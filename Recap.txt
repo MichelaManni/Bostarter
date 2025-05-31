@@ -1,0 +1,9 @@
+Installare DockerDesktop
+Far partire da terminale docker-compose up -d
+Per verificare funzionamento:
+
+App PHP → http://localhost:8000
+
+phpMyAdmin → http://localhost:8080 
+
+Mongo Express → http://localhost:8081 (ancora vuoto)
