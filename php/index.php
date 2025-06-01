@@ -1,13 +1,17 @@
 <?php
-$host = 'mysql';
-$db   = 'mariadb_test_db';
-$user = 'username';
-$pass = 'password';
-
-$conn = new mysqli($host, $user, $pass, $db);
-
-if ($conn->connect_error) {
-    die("Connessione fallita: " . $conn->connect_error);
-}
-echo "<h1>Connessione al database riuscita!</h1>";
-$conn->close();
+//homepage
+echo "
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Bostarter</title>
+</head>
+<body>
+	<h1> Bostarter </h1>
+	<div>
+		<a href=login.php>Login</a>
+		<a href=registrazione.php>Registrazione</a>
+	</div>
+</body>
+</html>";
+?>
