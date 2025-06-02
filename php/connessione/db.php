@@ -1,13 +1,17 @@
 <?php
 $host = 'mysql';
 $db   = 'mariadb_test_db';
-$user = 'username';
-$pass = 'password';
+$username = 'username';
+$password = 'password';
 
 
-$conn = new mysqli($host, $user, $pass, $db);
+try{
+	$pdo= new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $username, $password);
+	
+	$pdo->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
 
-if ($conn->connect_error) {
-    die("Connessione fallita: " . $conn->connect_error);
+}catch(PDOException $ex) {
+	echo "Connessione non riuscita: " . $ex->getMessage();
+	exit();
 }
 ?>
