@@ -11,6 +11,7 @@ echo "
 	<div>
 		<a href=login.php>Login</a>
 		<a href=registrazione.php>Registrazione</a>
+		<a href=database.php>Tesst</a>
 	</div>
 </body>
 </html>";

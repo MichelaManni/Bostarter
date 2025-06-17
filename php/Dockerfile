@@ -1,10 +1,8 @@
-FROM php:8.2-apache
+FROM php:8.2-apache  
 
-# Installa estensione PDO per MySQL
-RUN docker-php-ext-install pdo pdo_mysql
+RUN docker-php-ext-install mysqli && \
+    a2enmod rewrite && \
+    service apache2 restart
 
-# Abilita il modulo rewrite di Apache (utile per progetti web)
-RUN a2enmod rewrite
-
-# Copia i file del tuo progetto nella root del server Apache
-COPY . /var/www/html/
+ENV APACHE_DOCUMENT_ROOT /var/www/html
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
