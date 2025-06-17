@@ -66,6 +66,7 @@
 				}catch(PDOException $e){
 					echo "<p>Errore durante la registrazione " . $e->getMessage() . "</p>";
 				}
+				
 			}
 		}
 	}
