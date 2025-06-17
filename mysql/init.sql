@@ -1,4 +1,4 @@
-USE mariadb_test_db;
+USE Bostarter;
 
 CREATE TABLE Utente (
     Email VARCHAR(30) PRIMARY KEY,
@@ -16,7 +16,7 @@ CREATE TABLE Creatore (
     Id INT AUTO_INCREMENT PRIMARY KEY,
     EmailUtente VARCHAR(30),
     Affidabilita INT ,
-    nr_progetti INT, --ridondanza???????????
+    nr_progetti INT, -- ridondanza???????????
     FOREIGN KEY (EmailUtente) REFERENCES Utente(Email)
 ) ENGINE=INNODB;
 
@@ -142,12 +142,12 @@ CREATE TABLE Candidatura (
     FOREIGN KEY (IdProfilo) REFERENCES Profili(Id)
 ) ENGINE=INNODB;
 
---OPERAZIONI SUI DATI:
+-- OPERAZIONI SUI DATI:
 
---Operazioni degli utenti-----------------------------------------------------------------------------
+-- Operazioni degli utenti-----------------------------------------------------------------------------
 
---Autenticazione e registrazione sulla piattaforma
-DELIMITER $
+-- Autenticazione e registrazione sulla piattaforma
+DELIMITER //
 CREATE PROCEDURE Registrazione 
 	(IN New_Email VARCHAR(30),
     IN New_Nome VARCHAR(30),
@@ -158,7 +158,6 @@ CREATE PROCEDURE Registrazione
     IN New_Password VARCHAR(255),
     IN New_Ruolo ENUM('standard','creatore','amministratore'),
     IN New_CodiceSicurezza INT)
- 
 BEGIN 
 		IF EXISTS(SELECT 1 FROM Utente WHERE Email = New_Email) THEN
 			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Email già registratata';
@@ -177,10 +176,7 @@ BEGIN
             INSERT INTO Amministratore(CodiceSicurezza, EmailUtente)
 			VALUES (New_CodiceSicurezza, New_Email);
 		END IF;
-	
-END
-$ DELIMITER ;
-
+END // DELIMITER;
 
 DELIMITER $
 CREATE PROCEDURE Autenticazione( IN Email_inserita VARCHAR(30), 
@@ -188,7 +184,6 @@ CREATE PROCEDURE Autenticazione( IN Email_inserita VARCHAR(30),
 								IN CodiceSicurezza_inserito INT, #richiesto solo per gli amministratori
                                 OUT Esito BOOLEAN,
                                 OUT Ruolo_Utente ENUM ('standard','creatore','amministratore'))
-                                
 BEGIN
 	
     DECLARE RuoloRegistrato ENUM ('standard','creatore','amministratore');
@@ -218,13 +213,13 @@ BEGIN
 		SET Ruolo_utente = RuoloRegistrato;
 	END IF;   
 
-END
-$ DELIMITER ;    
+END$ 
+DELIMITER;    
 
---Inserire una skill di curriculum
-DELIMITER //
+-- Inserire una skill di curriculum
+DELIMITER $
 Create Procedure AggiungiSkillUtente(in Email_utente varchar(30),in Competenza_utente varchar(30),in Livello_competenza int)
-begin
+BEGIN
 			IF NOT EXISTS (SELECT 1 FROM Utente WHERE Email = Email_utente) THEN
 				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Email non trovata';
 			END IF;
@@ -235,11 +230,10 @@ begin
 			INSERT INTO SkillUtente (EmailUtente, Competenza, Livello)
 			VALUES (Email_utente,Competenza_utente,Livello_competenza);
             
-end
-DELIMITER ;
+END $ DELIMITER ;
 
---Visualizzazione di tutti i progetti disponibili(ovvero quelli aperti)
-DELIMITER //
+-- Visualizzazione di tutti i progetti disponibili(ovvero quelli aperti)
+DELIMITER $
 CREATE PROCEDURE VisualizzaProgettiDisponibili()
 BEGIN
     SELECT 
@@ -252,12 +246,11 @@ BEGIN
     FROM Progetto
     WHERE Stato = 'aperto'
     ORDER BY DataInserimento DESC;
-END //
-DELIMITER ;
+END $ DELIMITER ;
 
---Finanziare un progetto aperto e scelta del reward:
---visualizzazione delle reward disponibili per permettere all'utente di scegliere
-DELIMITER //
+-- Finanziare un progetto aperto e scelta del reward:
+-- visualizzazione delle reward disponibili per permettere all'utente di scegliere
+DELIMITER $
 CREATE PROCEDURE VisualizzazioneReward( IN Nome_Progetto VARCHAR(30))
 BEGIN
 	IF NOT EXISTS ( SELECT 1 FROM Progetto 
@@ -269,16 +262,15 @@ BEGIN
     FROM Rewards as R
     WHERE R.NomeProgetto = Nome_Progetto
     ORDER BY R.Codice;
-END //
-DELIMITER ;  
+END $ DELIMITER ;  
 
---Finanziamento progetto e assegnazione reward
-DELIMITER //
+-- Finanziamento progetto e assegnazione reward
+DELIMITER $
 CREATE PROCEDURE FinanziaProgetto(
     IN Email_utente VARCHAR(30),
     IN Nome_progetto VARCHAR(30),
     IN Importo_finanziamento DECIMAL(10,2),
-    IN Codice_reward INT  --scelto dall'utente
+    IN Codice_reward INT  -- scelto dall'utente
 )
 BEGIN
 	
@@ -310,10 +302,9 @@ BEGIN
     );
     
     
-END //
-DELIMITER ;  
+END $ DELIMITER ;  
 
---Aggiunta di un commento
+-- Aggiunta di un commento
 DELIMITER $
 CREATE PROCEDURE Inserimento_Commento(IN Testo_inserito  VARCHAR(500), IN NomeProgetto_Scelto VARCHAR(30))
 	BEGIN
@@ -329,13 +320,12 @@ CREATE PROCEDURE Inserimento_Commento(IN Testo_inserito  VARCHAR(500), IN NomePr
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Progetto non esistente';
 	END IF;
     
-END
-$ DELIMITER ;   
+END $ DELIMITER ;   
 
---Inserimento di una candidatura
---La piattaforma consente ad un utente di inserire una candidatura su un profilo SOLO se, 
---per ogni skill richiesta da un profilo, l’utente dispone di un livello superiore o uguale al valore richiesto.
-DELIMITER //
+-- Inserimento di una candidatura
+-- La piattaforma consente ad un utente di inserire una candidatura su un profilo SOLO se, 
+-- per ogni skill richiesta da un profilo, l’utente dispone di un livello superiore o uguale al valore richiesto.
+DELIMITER $
 CREATE PROCEDURE InserimentoCandidatura(IN Email_Utente VARCHAR(30), IN Id_Profilo INT) 
 BEGIN 
 	DECLARE Nome_Progetto VARCHAR(30);
@@ -351,7 +341,7 @@ BEGIN
 	IF ControlloProgetto = 'false' THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'progetto non valido';
 	END IF;
-    --controllo che le skill dell'utente siano sufficienti
+    -- controllo che le skill dell'utente siano sufficienti
 	IF EXISTS(SELECT 1 
 					FROM SkillRichieste AS Sr
                     WHERE Sr.IdProfilo=Id_Profilo AND
@@ -360,7 +350,7 @@ BEGIN
                                 WHERE Su.EmailUtente = Email_Utente AND 
                                 Sr.CompetenzaRichiesta = Su.CompetenzaUtente AND
                                 Su.Livello >= Sr.Livello)
-				)
+	)
 	THEN SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Mancono delle skill per la candidatura';
     END IF;
 					
@@ -368,13 +358,12 @@ BEGIN
 	INSERT INTO Candidatura(EmailUtente, IdProfilo, stato)
     VALUES (Email_Utente, Id_Profilo, 'in_attesa'); #stato inizializzato come 'in_attesa'
  
-END //
-DELIMITER ;
+END $ DELIMITER ;
 
----Operazioni degli Amministratori----------------------------------------------------------
+-- Operazioni degli Amministratori----------------------------------------------------------
 
---Inserimento di una nuova competenza
-DELIMITER //
+-- Inserimento di una nuova competenza
+DELIMITER $
 CREATE PROCEDURE InserimentoCompetenza (IN Nome_competenza VARCHAR(30), IN Codice_sicurezza INT)
 BEGIN 
 	DECLARE ControlloEsistenzaCompetenza BOOLEAN;
@@ -392,13 +381,12 @@ BEGIN
         VALUES (NuovaStringa);
 	ELSE SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Competenza già inserita o atenticazione come amministratore non andata a buon fine';
 	END IF;
-END //
-DELIMITER ;
+END $ DELIMITER ;
 
---Operazioni dei Creatori------------------------------------------------------------------
+-- Operazioni dei Creatori------------------------------------------------------------------
 
 --Inserire un nuovo progetto
-DELIMITER //
+DELIMITER $
 CREATE PROCEDURE AggiungiProgetto(
     IN Id_Creatore INT,
     IN Nome_Progetto VARCHAR(30),
@@ -435,11 +423,10 @@ BEGIN
         'aperto',
         Tipologia
     );
-END //
-DELIMITER ;
+END $ DELIMITER ;
 
---Inserimento foto nel Progetto
-DELIMITER //
+-- Inserimento foto nel Progetto
+DELIMITER $
 CREATE PROCEDURE AggiungiFotoProgetto( IN NomeProgetto_inserito VARCHAR(30), IN Percorsofoto_inserito VARCHAR(255),
 									IN IdCreatore_inserito INT )
 BEGIN
@@ -453,10 +440,9 @@ BEGIN
 		INSERT INTO FotoProgetto(IdCreatore,NomeProgetto,PercorsoFoto)
         VALUES (IdCreatore_inserito,NomeProgetto_inserito, Percorsofoto_inserito);
 	END IF;
-END
-// DELIMITER ;
+END $ DELIMITER ;
 
---inserimento Reward 
+-- inserimento Reward 
 DELIMITER $
 CREATE PROCEDURE InserimentoReward( IN Descrizione_reward VARCHAR(300),IN Nome_progetto VARCHAR(30),
 									IN Id_creatore INT, IN  Percorso_Foto VARCHAR(255))
@@ -475,28 +461,27 @@ BEGIN
 	ELSE
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Progetto non trovato o chiuso';
 	END IF;
- END
-$ DELIMITER ;
+ END $ DELIMITER ;
 
---inserimento di una risposta
+-- inserimento di una risposta
 DELIMITER $
 CREATE PROCEDURE InserimentoRisposta (IN Id_creatore INT,IN Cod_commento INT,IN Testo_comm VARCHAR(500))
 BEGIN
     DECLARE ControlloCodiceCommento BOOLEAN;
     DECLARE ControlloCreatore BOOLEAN;
     DECLARE ControlloRisposta BOOLEAN ; 
-    --controllo esistenza del codice commento
+    -- controllo esistenza del codice commento
     SELECT EXISTS (SELECT 1
 					FROM COMMENTO AS C
                     WHERE C.CodiceCommento = Cod_commento)
                     INTO ControlloCodiceCommento;
-	--controllo associazione tra creatore e progetto
+	-- controllo associazione tra creatore e progetto
     SELECT EXISTS (SELECT 1
 				FROM Commento AS C
                 JOIN Progetto AS P ON C.NomeProgetto = P.NomeProgetto
                 WHERE C.Codice = Cod_commento 
                 AND P.IdCreatore = Id_creatore) INTO ControlloCreatore;
-    --controllo che non sia già stata inserita risposta    
+    -- controllo che non sia già stata inserita risposta    
      SELECT EXISTS (SELECT 1 
 					FROM Risposta 
 					WHERE CodCommento = Cod_commento)  INTO ControlloRisposta;
@@ -507,13 +492,12 @@ BEGIN
 	ELSE SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Commento non trovato o risposta già inserita';
 	END IF;
     
-END
-$ DELIMITER ;
+END $ DELIMITER ;
 
---Inserimento nuovo profilo per un progetto software
-DELIMITER //
+-- Inserimento nuovo profilo per un progetto software
+DELIMITER $
 Create Procedure AggiungiProfiloSoftware(in Id_Creatore int,in Nome_Progetto varchar(30),in Nome_Profilo varchar(30)) 
-begin
+BEGIN
 			IF NOT EXISTS (SELECT 1 FROM Creatore WHERE idCreatore = Id_Creatore) THEN
 				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Id non valido';
 			END IF;
@@ -521,13 +505,12 @@ begin
 				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Progetto non trovato';
 			END IF;
             
-            INSERT INTO Profili (Nome,Nome_progetto)
-            VALUES (Nome_Profilo,Nome_Progetto)
-end
-DELIMITER ;
+            INSERT INTO Profili (Nome,Nome_progetto) VALUES (Nome_Profilo,Nome_Progetto);
+	
+ END $ DELIMITER ;
 
---Accettazione o meno di una candidatura
-DELIMITER //
+-- Accettazione o meno di una candidatura
+DELIMITER $
 CREATE PROCEDURE AccettazioneCandidatura (IN Id_Candidatura INT, 
 										IN Id_creatore INT, 
                                         IN Esito_Candidatura ENUM('accettata', 'rifiutata'))
@@ -536,7 +519,7 @@ BEGIN
     DECLARE id_profilo INT;
     DECLARE nome_progetto VARCHAR(30);
     
-    --controllo esistenza candidatura e appartenenza progetto a creatore
+    -- controllo esistenza candidatura e appartenenza progetto a creatore
     SELECT EXISTS (
         SELECT 1
         FROM Candidatura AS C
@@ -550,7 +533,7 @@ BEGIN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Candidatura non valida o problemi come creatore';
     END IF;
     
-    --controllo stato candidatura
+    -- controllo stato candidatura
     IF NOT EXISTS (
         SELECT 1 
         FROM Candidatura 
@@ -567,36 +550,36 @@ BEGIN
 END //
 DELIMITER ;
 
---Statistiche(Viste)------------------------------------------------------------------------------------------------
+-- Statistiche(Viste)------------------------------------------------------------------------------------------------
 
---Top 3 creatori più affidabili
+-- Top 3 creatori più affidabili
 CREATE VIEW ClassificaAffidabili AS
 SELECT Nickname
 FROM Creatore C join Utente U on C.EmailUtente = U.Email
 ORDER BY affidabilita DESC
 LIMIT 3;
 
---3 Progetti più vicini al completamento
+-- 3 Progetti più vicini al completamento
 CREATE VIEW ProgettiQuasiCompletati AS
 Select p.Nome,p.Descrizione,p.Budget,(p.Budget - SUM(F.Importo)) as Differenza
-From Progetto P left join Finanziamento F on P.Nome = F.NomeProgetto
+From Progetto p left join Finanziamento F on p.Nome = F.NomeProgetto
 where p.stato = 'Aperto'
 Group By p.Nome
 order by Differenza asc
 Limit 3;
 
---3 utenti con più finanziamenti
+-- 3 utenti con più finanziamenti
 CREATE VIEW ClassificaUtenti AS 
 SELECT U.Nickname
-FROM FINANZIAMENTO AS F
-JOIN UTENTE AS U ON U.Email = F.EmailUtente
+FROM Finanziamento AS F
+JOIN Utente AS U ON U.Email = F.EmailUtente
 GROUP BY F.EmailUtente, U.Nickname
 ORDER BY SUM(F.Importo) DESC
 LIMIT 3;
 
---Triggers----------------------------------------------------------------------------------------------------------------------
+-- Triggers----------------------------------------------------------------------------------------------------------------------
 
---Aggiornare l'affidabilità dopo l'inserimento di un progetto (Da rivedere)
+-- Aggiornare l'affidabilità dopo l'inserimento di un progetto (Da rivedere)
 DELIMITER //
 CREATE TRIGGER Affidabilità_progetto
 AFTER INSERT ON Progetto
@@ -606,7 +589,7 @@ BEGIN
     DECLARE progetti_finanziati INT;
     DECLARE nuova_affidabilita INT;
     
-	--Contrare il numero di progetti di un creatore -> contrare i progetti finanziati almeno una volta
+	-- Contrare il numero di progetti di un creatore -> contrare i progetti finanziati almeno una volta
     SELECT COUNT(*) INTO progetti_totali
     FROM Progetto
     WHERE IdCreatore = NEW.IdCreatore;
@@ -629,7 +612,7 @@ BEGIN
 END //
 DELIMITER ;
 
---Aggiornare l'affidabilità dopo un finanziamento (Da rivedere)
+-- Aggiornare l'affidabilità dopo un finanziamento (Da rivedere)
 DELIMITER //
 CREATE TRIGGER Affidabilità_finanziamento
 AFTER INSERT ON Finanziamento
@@ -671,7 +654,7 @@ BEGIN
 END //
 DELIMITER ;
 
---Cambiare lo stato di un progetto da aperto a chiuso
+-- Cambiare lo stato di un progetto da aperto a chiuso
 DELIMITER //
 CREATE TRIGGER Chiusura_progetto
 AFTER INSERT ON Finanziamento
@@ -680,7 +663,7 @@ BEGIN
     DECLARE totale_finanziamenti DECIMAL(10,2);
     DECLARE budget_progetto DECIMAL(10,2);
     
-	--Ottenere il totale dei finanziamenti -> Ottenere il budget del progetto
+	-- Ottenere il totale dei finanziamenti -> Ottenere il budget del progetto
     SELECT SUM(Importo) INTO totale_finanziamenti
     FROM Finanziamento
     WHERE NomeProgetto = NEW.NomeProgetto;
@@ -689,7 +672,7 @@ BEGIN
     FROM Progetto
     WHERE Nome = NEW.NomeProgetto;
     
-    --Controllo se effettivamente sia abbastanza
+    -- Controllo se effettivamente sia abbastanza
     IF totale_finanziamenti >= budget_progetto THEN
         UPDATE Progetto
         SET Stato = 'chiuso'
@@ -698,7 +681,7 @@ BEGIN
 END //
 DELIMITER ;
 
---Incrementare il numero di progetti
+-- Incrementare il numero di progetti
 DELIMITER //
 CREATE TRIGGER Incrementa_progetti
 AFTER INSERT ON Progetto
