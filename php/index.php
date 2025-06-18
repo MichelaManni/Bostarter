@@ -10,15 +10,16 @@
 <body>
 	<h1> Bostarter </h1>
 	<div>
-		<input type="email" name="email" required><br>
-		<input type="password" name="password" required><br>
-		<a href=HomePage.php>Login</a>
-		<a href=registrazione.php>Se non hai un account registrati</a>
+		<form action="login.php" method="post">
+			<input type="Email" name="Email" required /><br>
+			<input type="Password" name="Password" required /><br>	
+			<a href=HomePage.php><button type="submit">Login</button></a><br>
+			<a href=registrazione.php>Se non hai un account registrati qui!</a>
+		</form>
 	</div>
 </body>
 </html>
 
 <?php
 	include("connessione/db.php"); 
-	include("login.php"); 
 ?>
