@@ -1,12 +1,13 @@
 <?php
 $host = 'mysql';
-$db   = 'mariadb_test_db';
+$db   = 'Bostarter';
 $username = 'username';
 $password = 'password';
 
 
 try{
 	$pdo= new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $username, $password);
+	echo "funziona";
 	
 	$pdo->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
 
