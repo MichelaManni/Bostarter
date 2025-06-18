@@ -1,3 +1,4 @@
+<!-- Connessione con il database -->
 <?php
 $host = 'mysql';
 $db   = 'Bostarter';
@@ -7,8 +8,6 @@ $password = 'password';
 
 try{
 	$pdo= new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $username, $password);
-	echo "funziona";
-	
 	$pdo->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
 
 }catch(PDOException $ex) {

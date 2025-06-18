@@ -1,3 +1,4 @@
+<!-- Pagina per la registrazione -->
 <?php
 	include("connessione/db.php"); 
 ?>
@@ -9,27 +10,28 @@
 <body>
 	<form method="post">
 		<h2>Registrazione Bostarter</h2>
-		email:<br>
+		Email:<br>
 		<input type="email" name="email" required><br>
-		nome:<br>
+		Nome:<br>
 		<input type="text" name="nome" required><br>
-		cognome:<br>
+		Cognome:<br>
 		<input type="text" name="cognome" required><br>
-		anno di nascita: <br>
+		Anno di nascita: <br>
 		<input type="number" name="anno" min="1900" required><br>
-		luogo di nascita: <br>
+		Luogo di nascita: <br>
 		<input type="text" name="luogo" required><br>
-		nickname: <br>
+		Nickname: <br>
 		<input type="text" name="nickname" required><br>
-		password:<br>
+		Password:<br>
 		<input type="password" name="password" required><br>
-		ruolo:<br>
+		Ruolo:<br>
 		<select name="ruolo" required>
 		  <option value="standard">Standard</option>
 		  <option value="creatore">Creatore</option>
 		  <option value="amministratore">Amministratore</option>
 		</select><br>
 		<p> <button type="submit" name="submit">Submit</button> </p> <br>
+		<p href="index.php"> <button type="" name="back">Torna al login</button> </p> <br>
 	</form>
 </body>
 </html>

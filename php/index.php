@@ -1,18 +1,24 @@
-<?php
-//homepage
-echo "
+<!-- Login,prima pagina che viene vista -->
 <!DOCTYPE HTML>
 <html>
 <head>
 	<title>Bostarter</title>
+	<style>
+		body {background-color: powderblue;text-align: center;}
+	</style>
 </head>
 <body>
 	<h1> Bostarter </h1>
 	<div>
-		<a href=login.php>Login</a>
-		<a href=registrazione.php>Registrazione</a>
-		<a href=connessione/db.php>Tesst</a>
+		<input type="email" name="email" required><br>
+		<input type="password" name="password" required><br>
+		<a href=HomePage.php>Login</a>
+		<a href=registrazione.php>Se non hai un account registrati</a>
 	</div>
 </body>
-</html>";
+</html>
+
+<?php
+	include("connessione/db.php"); 
+	include("login.php"); 
 ?>
