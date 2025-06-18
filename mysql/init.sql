@@ -142,6 +142,35 @@ CREATE TABLE Candidatura (
     FOREIGN KEY (IdProfilo) REFERENCES Profili(Id)
 ) ENGINE=INNODB;
 
+--Test
+
+INSERT INTO Utente (
+  Email, Nome, Cognome, AnnoNascita, LuogoNascita, Nickname, Password, Ruolo
+) VALUES (
+  'mario.rossi@example.com',
+  'Mario',
+  'Rossi',
+  1985,
+  'Milano',
+  'mrossi85',
+  'PasswordSicura123!',
+  'standard'
+);
+
+INSERT INTO Utente (
+  Email, Nome, Cognome, AnnoNascita, LuogoNascita, Nickname, Password, Ruolo
+) VALUES (
+  'anna.verdi@example.com',
+  'Anna',
+  'Verdi',
+  1990,
+  'Roma',
+  'av1990',
+  'AltroPassword!@#',
+  'creatore'
+);
+
+
 -- OPERAZIONI SUI DATI:
 
 -- Operazioni degli utenti-----------------------------------------------------------------------------
@@ -677,4 +706,6 @@ BEGIN
     WHERE Stato = 'aperto' 
     AND DataLimite < CURDATE();
 END // DELIMITER;
+
+
 
