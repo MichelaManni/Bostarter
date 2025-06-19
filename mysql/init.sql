@@ -170,6 +170,19 @@ INSERT INTO Utente (
   'creatore'
 );
 
+INSERT INTO Utente (
+  Email, Nome, Cognome, AnnoNascita, LuogoNascita, Nickname, Password, Ruolo
+) VALUES (
+  'A',
+  'Anna',
+  'Verdi',
+  1990,
+  'Roma',
+  'av1990',
+  'B',
+  'creatore'
+);
+
 
 -- OPERAZIONI SUI DATI:
 

@@ -1,4 +1,3 @@
-<!-- Connessione con il database -->
 <?php
 // Parametri di connessione (corrispondono a quelli definiti in docker-compose)
 $host = 'mysql';
