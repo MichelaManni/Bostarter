@@ -1,18 +1,16 @@
 <?php
-
 include 'Connessione/db.php';
-
 // Verifica che il dato sia stato inviato
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['nome_progetto'])) {
     $nomeProgetto = $_POST['nome_progetto'];
 
-    // Chiamata alla stored procedure
+    //Chiamata alla stored procedure
+    //Costruisce una tabella con i commenti relativi al progetto
     $stmt = $mysqli->prepare("CALL VisualizzaCommenti(?)");
     $stmt->bind_param("s", $nomeProgetto);
     $stmt->execute();
     $result = $stmt->get_result();
-
-    echo "<h2>Commenti per il progetto: " . htmlspecialchars($nomeProgetto) . "</h2>";
+    echo "<h2>Commenti del progetto: " . htmlspecialchars($nomeProgetto) . "</h2>";
 
     if ($result->num_rows > 0) {
         echo "<table border='1' cellpadding='5'>
@@ -33,7 +31,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['nome_progetto'])) {
                   </tr>";
         }
         echo "</table>";
-        echo "<br> <a href='VisualizzaProgetti.php'><button>Torna ai progetti</button></a>";
     } else {
         echo "Nessun commento trovato per questo progetto.";
     }

@@ -63,7 +63,7 @@ $result = $mysqli->query($sql);
                         Ogni progetto costruisce la propria pagina con i commenti mandando con post il suo nome
                         alla pagina visualizzacommento-->
                         <td>
-                            <form action="VisualizzaCommenti.php" method="post">
+                            <form action="Commenti.php" method="post">
                                 <input type="hidden" name="nome_progetto" value="<?= htmlspecialchars($row['Nome Progetto']) ?>">
                                 <button type="submit">Commenti</button>
                             </form>

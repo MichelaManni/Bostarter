@@ -267,6 +267,7 @@ BEGIN
 END //
 
 -- Non riechiesta espressamente ma aggiunta mentre facevo la pagina dei commenti,per semplificare il processo
+-- La risposta potrebbe non essere ancora stata inserita quindi controlla che non sia null
 CREATE PROCEDURE VisualizzaCommenti(IN Nome_Progetto VARCHAR(30))
 BEGIN
     SELECT 
@@ -331,17 +332,17 @@ BEGIN
     );   
 END //
 
--- Aggiunta di un commento
-CREATE PROCEDURE Inserimento_Commento(IN Testo_inserito  VARCHAR(500), IN NomeProgetto_Scelto VARCHAR(30))
+-- Aggiunta di un commento,l'email è presa automaticamente grazie a session() mentre il nome progetto mandata con post
+CREATE PROCEDURE Inserimento_Commento(Email_utente VARCHAR(30),IN Testo_inserito  VARCHAR(500), IN NomeProgetto_Scelto VARCHAR(30))
 	BEGIN
     DECLARE ControlloEsistenzaProgetto BOOLEAN;
     SELECT EXISTS (SELECT 1
 					FROM PROGETTO AS P
                     WHERE NomeProgetto_Scelto = P.Nomeprogetto)INTO ControlloEsistenzaProgetto;
-	
+                    
     IF ControlloEsistenzaProgetto=TRUE THEN
-		INSERT INTO COMMENTO( Data_commento,Testo ,Nome_progetto)
-        VALUES (CURDATE(), Testo_inserito, NomeProgetto_scelto);
+		INSERT INTO COMMENTO(EmailUtente, DataCommento,Testo ,NomeProgetto)
+        VALUES (Email_utente,CURDATE(), Testo_inserito, NomeProgetto_scelto);
 	ELSE 
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Progetto non esistente';
 	END IF;    

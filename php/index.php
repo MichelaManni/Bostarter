@@ -18,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$PasswordDB = mysqli_fetch_assoc($result)['Password'];
 
 		if ($Password == $PasswordDB) {
+			$_SESSION['Email'] = $Email;
 			header("Location: HomePage.php");
 			exit;
 		} else {
@@ -30,7 +31,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	mysqli_close($mysqli);
 }
 ?>
-
 
 <!DOCTYPE HTML>
 <html>
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	<h1> Bostarter </h1>
 	<div>
 		<form action="" method="post">
-			<input type="Email" name="Email" required /><br>
+			<input type="Text" name="Email" required /><br>
 			<input type="Password" name="Password" required /><br>
 			<a href=HomePage.php><button type="submit">Login</button></a><br>
 			<a href=registrazione.php>Se non hai un account registrati qui!</a>
