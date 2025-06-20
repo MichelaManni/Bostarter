@@ -18,7 +18,7 @@ if ($result->num_rows > 0) {
             <th>Tipologia</th>
           </tr>";
 //Mette i dati in ogni cella
-    while($row = $result->fetch_assoc()) {
+while($row = $result->fetch_assoc()) {
         echo "<tr>
                 <td>" . htmlspecialchars($row["Nome Progetto"]) . "</td>
                 <td>" . htmlspecialchars($row["Descrizione"]) . "</td>
@@ -27,15 +27,18 @@ if ($result->num_rows > 0) {
                 <td>" . htmlspecialchars($row["Budget Richiesto"]) . " €</td>
                 <td>" . htmlspecialchars($row["Tipologia"]) . "</td>
                 <td><button>Commenti</button></td>
-                <td><button>Manda candidatura</button></td>
-                <td><button>Finanzia</button></td>
-              </tr>";
+                <td><button>Finanzia</button></td>";
+    // è possibile mandare candidature solo per lavorare a progetti software, per gli hardware è possibile vedere la lista dei componenti
+    if (strtolower($row["Tipologia"]) === 'software') {
+        echo "<td><button>Manda candidatura</button></td>";
+    } 
+    else {
+        echo "<td> <button>Controlla componenti</button></td>"; 
     }
-
+    echo " </tr>";
+    }
     echo "</table>";
-} else {
-    echo "Nessun progetto disponibile.";
-}
+} 
 
 // Chiusura della connessione
 $mysqli->close();
@@ -53,13 +56,10 @@ th {
   padding-bottom: 12px;
   text-align: left;
   background-color:white;
-  color: black;
-}
+  color: black;}
 td,th {
   border: 1px solid black;
-  padding: 8px;
-}
-
+  padding: 8px;}
 </style>
 </head>
 <body>
