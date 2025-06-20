@@ -115,9 +115,11 @@ CREATE TABLE Finanziamento (
 
 CREATE TABLE Commento (
     CodiceCommento INT AUTO_INCREMENT PRIMARY KEY,
+    EmailUtente VARCHAR(30),
     DataCommento DATE,
     Testo VARCHAR(500),
     NomeProgetto VARCHAR(30),
+    FOREIGN KEY (EmailUtente) REFERENCES Utente(Email),
     FOREIGN KEY (NomeProgetto) REFERENCES Progetto(Nome)
 ) ENGINE=INNODB;
 
@@ -161,7 +163,7 @@ insert into Creatore(
   INSERT INTO Progetto (
     IdCreatore, Nome, Descrizione, DataInserimento, DataLimite, Budget, Stato, Tipologia
 ) VALUES (
-    1, 'SensoreTemperaturaArduino', 'Prototipo hardware per rilevamento temperatura in ambienti industriali.', 
+    1, 'Progetto Aperto 1', 'Prototipo hardware per rilevamento temperatura in ambienti industriali.', 
     '2025-06-19', '2025-07-30', 1500.00, 'aperto', 'hardware'
 );
 
@@ -177,6 +179,12 @@ insert into Creatore(
     1, 'Progetto chiuso', 'Prototipo hardware per rilevamento temperatura in ambienti industriali.', 
     '2025-06-19', '2025-07-30', 15000.00, 'chiuso', 'hardware'
 );
+
+INSERT INTO Commento (EmailUtente,DataCommento, Testo, NomeProgetto)
+VALUES ('mario.rossi@example.com','2025-06-15', 'Ottimo lavoro su questo progetto!', 'Progetto Aperto 1');
+
+INSERT INTO Commento (EmailUtente,DataCommento, Testo, NomeProgetto)
+VALUES ('mario.rossi@example.com','2025-06-18', 'Ci sono ancora alcuni miglioramenti da fare.', 'Progetto Aperto 2');
 
 
 -- OPERAZIONI SUI DATI:
@@ -281,6 +289,17 @@ BEGIN
     ORDER BY DataInserimento DESC;
 END //
 
+-- Non riechiesta espressamente e aggiunta mentre facevo la pagina dei commenti per semplificare il processo 
+CREATE PROCEDURE VisualizzaCommenti(IN Nome_Progetto VARCHAR(30))
+BEGIN
+    SELECT 
+     U.Nickname as 'Poster',
+     C.Testo as 'Contenuto',
+     C.DataCommento as 'Data' 
+    FROM Commento C JOIN Utente U ON C.EmailUtente = U.Email
+    WHERE C.NomeProgetto = Nome_Progetto;
+END //
+
 -- Finanziare un progetto aperto e scelta del reward:
 -- visualizzazione delle reward disponibili per permettere all'utente di scegliere
 CREATE PROCEDURE VisualizzazioneReward( IN Nome_Progetto VARCHAR(30))
@@ -304,7 +323,6 @@ CREATE PROCEDURE FinanziaProgetto(
     IN Codice_reward INT  -- scelto dall'utente
 )
 BEGIN
-	
 	IF NOT EXISTS (SELECT 1 FROM Utente WHERE Email = Email_utente) THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Email non trovata';
 	END IF;
@@ -330,9 +348,7 @@ BEGIN
 		CURDATE(),
         Nome_progetto,
         Codice_reward
-    );
-    
-    
+    );   
 END //
 
 -- Aggiunta di un commento
@@ -348,8 +364,7 @@ CREATE PROCEDURE Inserimento_Commento(IN Testo_inserito  VARCHAR(500), IN NomePr
         VALUES (CURDATE(), Testo_inserito, NomeProgetto_scelto);
 	ELSE 
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Progetto non esistente';
-	END IF;
-    
+	END IF;    
 END //   
 
 -- Inserimento di una candidatura

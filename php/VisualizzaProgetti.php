@@ -26,7 +26,7 @@ while($row = $result->fetch_assoc()) {
                 <td>" . htmlspecialchars($row["Data Limite"]) . "</td>
                 <td>" . htmlspecialchars($row["Budget Richiesto"]) . " €</td>
                 <td>" . htmlspecialchars($row["Tipologia"]) . "</td>
-                <td><button>Commenti</button></td>
+                <td><button>Commenti del progetto</button></td>
                 <td><button>Finanzia</button></td>";
     // è possibile mandare candidature solo per lavorare a progetti software, per gli hardware è possibile vedere la lista dei componenti
     if (strtolower($row["Tipologia"]) === 'software') {
