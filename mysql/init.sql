@@ -333,15 +333,15 @@ BEGIN
 END //
 
 -- Aggiunta di un commento,l'email è presa automaticamente grazie a session() mentre il nome progetto mandata con post
-CREATE PROCEDURE Inserimento_Commento(Email_utente VARCHAR(30),IN Testo_inserito  VARCHAR(500), IN NomeProgetto_Scelto VARCHAR(30))
+CREATE PROCEDURE InserimentoCommento(Email_utente VARCHAR(30),IN Testo_inserito  VARCHAR(500), IN NomeProgetto_Scelto VARCHAR(30))
 	BEGIN
     DECLARE ControlloEsistenzaProgetto BOOLEAN;
     SELECT EXISTS (SELECT 1
-					FROM PROGETTO AS P
-                    WHERE NomeProgetto_Scelto = P.Nomeprogetto)INTO ControlloEsistenzaProgetto;
+					FROM Progetto AS P
+                    WHERE NomeProgetto_Scelto = P.Nome)INTO ControlloEsistenzaProgetto;
                     
     IF ControlloEsistenzaProgetto=TRUE THEN
-		INSERT INTO COMMENTO(EmailUtente, DataCommento,Testo ,NomeProgetto)
+		INSERT INTO Commento(EmailUtente, DataCommento,Testo ,NomeProgetto)
         VALUES (Email_utente,CURDATE(), Testo_inserito, NomeProgetto_scelto);
 	ELSE 
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Progetto non esistente';
