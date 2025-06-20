@@ -147,40 +147,35 @@ CREATE TABLE Candidatura (
 INSERT INTO Utente (
   Email, Nome, Cognome, AnnoNascita, LuogoNascita, Nickname, Password, Ruolo
 ) VALUES (
-  'mario.rossi@example.com',
-  'Mario',
-  'Rossi',
-  1985,
-  'Milano',
-  'mrossi85',
-  'PasswordSicura123!',
-  'standard'
-);
+  'mario.rossi@example.com','Mario','Rossi',1985,'Milano','mrossi85','PasswordSicura123!','standard');
 
 INSERT INTO Utente (
   Email, Nome, Cognome, AnnoNascita, LuogoNascita, Nickname, Password, Ruolo
 ) VALUES (
-  'anna.verdi@example.com',
-  'Anna',
-  'Verdi',
-  1990,
-  'Roma',
-  'av1990',
-  'AltroPassword!@#',
-  'creatore'
+  'A','Anna','Verdi',1990,'Roma','av1990','B','creatore');
+  
+insert into Creatore(
+    EmailUtente,Affidabilita,nr_progetti)  
+    VALUES('mario.rossi@example.com',9,1);
+
+  INSERT INTO Progetto (
+    IdCreatore, Nome, Descrizione, DataInserimento, DataLimite, Budget, Stato, Tipologia
+) VALUES (
+    1, 'SensoreTemperaturaArduino', 'Prototipo hardware per rilevamento temperatura in ambienti industriali.', 
+    '2025-06-19', '2025-07-30', 1500.00, 'aperto', 'hardware'
 );
 
-INSERT INTO Utente (
-  Email, Nome, Cognome, AnnoNascita, LuogoNascita, Nickname, Password, Ruolo
+  INSERT INTO Progetto (
+    IdCreatore, Nome, Descrizione, DataInserimento, DataLimite, Budget, Stato, Tipologia
 ) VALUES (
-  'A',
-  'Anna',
-  'Verdi',
-  1990,
-  'Roma',
-  'av1990',
-  'B',
-  'creatore'
+    1, 'Progetto Aperto 2', 'Prototipo', '2025-06-19', '2025-07-30', 15020.00, 'aperto', 'software'
+);
+
+  INSERT INTO Progetto (
+    IdCreatore, Nome, Descrizione, DataInserimento, DataLimite, Budget, Stato, Tipologia
+) VALUES (
+    1, 'Progetto chiuso', 'Prototipo hardware per rilevamento temperatura in ambienti industriali.', 
+    '2025-06-19', '2025-07-30', 15000.00, 'chiuso', 'hardware'
 );
 
 
@@ -275,7 +270,7 @@ END //
 CREATE PROCEDURE VisualizzaProgettiDisponibili()
 BEGIN
     SELECT 
-        Nomeprogetto AS 'Nome Progetto',
+        Nome AS 'Nome Progetto',
         Descrizione AS 'Descrizione',
         DataInserimento AS 'Data Inserimento',
 		DataLimite AS 'Data Limite',
