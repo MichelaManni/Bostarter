@@ -162,6 +162,7 @@ INSERT INTO Commento (EmailUtente,DataCommento, Testo, NomeProgetto)VALUES ('mar
 
 INSERT INTO Commento (EmailUtente,DataCommento, Testo, NomeProgetto)VALUES ('mario.rossi@example.com','2025-06-18', 'Ci sono ancora alcuni miglioramenti da fare.', 'Progetto Aperto 2');
 
+INSERT INTO Risposta (IdCreatore,CodCommento,DataRisposta,Testo)VALUES(1,1,'2025-06-15','Gas');
 
 -- OPERAZIONI SUI DATI:
 
@@ -265,14 +266,17 @@ BEGIN
     ORDER BY DataInserimento DESC;
 END //
 
--- Non riechiesta espressamente e aggiunta mentre facevo la pagina dei commenti per semplificare il processo 
+-- Non riechiesta espressamente ma aggiunta mentre facevo la pagina dei commenti,per semplificare il processo
 CREATE PROCEDURE VisualizzaCommenti(IN Nome_Progetto VARCHAR(30))
 BEGIN
     SELECT 
-     U.Nickname as 'Poster',
-     C.Testo as 'Contenuto',
-     C.DataCommento as 'Data' 
-    FROM Commento C JOIN Utente U ON C.EmailUtente = U.Email
+        U.Nickname AS 'Poster',
+        C.Testo AS 'Contenuto',
+        C.DataCommento AS 'Data', 
+        IFNULL(R.Testo, '') AS 'Risposta'
+    FROM Commento C 
+    JOIN Utente U ON C.EmailUtente = U.Email 
+    LEFT JOIN Risposta R ON R.CodCommento = C.CodiceCommento
     WHERE C.NomeProgetto = Nome_Progetto;
 END //
 

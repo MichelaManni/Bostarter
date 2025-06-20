@@ -20,13 +20,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['nome_progetto'])) {
                     <th>Poster</th>
                     <th>Contenuto</th>
                     <th>Data</th>
+                    <th>Risposta del cratore</th>
                 </tr>";
 
         while ($row = $result->fetch_assoc()) {
+
             echo "<tr>
                     <td>" . htmlspecialchars($row['Poster']) . "</td>
                     <td>" . htmlspecialchars($row['Contenuto']) . "</td>
                     <td>" . htmlspecialchars($row['Data']) . "</td>
+                    <td>" . htmlspecialchars($row['Risposta']) . "</td>
                   </tr>";
         }
         echo "</table>";
