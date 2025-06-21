@@ -1,4 +1,5 @@
 <?php
+session_start();
 include 'Connessione/db.php';
 include 'Connessione/VisualizzaCommenti.php';
 ?>

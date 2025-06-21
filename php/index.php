@@ -1,35 +1,6 @@
-<?php
+<?php 
 session_start();
-include 'Connessione/db.php';
-$errore = '';
-
-//Script per il login -> se arriva un post(tramite il pulsane login)
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-	$Email = $_POST['Email'];
-	$Password = $_POST['Password'];
-	//Metodo    
-	$Query = "SELECT Email FROM Utente where Email = '$Email' limit 1";
-	$result  = mysqli_query($mysqli, $Query);
-	$EmailDB = mysqli_fetch_assoc($result)['Email'];
-
-	if ($Email == $EmailDB) {
-		$Query = "SELECT Password FROM Utente where Email = '$Email' limit 1";
-		$result  = mysqli_query($mysqli, $Query);
-		$PasswordDB = mysqli_fetch_assoc($result)['Password'];
-
-		if ($Password == $PasswordDB) {
-			$_SESSION['Email'] = $Email;
-			header("Location: HomePage.php");
-			exit;
-		} else {
-			$errore = "Password errata.";
-		}
-	}
-	else{
-		$errore = "Email errata.";
-	}
-	mysqli_close($mysqli);
-}
+include 'Connessione/Login.php'
 ?>
 
 <!DOCTYPE HTML>

@@ -3,7 +3,7 @@ include 'Connessione/db.php';
 // Verifica che il dato sia stato inviato
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['nome_progetto'])) {
     $_SESSION['Progetto'] = $_POST['nome_progetto'];
-    $nomeProgetto = $_SESSION['Email'];
+    $nomeProgetto = $_SESSION['Progetto'];
     
     //Chiamata alla stored procedure
     //Costruisce una tabella con i commenti relativi al progetto

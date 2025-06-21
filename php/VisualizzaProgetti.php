@@ -4,7 +4,6 @@ include 'Connessione/db.php';
 $sql = "CALL VisualizzaProgettiDisponibili()";
 $result = $mysqli->query($sql);
 //Se settato lo toglie così si possono vedere le specifiche del progetto giusto
-unset($_SESSION['Progetto']);
 ?>
 
 <!DOCTYPE HTML>
