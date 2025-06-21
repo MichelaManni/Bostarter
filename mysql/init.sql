@@ -266,8 +266,8 @@ BEGIN
     ORDER BY DataInserimento DESC;
 END //
 
--- Non riechiesta espressamente ma aggiunta mentre facevo la pagina dei commenti,per semplificare il processo
--- La risposta potrebbe non essere ancora stata inserita quindi controlla che non sia null
+-- Visualizza i commenti di un dato progetto,la risposta potrebbe non essere ancora stata inserita quindi controlla che non sia null
+-- Un creatore può rispondere ad un commento una sola volta
 CREATE PROCEDURE VisualizzaCommenti(IN Nome_Progetto VARCHAR(30))
 BEGIN
     SELECT 
@@ -279,6 +279,15 @@ BEGIN
     JOIN Utente U ON C.EmailUtente = U.Email 
     LEFT JOIN Risposta R ON R.CodCommento = C.CodiceCommento
     WHERE C.NomeProgetto = Nome_Progetto;
+END //
+
+-- prende tutti i dati di un utente per restituire la lista delle sue skills inserite
+CREATE PROCEDURE VisualizzaSkillsUtente(IN Email_Utente) (
+BEGIN
+    SELECT
+    Email,Nome,Cognome,AnnoNascita,LuogoNascita,Nickname,Ruolo
+    FROM Utente
+    WHERE Email = Email_Utente;
 END //
 
 -- Finanziare un progetto aperto e scelta del reward:
@@ -332,7 +341,7 @@ BEGIN
     );   
 END //
 
--- Aggiunta di un commento,l'email è presa automaticamente grazie a session() mentre il nome progetto mandata con post
+-- Aggiunta di un commento
 CREATE PROCEDURE InserimentoCommento(Email_utente VARCHAR(30),IN Testo_inserito  VARCHAR(500), IN NomeProgetto_Scelto VARCHAR(30))
 	BEGIN
     DECLARE ControlloEsistenzaProgetto BOOLEAN;
@@ -427,25 +436,8 @@ BEGIN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Nome progetto già esistente';
     END IF;
             
-    INSERT INTO Progetto (
-        IdCreatore,
-        Nome,
-        Descrizione,
-        DataInserimento,
-        Budget,
-        DataLimite,
-        Stato,
-        Tipologia
-    ) VALUES (
-        Id_Creatore,
-        Nome_Progetto,
-        Descrizione_Progetto,
-        CURDATE(),
-        Budget,
-        Limite,
-        'aperto',
-        Tipologia
-    );
+    INSERT INTO Progetto (IdCreatore,Nome,Descrizione,DataInserimento,Budget,DataLimite,Stato,Tipologia) 
+    VALUES (Id_Creatore,Nome_Progetto,Descrizione_Progetto,CURDATE(),Budget,Limite,'aperto',Tipologia);
 END //
 
 -- Inserimento foto nel Progetto

@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->execute();
     $result = $stmt->get_result();
     echo "<h2>Commenti del progetto: " . htmlspecialchars($nomeProgetto) . "</h2>";
-
+    //Costruisce la tabella con il risultato della storede procedure, a seconda del ruolo vengono aggiunte/rimosse opzioni
     if ($result->num_rows > 0) {
         echo "<table border='1' cellpadding='5'>
                 <tr>
@@ -23,9 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <th>Data</th>
                     <th>Risposta del cratore</th>
                 </tr>";
-
         while ($row = $result->fetch_assoc()) {
-
             echo "<tr>
                     <td>" . htmlspecialchars($row['Poster']) . "</td>
                     <td>" . htmlspecialchars($row['Contenuto']) . "</td>
@@ -34,11 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                   </tr>";
         }
         echo "</table>";
-    } else {
-        echo "Nessun commento trovato per questo progetto.";
-    }
-    $stmt->close();
-} else {
-    echo "Nessun progetto specificato.";
-}
+    } else {echo "Nessun commento trovato per questo progetto.";}
+    $stmt->close();} 
+else {echo "Nessun progetto specificato.";}
 ?>
