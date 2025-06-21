@@ -11,7 +11,6 @@ CREATE TABLE Utente (
     Ruolo ENUM('standard','creatore','amministratore') NOT NULL DEFAULT 'standard'
 ) ENGINE=INNODB;
 
-
 CREATE TABLE Creatore (
     Id INT AUTO_INCREMENT PRIMARY KEY,
     EmailUtente VARCHAR(30),
@@ -19,7 +18,6 @@ CREATE TABLE Creatore (
     nr_progetti INT, -- ridondanza???????????
     FOREIGN KEY (EmailUtente) REFERENCES Utente(Email)
 ) ENGINE=INNODB;
-
 
 CREATE TABLE Amministratore (
     CodiceSicurezza INT PRIMARY KEY,
@@ -57,7 +55,6 @@ CREATE TABLE Componenti (
     FOREIGN KEY (NomeProgetto) REFERENCES Progetto(Nome)
 ) ENGINE=INNODB;
 
-
 CREATE TABLE Profili (
 	Id INT AUTO_INCREMENT PRIMARY KEY,
     Nome VARCHAR(30) NOT NULL,
@@ -65,11 +62,9 @@ CREATE TABLE Profili (
     FOREIGN KEY (NomeProgetto) REFERENCES Progetto(Nome)
 ) ENGINE=INNODB;
 
-
 CREATE TABLE Skills (
     Competenza VARCHAR(30) PRIMARY KEY
 ) ENGINE=INNODB;
-
 
 CREATE TABLE SkillUtente (
     EmailUtente VARCHAR(30),
@@ -80,7 +75,6 @@ CREATE TABLE SkillUtente (
     FOREIGN KEY (CompetenzaUtente) REFERENCES Skills(Competenza)
 ) ENGINE=INNODB;
 
-
 CREATE TABLE SkillRichieste (
     IdProfilo INT,
     CompetenzaRichiesta VARCHAR(30),
@@ -90,7 +84,6 @@ CREATE TABLE SkillRichieste (
     FOREIGN KEY (CompetenzaRichiesta) REFERENCES Skills(Competenza)
 ) ENGINE=INNODB;
 
-
 CREATE TABLE Rewards (
     Codice INT AUTO_INCREMENT PRIMARY KEY,
     Descrizione VARCHAR(300),
@@ -98,7 +91,6 @@ CREATE TABLE Rewards (
     PercorsoFoto VARCHAR(255), #aggiunta percorso foto
     FOREIGN KEY (NomeProgetto) REFERENCES Progetto(Nome)
 ) ENGINE=INNODB;
-
 
 CREATE TABLE Finanziamento (
     Codice INT AUTO_INCREMENT PRIMARY KEY,
@@ -123,7 +115,6 @@ CREATE TABLE Commento (
     FOREIGN KEY (NomeProgetto) REFERENCES Progetto(Nome)
 ) ENGINE=INNODB;
 
-
 CREATE TABLE Risposta (
     IdCreatore INT,
     CodCommento INT PRIMARY KEY,
@@ -132,7 +123,6 @@ CREATE TABLE Risposta (
     FOREIGN KEY (CodCommento) REFERENCES Commento(CodiceCommento),
     FOREIGN KEY (IdCreatore) REFERENCES Creatore(Id)
 ) ENGINE=INNODB;
-
 
 CREATE TABLE Candidatura (
     Id INT AUTO_INCREMENT PRIMARY KEY,
@@ -145,26 +135,22 @@ CREATE TABLE Candidatura (
 ) ENGINE=INNODB;
 
 --Test
-
-INSERT INTO Utente (Email, Nome, Cognome, AnnoNascita, LuogoNascita, Nickname, Password, Ruolo) VALUES ('mario.rossi@example.com','Mario','Rossi',1985,'Milano','mrossi85','PasswordSicura123!','standard');
-
+INSERT INTO Utente (Email, Nome, Cognome, AnnoNascita, LuogoNascita, Nickname, Password, Ruolo) VALUES ('mario.rossi@example.com','Mario','Rossi',1985,'Milano','mrossi85','1','standard');
 INSERT INTO Utente (Email, Nome, Cognome, AnnoNascita, LuogoNascita, Nickname, Password, Ruolo) VALUES ('A','Anna','Verdi',1990,'Roma','av1990','B','creatore');
-  
 insert into Creatore(EmailUtente,Affidabilita,nr_progetti)  VALUES('mario.rossi@example.com',9,1);
-
 INSERT INTO Progetto (IdCreatore, Nome, Descrizione, DataInserimento, DataLimite, Budget, Stato, Tipologia) VALUES (1, 'Progetto Aperto 1', 'Prototipo hardware per rilevamento temperatura in ambienti industriali.', '2025-06-19', '2025-07-30', 1500.00, 'aperto', 'hardware');
-
 INSERT INTO Progetto (IdCreatore, Nome, Descrizione, DataInserimento, DataLimite, Budget, Stato, Tipologia) VALUES ( 1, 'Progetto Aperto 2', 'Prototipo', '2025-06-19', '2025-07-30', 15020.00, 'aperto', 'software');
-
 INSERT INTO Progetto (IdCreatore, Nome, Descrizione, DataInserimento, DataLimite, Budget, Stato, Tipologia) VALUES (1, 'Progetto chiuso', 'Prototipo hardware per rilevamento temperatura in ambienti industriali.', '2025-06-19', '2025-07-30', 15000.00, 'chiuso', 'hardware');
-
 INSERT INTO Commento (EmailUtente,DataCommento, Testo, NomeProgetto)VALUES ('mario.rossi@example.com','2025-06-15', 'Ottimo lavoro su questo progetto!', 'Progetto Aperto 1');
-
 INSERT INTO Commento (EmailUtente,DataCommento, Testo, NomeProgetto)VALUES ('mario.rossi@example.com','2025-06-18', 'Ci sono ancora alcuni miglioramenti da fare.', 'Progetto Aperto 2');
-
 INSERT INTO Risposta (IdCreatore,CodCommento,DataRisposta,Testo)VALUES(1,1,'2025-06-15','Gas');
+INSERT INTO Skills(Competenza)VALUES('Programmazione PHP');
+INSERT INTO Skills(Competenza)VALUES('Programmazione Java');
+INSERT INTO Skills(Competenza)VALUES('Programmazione Python');
+INSERT INTO SkillUtente(EmailUtente,CompetenzaUtente,Livello)VALUES('A','Programmazione PHP',3);
+INSERT INTO SkillUtente(EmailUtente,CompetenzaUtente,Livello)VALUES('A','Programmazione Java',5);
 
--- OPERAZIONI SUI DATI:
+-- OPERAZIONI SUI DATI--
 
 -- Operazioni degli utenti-----------------------------------------------------------------------------
 
@@ -248,7 +234,6 @@ BEGIN
             
 			INSERT INTO SkillUtente (EmailUtente, Competenza, Livello)
 			VALUES (Email_utente,Competenza_utente,Livello_competenza);
-            
 END //
 
 -- Visualizzazione di tutti i progetti disponibili(ovvero quelli aperti)
@@ -282,12 +267,11 @@ BEGIN
 END //
 
 -- prende tutti i dati di un utente per restituire la lista delle sue skills inserite
-CREATE PROCEDURE VisualizzaSkillsUtente(IN Email_Utente) (
+CREATE PROCEDURE VisualizzaSkillsUtente(IN Email_Utente VARCHAR(30))
 BEGIN
-    SELECT
-    Email,Nome,Cognome,AnnoNascita,LuogoNascita,Nickname,Ruolo
-    FROM Utente
-    WHERE Email = Email_Utente;
+    SELECT CompetenzaUtente,Livello 
+    FROM CompetenzaUtente C JOIN Utente U ON U.Email = C.EmailUtente
+    WHERE C.EmailUtente = Email_Utente;
 END //
 
 -- Finanziare un progetto aperto e scelta del reward:
@@ -326,19 +310,8 @@ BEGIN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Reward non valido';
 	END IF;
     
-    INSERT INTO Finanziamento (
-        EmailUtente,
-        Importo,
-        DataFinanziamento,
-        NomeProgetto,
-        CodiceReward
-    ) VALUES (
-        Email_utente,
-        Importo_finanziamento,
-		CURDATE(),
-        Nome_progetto,
-        Codice_reward
-    );   
+    INSERT INTO Finanziamento (EmailUtente,Importo,DataFinanziamento,NomeProgetto,CodiceReward) 
+    VALUES (Email_utente,Importo_finanziamento,CURDATE(),Nome_progetto,Codice_reward);   
 END //
 
 -- Aggiunta di un commento
@@ -391,7 +364,6 @@ BEGIN
 	#se tutta va a buon fine si inserisce candidatura            
 	INSERT INTO Candidatura(EmailUtente, IdProfilo, stato)
     VALUES (Email_Utente, Id_Profilo, 'in_attesa'); #stato inizializzato come 'in_attesa'
- 
 END // 
 
 -- Operazioni degli Amministratori----------------------------------------------------------
