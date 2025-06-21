@@ -30,7 +30,7 @@ unset($_SESSION['Progetto']);
             padding: 6px 12px;
             cursor: pointer;
         }
-        form { margin: 0; } /* elimina margini indesiderati */
+        form { margin: 0; } 
     </style>
 </head>
 <body>
