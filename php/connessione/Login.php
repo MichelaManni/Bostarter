@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			$_SESSION['Email'] = $email;
 			$_SESSION['Ruolo'] = $row['ruolo'];
             //Il ruolo di admin non è "confermato"
-            if (strtolower($row['ruolo']) === 'admin') {
+            if (strtolower($row['ruolo']) === 'amministratore') {
                 header("Location: AdminLogin.php");
             } else {
                 header("Location: HomePage.php");
