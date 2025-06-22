@@ -135,9 +135,9 @@ CREATE TABLE Candidatura (
 ) ENGINE=INNODB;
 
 --Test
-INSERT INTO Utente (Email, Nome, Cognome, AnnoNascita, LuogoNascita, Nickname, Password, Ruolo) VALUES ('M','Mario','Rossi',1985,'Milano','A','1','standard');
+INSERT INTO Utente (Email, Nome, Cognome, AnnoNascita, LuogoNascita, Nickname, Password, Ruolo) VALUES ('mario.rossi@example.com','Mario','Rossi',1985,'Milano','mrossi85','1','standard');
 INSERT INTO Utente (Email, Nome, Cognome, AnnoNascita, LuogoNascita, Nickname, Password, Ruolo) VALUES ('A','Anna','Verdi',1990,'Roma','av1990','B','creatore');
-INSERT INTO Utente (Email, Nome, Cognome, AnnoNascita, LuogoNascita, Nickname, Password, Ruolo) VALUES ('G@G','Giorgio','Miselli',2000,'Modena','Gyo','1','amministratore');
+INSERT INTO Utente (Email, Nome, Cognome, AnnoNascita, LuogoNascita, Nickname, Password, Ruolo) VALUES ('B','Andrea','Verdi',1990,'Roma','av1990','B','amministratore');
 insert into Creatore(EmailUtente,Affidabilita,nr_progetti)  VALUES('mario.rossi@example.com',9,1);
 INSERT INTO Progetto (IdCreatore, Nome, Descrizione, DataInserimento, DataLimite, Budget, Stato, Tipologia) VALUES (1, 'Progetto Aperto 1', 'Prototipo hardware per rilevamento temperatura in ambienti industriali.', '2025-06-19', '2025-07-30', 1500.00, 'aperto', 'hardware');
 INSERT INTO Progetto (IdCreatore, Nome, Descrizione, DataInserimento, DataLimite, Budget, Stato, Tipologia) VALUES ( 1, 'Progetto Aperto 2', 'Prototipo', '2025-06-19', '2025-07-30', 15020.00, 'aperto', 'software');
@@ -200,8 +200,6 @@ BEGIN
             SET Esito=TRUE;
 		END IF;
 END //     
-
---Autenticazione admin con codice di sicurezza(dopo il login normale)
 
 -- Inserire una skill di curriculum
 Create Procedure AggiungiSkillUtente(in Email_utente varchar(30),in Competenza_utente varchar(30),in Livello_competenza int)
@@ -347,6 +345,21 @@ BEGIN
 END // 
 
 -- Operazioni degli Amministratori----------------------------------------------------------
+
+--Autenticazione Ulteriore per gli admin
+CREATE PROCEDURE AutenticazioneAdmin(IN Email_inserita VARCHAR(30),Codice_inserito INT,OUT Esito BOOLEAN)
+BEGIN
+    DECLARE CodiceRegistrato INT;
+    SET Esito=FALSE;
+        SELECT CodiceSicurezza
+        INTO CodiceRegistrato
+        FROM Amministratore
+        WHERE EmailUtente = Email_inserita
+        LIMIT 1;
+    IF Codice_inserito IS NOT NULL AND CodiceRegistrato=Codice_inserito THEN
+        SET Esito=TRUE;
+	END IF;
+END //     
 
 -- Inserimento di una nuova competenza
 CREATE PROCEDURE InserimentoCompetenza (IN Nome_competenza VARCHAR(30), IN Codice_sicurezza INT)
