@@ -2,28 +2,10 @@
 
 <?php
 include 'Connessione/db.php';
-
-// Da rivedere questa parte !!!!!!
-function eseguiQuery($mysqli, $sql) {
-    if (!$result = $mysqli->query($sql)) {
-        echo "Errore nella query: " . $mysqli->error;
-        return [];}
-    $rows = $result->fetch_all(MYSQLI_ASSOC);
-    $result->free();
-    return $rows;
-}
-
 // Chiama le view
-$sezioni = [
-    'Top 3 Creatori più Affidabili' => 'SELECT * FROM ClassificaAffidabili',
-    '3 Progetti più Vicini al Completamento' => 'SELECT * FROM ProgettiQuasiCompletati',
-    '3 Utenti con più Finanziamenti' => "SELECT * FROM ClassificaUtenti"
-];
-// Recupero dati per tutte le sezioni
-$risultati = [];
-foreach ($sezioni as $titolo => $query) {
-    $risultati[$titolo] = eseguiQuery($mysqli, $query);
-}
+$affidabili = $mysqli->query("SELECT Nickname FROM ClassificaAffidabili")->fetch_all(MYSQLI_ASSOC);
+$progetti = $mysqli->query("SELECT Nome, Descrizione, Budget, Differenza FROM ProgettiQuasiCompletati")->fetch_all(MYSQLI_ASSOC);
+$finanziatori = $mysqli->query("SELECT Nickname FROM ClassificaUtenti")->fetch_all(MYSQLI_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -37,38 +19,62 @@ foreach ($sezioni as $titolo => $query) {
         th, td { padding: 8px; text-align: left; border-bottom: 5px solid black;}
     </style>
 </head>
-<body>
-    <?php foreach ($risultati as $titolo => $rows): ?>
-            <h2><?= htmlspecialchars($titolo) ?></h2>
-            <?php if (!empty($rows)): ?>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Posizione</th>
-                            <?php foreach (array_keys($rows[0]) as $colonna): ?>
-                                <th><?= htmlspecialchars($colonna) ?></th>
-                            <?php endforeach; ?>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($rows as $i => $row): ?>
-                            <tr>
-                                <td><?= $i + 1 ?></td>
-                                <?php foreach ($row as $valore): ?>
-                                    <td>
-                                        <?= is_numeric($valore) 
-                                            ? number_format($valore, 2, ',', '.') . ' €' 
-                                            : htmlspecialchars($valore) ?>
-                                    </td>
-                                <?php endforeach; ?>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            <?php else: ?>
-                <p>Nessun dato disponibile.</p>
-            <?php endif; ?>
-        </div>
-    <?php endforeach; ?>
+<div class="section">
+        <h2>Top 3 Creatori più Affidabili</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Posizione</th><th>Nickname</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php for ($i = 0; $i < 3; $i++): //Ogni sezione viene costruita con un for(3)?>
+                    <tr>
+                        <td><?= $i + 1 ?></td>
+                        <td><?= htmlspecialchars($affidabili[$i]['Nickname'] ?? 'N/A') ?></td>
+                    </tr>
+                <?php endfor; ?>
+            </tbody>
+        </table>
+    </div>
+    <div class="section">
+        <h2>3 Progetti più Vicini al Completamento</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Posizione</th><th>Nome</th><th>Descrizione</th><th>Budget</th><th>Da Raccogliere</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php for ($i = 0; $i < 3; $i++): ?>
+                    <tr>
+                        <td><?= $i + 1 ?></td>
+                        <td><?= htmlspecialchars($progetti[$i]['Nome'] ?? 'N/A') ?></td>
+                        <td><?= htmlspecialchars($progetti[$i]['Descrizione'] ?? 'N/A') ?></td>
+                        <td><?= number_format($progetti[$i]['Budget'] ?? 0, 2, ',', '.') ?> €</td>
+                        <td><?= number_format($progetti[$i]['Differenza'] ?? 0, 2, ',', '.') ?> €</td>
+                    </tr>
+                <?php endfor; ?>
+            </tbody>
+        </table>
+    </div>
+    <div class="section">
+        <h2>3 Utenti con più Finanziamenti</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Posizione</th><th>Nickname</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php for ($i = 0; $i < 3; $i++): ?>
+                    <tr>
+                        <td><?= $i + 1 ?></td>
+                        <td><?= htmlspecialchars($finanziatori[$i]['Nickname'] ?? 'N/A') ?></td>
+                    </tr>
+                <?php endfor; ?>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>

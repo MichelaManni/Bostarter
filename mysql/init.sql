@@ -548,7 +548,7 @@ Limit 3;
 
 -- 3 utenti con più finanziamenti
 CREATE VIEW ClassificaUtenti AS 
-SELECT U.Nickname,SUM(F.Importo) AS TotaleFinanziamenti
+SELECT U.Nickname
 FROM Finanziamento AS F
 JOIN Utente AS U ON U.Email = F.EmailUtente
 GROUP BY F.EmailUtente, U.Nickname
