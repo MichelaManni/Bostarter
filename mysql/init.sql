@@ -186,41 +186,21 @@ BEGIN
 		END IF;
 END //
 
-CREATE PROCEDURE Autenticazione( IN Email_inserita VARCHAR(30), 
-								IN Password_inserita VARCHAR(255),
-								IN CodiceSicurezza_inserito INT, #richiesto solo per gli amministratori
-                                OUT Esito BOOLEAN,
-                                OUT Ruolo_Utente ENUM ('standard','creatore','amministratore'))
+--Autenticazione per gli utenti(tutti)
+CREATE PROCEDURE Autenticazione(IN Email_inserita VARCHAR(30),IN Password_inserita VARCHAR(255),OUT Esito BOOLEAN,OUT RuoloRegistrato VARCHAR(20))
 BEGIN
-	
-    DECLARE RuoloRegistrato ENUM ('standard','creatore','amministratore');
     DECLARE PasswordRegistrata VARCHAR(255);
-    
     SET Esito=FALSE;
-    SET Ruolo_utente = NULL;
-    
-    SELECT U.Ruolo, U.Password INTO RuoloRegistrato, PasswordRegistrata
-    FROM UTENTE AS U
-    WHERE U.Email = Email_inserita;
-   
-    IF RuoloRegistrato IS NOT NULL AND PasswordRegistrata=Password_inserita THEN
-			IF RuoloRegistrato = 'amministratore' THEN
-				IF EXISTS (
-					SELECT 1
-                    FROM Amministratore
-                    WHERE EmailUtente = Email_inserita AND CodiceSicurezza = CodiceSicurezza_inserito)
-				THEN SET Esito = TRUE;
-                END IF;
-			ELSE 
-				SET Esito=TRUE;
-			END IF;
-	END IF;
-    
-    IF Esito = TRUE THEN
-		SET Ruolo_utente = RuoloRegistrato;
-	END IF;   
-
+        SELECT Password,Ruolo
+        INTO PasswordRegistrata,RuoloRegistrato
+        FROM Utente
+        WHERE Email = Email_inserita;
+        IF Password_inserita IS NOT NULL AND PasswordRegistrata=Password_inserita THEN
+            SET Esito=TRUE;
+		END IF;
 END //     
+
+--Autenticazione admin con codice di sicurezza(dopo il login normale)
 
 -- Inserire una skill di curriculum
 Create Procedure AggiungiSkillUtente(in Email_utente varchar(30),in Competenza_utente varchar(30),in Livello_competenza int)
@@ -231,7 +211,6 @@ BEGIN
             IF NOT EXISTS (SELECT 1 FROM Skills WHERE Competenza = Competenza_utente) THEN
 				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Questa skill non esiste';
 			END IF;
-            
 			INSERT INTO SkillUtente (EmailUtente, Competenza, Livello)
 			VALUES (Email_utente,Competenza_utente,Livello_competenza);
 END //

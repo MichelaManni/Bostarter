@@ -2,36 +2,30 @@
 include 'Connessione/db.php';
 $errore = '';
 
-//Script per il login -> se arriva un post(tramite il pulsane login)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-	$Email = $_POST['Email'];
-	$Password = $_POST['Password'];
-	//Metodo    
-	$Query = "SELECT Email FROM Utente where Email = '$Email' limit 1";
-	$result  = mysqli_query($mysqli, $Query);
-	$EmailDB = mysqli_fetch_assoc($result)['Email'];
+    $email = $_POST['Email'] ?? '';
+    $password_inserita = $_POST['Password'] ?? '';
+    //Usa la stored procedure autenticazione ottenere il ruolo serve per reindirizzare ad un ulteriore
+	//autenticazione nel caso sia admin
+    	$stmt = $mysqli->prepare("CALL Autenticazione(?, ?, @Esito, @RuoloRegistrato)");
+        $stmt->bind_param("ss", $email, $password_inserita);
+        $stmt->execute();
+        $stmt->close();
+        $result = $mysqli->query("SELECT @Esito AS esito, @RuoloRegistrato AS ruolo");
+        $row = $result->fetch_assoc();
 
-	if ($Email == $EmailDB) {
-		$Query = "SELECT Password FROM Utente where Email = '$Email' limit 1";
-		$result  = mysqli_query($mysqli, $Query);
-		$PasswordDB = mysqli_fetch_assoc($result)['Password'];
-
-		if ($Password == $PasswordDB) {
-			//Se la password matcha si può loggare,solo in questo caso
-			//salva per la sessione ruolo e email che saranno usati per le operazioni successive
-			$Query = "SELECT Ruolo FROM Utente where Email = '$Email' limit 1";
-			$result  = mysqli_query($mysqli, $Query);
-			$_SESSION['Ruolo'] = mysqli_fetch_assoc($result)['Ruolo'];
-			$_SESSION['Email'] = $Email;
-			header("Location: HomePage.php");
-			exit;
-		} else {
-			$errore = "Password errata.";
-		}
-	}
-	else{
-		$errore = "Email errata.";
-	}
-	mysqli_close($mysqli);
+        if ($row['esito']) {
+			$_SESSION['Email'] = $email;
+			$_SESSION['Ruolo'] = $row['ruolo'];
+            //Il ruolo di admin non è "confermato"
+            if (strtolower($row['ruolo']) === 'admin') {
+                header("Location: AdminLogin.php");
+            } else {
+                header("Location: HomePage.php");
+            }
+            exit();
+        }	
+		else {$errore = "Email o password errati.";}
 }
+$mysqli->close();
 ?>
