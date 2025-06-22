@@ -539,7 +539,7 @@ LIMIT 3;
 
 -- 3 Progetti più vicini al completamento
 CREATE VIEW ProgettiQuasiCompletati AS
-Select p.Nome,p.Descrizione,p.Budget,(p.Budget - SUM(F.Importo)) as Differenza
+Select p.Nome,p.Descrizione,p.Budget, IFNULL((p.Budget - SUM(F.Importo)), p.Budget) as Differenza
 From Progetto p left join Finanziamento F on p.Nome = F.NomeProgetto
 where p.stato = 'Aperto'
 Group By p.Nome
@@ -548,7 +548,7 @@ Limit 3;
 
 -- 3 utenti con più finanziamenti
 CREATE VIEW ClassificaUtenti AS 
-SELECT U.Nickname
+SELECT U.Nickname,SUM(F.Importo) AS TotaleFinanziamenti
 FROM Finanziamento AS F
 JOIN Utente AS U ON U.Email = F.EmailUtente
 GROUP BY F.EmailUtente, U.Nickname
