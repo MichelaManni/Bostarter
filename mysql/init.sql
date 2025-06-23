@@ -169,7 +169,7 @@ CREATE PROCEDURE Registrazione
     IN New_CodiceSicurezza INT)
 BEGIN 
 		IF EXISTS(SELECT 1 FROM Utente WHERE Email = New_Email) THEN
-			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Email già registratata';
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Email già registrata';
 		END IF;
         
 		INSERT INTO Utente (Email, Nome, Cognome, AnnoNascita, LuogoNascita, Nickname, Password, Ruolo)
@@ -180,7 +180,7 @@ BEGIN
             VALUES (New_Email,0,0);
 		ELSEIF New_Ruolo = 'amministratore' THEN
 			IF New_CodiceSicurezza IS NULL THEN
-				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Codice sicurezza obbligatorio per amministratori';
+				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Codice sicurezza obbligatorio';
 			END IF;
             INSERT INTO Amministratore(CodiceSicurezza, EmailUtente)
 			VALUES (New_CodiceSicurezza, New_Email);
