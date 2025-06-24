@@ -1,7 +1,6 @@
 <?php
 include 'Connessione/db.php';
-// Verifica sessione attiva
-
+// Verifica 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['testo'])) {
     if (!isset($_SESSION['Email']) || !isset($_SESSION['Progetto'])) {
         die('Sessione non valida. Effettua il login o seleziona un progetto.');

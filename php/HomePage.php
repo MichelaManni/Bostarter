@@ -52,6 +52,14 @@ session_start();
 		<a href="VisualizzaProgetti.php"><button type="button">Visualizza i progetti aperti</button></a>
 		<a href="Statistiche.php"><button type="button">Visualizza statistiche</button></a>
 		<a href="Profilo.php"><button type="button">Visualizza profilo personale</button></a>
+		<?php if($_SESSION['Ruolo'] == "creatore"){
+			echo "<a href='InserimentoProgetto.php'><button type='button'>Inserisci nuovo progetto</button></a>";
+			echo "<a href='GestioneProgetti.php'><button type='button'>Gestisci i tuoi progetti</button></a>";
+		}
+		if($_SESSION['Ruolo'] == "amministratore"){
+			echo "<a href='Profilo.php'><button type='button'>Inserisci Skills</button></a>";;
+		}
+		?>
 		<a href="index.php"><button type="button">Esci</button></a>
 	</div>
 </body>
