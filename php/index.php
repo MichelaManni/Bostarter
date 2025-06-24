@@ -5,7 +5,6 @@ include 'Connessione/Login.php'
 
 <!DOCTYPE HTML>
 <html>
-
 <head>
 	<title>Bostarter</title>
 	<style>
@@ -15,13 +14,12 @@ include 'Connessione/Login.php'
 		}
 	</style>
 </head>
-
 <body>
 	<h1> Bostarter </h1>
 	<div>
 		<form action="" method="post">
-			<input type="Text" name="Email" required /><br>
-			<input type="Password" name="Password" required /><br>
+			<input type="Text" name="Email_Inserita" required /><br>
+			<input type="Password" name="Password_Inserita" required /><br>
 			<a href=HomePage.php><button type="submit">Login</button></a><br>
 			<a href=registrazione.php>Se non hai un account registrati qui!</a>
 		</form>
@@ -30,5 +28,4 @@ include 'Connessione/Login.php'
 		<?php endif; ?>
 	</div>
 </body>
-
 </html>

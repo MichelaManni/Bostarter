@@ -14,11 +14,6 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
 	$ruolo = filter_input(INPUT_POST, 'ruolo', FILTER_SANITIZE_SPECIAL_CHARS);
     $codiceSicurezza = $_POST['codiceSicurezza'] ?? null;
 
-	//controlli
-	if(!$email){
-		echo "<p> email non valida </p>";
-		exit;
-	}
 	if (!preg_match('/^\d{4}$/', $anno)) {
         echo "<p>Anno di nascita non valido.</p>";
         exit;
@@ -28,7 +23,6 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
 		exit;
 	}
 	 include 'Connessione/registrazioneUtente.php';
-
 }
 ?>
 
