@@ -1,10 +1,10 @@
 <?php
 session_start();
 ?>
-<!-- Pagina che viene vista dopo il login da cui si può accedere al resto -->
+<!-- Pagina che viene vista dopo il login da cui si può accedere al resto
+ a seconda del ruolo vengono mostrate più o meno opzioni -->
 <!DOCTYPE HTML>
 <html>
-
 <head>
 	<title>Bostarter</title>
 	<style>
@@ -40,7 +40,6 @@ session_start();
 		}
 	</style>
 </head>
-
 <body>
 	<h1>Bostarter</h1>
 	<p>
@@ -48,6 +47,7 @@ session_start();
 		echo "Benvenuto " . $_SESSION['Email'];
 		?>
 	</p>
+<!-- Viene controllato il ruolo per mostrare o meno i pulsanti -->
 	<div class="container">
 		<a href="VisualizzaProgetti.php"><button type="button">Visualizza i progetti aperti</button></a>
 		<a href="Statistiche.php"><button type="button">Visualizza statistiche</button></a>
@@ -63,5 +63,4 @@ session_start();
 		<a href="index.php"><button type="button">Esci</button></a>
 	</div>
 </body>
-
 </html>

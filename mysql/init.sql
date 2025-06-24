@@ -135,15 +135,15 @@ CREATE TABLE Candidatura (
 ) ENGINE=INNODB;
 
 --Test
-INSERT INTO Utente (Email, Nome, Cognome, AnnoNascita, LuogoNascita, Nickname, Password, Ruolo) VALUES ('mario.rossi@example.com','Mario','Rossi',1985,'Milano','mrossi85','1','standard');
-INSERT INTO Utente (Email, Nome, Cognome, AnnoNascita, LuogoNascita, Nickname, Password, Ruolo) VALUES ('A','Anna','Verdi',1990,'Roma','av1990','B','creatore');
-INSERT INTO Utente (Email, Nome, Cognome, AnnoNascita, LuogoNascita, Nickname, Password, Ruolo) VALUES ('B','Andrea','Verdi',1990,'Roma','av1990','B','amministratore');
-insert into Creatore(EmailUtente,Affidabilita,nr_progetti)  VALUES('mario.rossi@example.com',9,1);
+INSERT INTO Utente (Email, Nome, Cognome, AnnoNascita, LuogoNascita, Nickname, Password, Ruolo) VALUES ('A','Mario','Rossi',1985,'Milano','StandardD','1','standard');
+INSERT INTO Utente (Email, Nome, Cognome, AnnoNascita, LuogoNascita, Nickname, Password, Ruolo) VALUES ('B','Anna','Verdi',1990,'Roma','CreatorC','2','creatore');
+INSERT INTO Utente (Email, Nome, Cognome, AnnoNascita, LuogoNascita, Nickname, Password, Ruolo) VALUES ('C','Andrea','Blu',1990,'Roma','AdminM','3','amministratore');
+insert into Creatore(EmailUtente,Affidabilita,nr_progetti) VALUES('B',9,1);
 INSERT INTO Progetto (IdCreatore, Nome, Descrizione, DataInserimento, DataLimite, Budget, Stato, Tipologia) VALUES (1, 'Progetto Aperto 1', 'Prototipo hardware per rilevamento temperatura in ambienti industriali.', '2025-06-19', '2025-07-30', 1500.00, 'aperto', 'hardware');
 INSERT INTO Progetto (IdCreatore, Nome, Descrizione, DataInserimento, DataLimite, Budget, Stato, Tipologia) VALUES ( 1, 'Progetto Aperto 2', 'Prototipo', '2025-06-19', '2025-07-30', 15020.00, 'aperto', 'software');
 INSERT INTO Progetto (IdCreatore, Nome, Descrizione, DataInserimento, DataLimite, Budget, Stato, Tipologia) VALUES (1, 'Progetto chiuso', 'Prototipo hardware per rilevamento temperatura in ambienti industriali.', '2025-06-19', '2025-07-30', 15000.00, 'chiuso', 'hardware');
-INSERT INTO Commento (EmailUtente,DataCommento, Testo, NomeProgetto)VALUES ('mario.rossi@example.com','2025-06-15', 'Ottimo lavoro su questo progetto!', 'Progetto Aperto 1');
-INSERT INTO Commento (EmailUtente,DataCommento, Testo, NomeProgetto)VALUES ('mario.rossi@example.com','2025-06-18', 'Ci sono ancora alcuni miglioramenti da fare.', 'Progetto Aperto 2');
+INSERT INTO Commento (EmailUtente,DataCommento, Testo, NomeProgetto)VALUES ('A','2025-06-15', 'Ottimo lavoro su questo progetto!', 'Progetto Aperto 1');
+INSERT INTO Commento (EmailUtente,DataCommento, Testo, NomeProgetto)VALUES ('B','2025-06-15', 'Ci sono ancora alcuni miglioramenti da fare.', 'Progetto Aperto 2');
 INSERT INTO Risposta (IdCreatore,CodCommento,DataRisposta,Testo)VALUES(1,1,'2025-06-15','Gas');
 INSERT INTO Skills(Competenza)VALUES('Programmazione PHP');
 INSERT INTO Skills(Competenza)VALUES('Programmazione Java');
@@ -382,6 +382,23 @@ BEGIN
 END //
 
 -- Operazioni dei Creatori------------------------------------------------------------------
+
+-- Controllare se si possiede effettivamente il progetto
+CREATE PROCEDURE ControlloProgetto(IN Email_inserita VARCHAR(30),IN Progetto_inserito VARCHAR(30),OUT Esito BOOLEAN)
+BEGIN
+    DECLARE EmailRegistrata VARCHAR(30);
+    DECLARE ProgettoRegistrato VARCHAR(30);
+    SET Esito = FALSE;
+    SELECT C.EmailUtente, P.Nome
+    INTO EmailRegistrata, ProgettoRegistrato
+    FROM Creatore C
+    JOIN Utente U ON C.EmailUtente = U.Email
+    JOIN Progetto P ON P.IdCreatore = C.Id
+    WHERE C.EmailUtente = Email_inserita AND P.Nome = Progetto_inserito;
+    IF (EmailRegistrata IS NOT NULL AND ProgettoRegistrato IS NOT NULL) THEN
+        SET Esito = TRUE;
+    END IF;
+END //
 
 -- Inserire un nuovo progetto
 CREATE PROCEDURE AggiungiProgetto(

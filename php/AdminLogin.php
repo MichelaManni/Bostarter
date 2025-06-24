@@ -29,10 +29,7 @@ $mysqli->close();
 <head>
 	<title>Bostarter</title>
 	<style>
-		body {
-			background-color: powderblue;
-			text-align: center;
-		}
+		body {background-color: powderblue;text-align: center;}
 	</style>
 </head>
 <body>
