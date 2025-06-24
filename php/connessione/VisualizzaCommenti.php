@@ -5,8 +5,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if(isset($_POST['nome_progetto'])){
           $_SESSION['Progetto'] = $_POST['nome_progetto'];
     }
+
     $nomeProgetto = $_SESSION['Progetto'];
-    
+    $EmailRegistrata = $_SESSION['Email'];
+
+    //Controllo se si è il creatore del progetto per rispondere ai commenti
+    //se esito è true allora quando si visualizzano i commenti del proprio progetto è possibile
+    //rispondere, appare il tasto apposito
+    $stmt = $mysqli->prepare("CALL ControlloProgetto(?, ?, @Esito)");
+    $stmt->bind_param("ss", $EmailRegistrata, $nomeProgetto);
+    $stmt->execute();
+    $stmt->close();
+    $result = $mysqli->query("SELECT @esito AS esito");
+    $row = $result->fetch_assoc();
+    $esito = $row['esito'];
+
     //Chiamata alla stored procedure
     //Costruisce una tabella con i commenti relativi al progetto
     $stmt = $mysqli->prepare("CALL VisualizzaCommenti(?)");
@@ -21,15 +34,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <th>Poster</th>
                     <th>Contenuto</th>
                     <th>Data</th>
-                    <th>Risposta del cratore</th>
-                </tr>";
+                    <th>Risposta del cratore</th>";
+                    if($esito){
+                        echo "<th>---------------</th>";
+                    }
+                    "</tr>";
         while ($row = $result->fetch_assoc()) {
             echo "<tr>
                     <td>" . htmlspecialchars($row['Poster']) . "</td>
                     <td>" . htmlspecialchars($row['Contenuto']) . "</td>
                     <td>" . htmlspecialchars($row['Data']) . "</td>
-                    <td>" . htmlspecialchars($row['Risposta']) . "</td>
-                  </tr>";
+                    <td>" . htmlspecialchars($row['Risposta']) . "</td>";
+                    if($esito && $row['Risposta']== ''){
+                       echo "<td><a><button>Rispondi</button></a></td>";
+                    }
+                    else{
+                        echo "<td> </td>";
+                    }
+                    "</tr>";
         }
         echo "</table>";
     } else {echo "Nessun commento trovato per questo progetto.";}
