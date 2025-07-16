@@ -9,35 +9,23 @@ unset($_SESSION['Progetto']);
 
 <!DOCTYPE HTML>
 <html>
+
 <head>
-    <meta charset="utf-8">
     <title>Bostarter - Progetti Aperti</title>
+    <link rel="stylesheet" href="style.css">
     <style>
-        body { background-color: powderblue; }
-        table { border-collapse: collapse; width: 100%; }
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: white;
-            color: black;
-            padding-top: 12px;
-            padding-bottom: 12px;
-        }
         button {
             padding: 6px 12px;
             cursor: pointer;
         }
-        form { margin: 0; } 
     </style>
 </head>
+
 <body>
 
     <h2>Progetti Disponibili</h2>
     <?php if ($result && $result->num_rows > 0): ?>
-        <table>
+        <table class="t1">
             <thead>
                 <tr>
                     <th>Nome</th>
@@ -52,7 +40,7 @@ unset($_SESSION['Progetto']);
                 </tr>
             </thead>
             <tbody>
-                <?php while($row = $result->fetch_assoc()): ?>
+                <?php while ($row = $result->fetch_assoc()): ?>
                     <tr>
                         <td><?= htmlspecialchars($row["Nome Progetto"]) ?></td>
                         <td><?= htmlspecialchars($row["Descrizione"]) ?></td>
@@ -104,7 +92,8 @@ unset($_SESSION['Progetto']);
     // Chiudo la connessione
     $mysqli->close();
     ?>
-    <br>    
+    <br>
     <a href="HomePage.php"><button>HomePage</button></a>
 </body>
+
 </html>

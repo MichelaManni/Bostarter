@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     echo "<h2>Commenti del progetto: " . htmlspecialchars($nomeProgetto) . "</h2>";
     //Costruisce la tabella con il risultato della storede procedure, a seconda del ruolo vengono aggiunte/rimosse opzioni
     if ($result->num_rows > 0) {
-        echo "<table border='1' cellpadding='5'>
+        echo "<table class='T1' border='1' cellpadding='5'>
                 <tr>
                     <th>Poster</th>
                     <th>Contenuto</th>

@@ -1,24 +1,24 @@
-<?php 
+<?php
 session_start();
+//*Pagina di login
 include 'Connessione/Login.php'
 ?>
 
 <!DOCTYPE HTML>
 <html>
+
 <head>
 	<title>Bostarter</title>
-	<style>
-		body {
-			background-color: powderblue;
-			text-align: center;
-		}
-	</style>
+	<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 	<h1> Bostarter </h1>
 	<div>
 		<form action="" method="post">
+			<p>Email</p>
 			<input type="Text" name="Email_Inserita" required /><br>
+			<p>Password</p>
 			<input type="Password" name="Password_Inserita" required /><br>
 			<a href=HomePage.php><button type="submit">Login</button></a><br>
 			<a href=registrazione.php>Se non hai un account registrati qui!</a>
@@ -28,4 +28,5 @@ include 'Connessione/Login.php'
 		<?php endif; ?>
 	</div>
 </body>
+
 </html>

@@ -1,0 +1,76 @@
+		body {
+			background-color: powderblue;
+			font-family: Arial, sans-serif;
+			text-align: center;
+		}
+
+		p{
+			margin: 5px;
+		}
+		
+		h2 {
+			text-align: left;
+		}
+
+		table {
+			border-collapse: collapse;
+			width: 100%;
+		}
+
+		.t1 th,
+		.t1 td {
+			border: 1px solid black;
+			padding: 8px;
+			text-align: left;
+		}
+
+		.t1 th {
+			background-color: white;
+			color: black;
+			padding-top: 12px;
+			padding-bottom: 12px;
+		}
+
+		form {
+			margin: 0;
+		}
+
+		.container {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 20px;
+			justify-content: center;
+			margin-top: 40px;
+		}
+
+		.container a {
+			text-decoration: none;
+			flex: 1 1 200px;
+			max-width: 300px;
+		}
+
+		.Pulsantegrande {
+			width: 100%;
+			padding: 20px;
+			font-size: 1.2;
+			background-color: white;
+			color: black;
+			border-radius: 10px;
+			cursor: pointer;
+		}
+
+		.titolo {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: 10px;
+		}
+
+		.Classifica {
+			padding: 10px;
+		}
+
+		button {
+			padding: 6px 12px;
+			cursor: pointer;
+		}
