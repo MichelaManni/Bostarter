@@ -1,4 +1,5 @@
 <?php
+//*Scritp per usare la stored procedure per autenticarsi
 include 'Connessione/db.php';
 $errore = '';
 

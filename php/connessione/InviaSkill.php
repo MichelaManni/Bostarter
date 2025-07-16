@@ -1,24 +1,21 @@
 <?php
-//*Script per inviare un commento al db
 include 'Connessione/db.php';
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 try {
-    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['testo'])) {
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['Skill_Inserita'])) {
         if (!isset($_SESSION['Email']) || !isset($_SESSION['Progetto'])) {
             die('Sessione non valida. Effettua il login o seleziona un progetto.');
         }
-        $Email_utente   = $_SESSION['Email'];
-        $Nome_progetto  = $_SESSION['Progetto'];
-        $Testo_inserito = isset($_POST['testo']) ? trim($_POST['testo']) : '';
+        $Skill_inserita = isset($_POST['Skill_Inserita']) ? trim($_POST['Skill_Inserita']) : '';
 
         //Usa la stored procedure per inserire i commenti
-        $query = "CALL InserimentoCommento(?, ?, ?)";
+        $query = "CALL InserimentoCompetenza(?, ?)";
         if ($stmt = $mysqli->prepare($query)) {
-            // Bind dei parametri: tutti stringhe
-            $stmt->bind_param('sss', $Email_utente, $Testo_inserito, $Nome_progetto);
+
+            $stmt->bind_param('sss', $Skill_inserita,);
             if ($stmt->execute()) {
-                echo 'Commento inserito con successo!';
+                echo 'Skill inserita con successo!';
             }
             $stmt->close();
         }

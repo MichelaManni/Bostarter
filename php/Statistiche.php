@@ -1,7 +1,6 @@
-
-
-<!-- Pagina per vedere le classifiche -->
 <?php
+//*Pagina per vedere le statistiche
+
 include 'Connessione/db.php';
 // Chiama le view
 $affidabili = $mysqli->query("SELECT Nickname FROM ClassificaAffidabili")->fetch_all(MYSQLI_ASSOC);

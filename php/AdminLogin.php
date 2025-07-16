@@ -17,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['Cod_Inserito'])) {
 
         if ($row['esito']) {
         	header("Location: HomePage.php");
+			
        		exit();
 		}
 else {$errore = "Codice di sicurezza non valido";}

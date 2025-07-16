@@ -361,7 +361,7 @@ BEGIN
 	END IF;
 END //     
 
--- Inserimento di una nuova competenza
+-- Inserimento di una nuova skill
 CREATE PROCEDURE InserimentoCompetenza (IN Nome_competenza VARCHAR(30), IN Codice_sicurezza INT)
 BEGIN 
 	DECLARE ControlloEsistenzaCompetenza BOOLEAN;
