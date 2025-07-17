@@ -1,5 +1,5 @@
 <?php
-
+//Gestisce HTML della registrazione, la validazione di base e chiama la connessione
 session_start();//avvia sessione
 
 if($_SERVER["REQUEST_METHOD"]=="POST"){

@@ -383,6 +383,15 @@ END //
 
 -- Operazioni dei Creatori------------------------------------------------------------------
 
+--Ricava l'id del creatore tramite la mail
+CREATE PROCEDURE GetIdCreatore(IN Email VARCHAR(30), OUT IdCreatore INT)
+BEGIN 
+    SELECT Id INTO IdCreatore
+    FROM Creatore AS C
+    WHERE Email = C.EmailUtente;
+END //
+
+
 -- Controllare se si possiede effettivamente il progetto
 CREATE PROCEDURE ControlloProgetto(IN Email_inserita VARCHAR(30),IN Progetto_inserito VARCHAR(30),OUT Esito BOOLEAN)
 BEGIN

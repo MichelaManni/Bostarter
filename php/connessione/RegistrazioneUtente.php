@@ -1,4 +1,5 @@
 <?php
+//Gestisce l'inserimento nel database tramite la stored procedure
 include 'db.php';
 //recupera i dati inviati tramite POST dal form html
 $email = $_POST['email'];
