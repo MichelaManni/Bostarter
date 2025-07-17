@@ -29,17 +29,8 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<title> Registrazione </title>
-<style>
-	body {
-		background-color: powderblue;
-		text-align: center;
-	}
-	label {
-		display: block;
-		margin-bottom: 15px;
-	}
-</style>
+	<title> Registrazione </title>
+	<link rel="stylesheet" href="style.css">
 <!--per mostrare o nascondere il campo codice di sicurezza in base al ruolo scelto -->
 <script>
 function AbilitazioneCodiceSicurezza(){
@@ -59,32 +50,30 @@ window.onload = function() { //quando pagina è caricata esegue la funzione
 </head>
 <body>
 	<!-- Pulsante back -->
-<form action="index.php" method="get" style="position: absolute; top: 20px; left: 20px;">
-	<button type="submit">Torna alla Home</button>
-</form>
-<h2> Registrazione </h2>
-<!-- form di registrazione -->
-	<form method="post" action = "registrazione.php">
-		<label> Email : <input type="email" name="email" required></label><br>
-		<label> Nome : <input type="text" name="nome" required></label><br>
-		<label> Cognome : <input type="text" name="cognome" required></label><br>
-		<label> Anno di nascita : <input type="number" name="anno"  min="1900" max="2025" required></label><br>
-		<label> Luogo di nascita : <input type="text" name="luogo" required></label><br>
-		<label> Nickname : <input type="text" name="nickname" required></label><br>
-		<label> Password : <input type="password" name="password" required></label><br>
-		<!-- tendina per selezionare ruolo -->
-		<label> Ruolo : 
-			<select name= "ruolo" id = "ruolo" onchange="AbilitazioneCodiceSicurezza()" required>
-				<option value="standard">Standard</option>
-				<option value="creatore">Creatore</option>
-				<option value="amministratore">Amministratore</option>
-			</select>
-		</label><br>
-		<!-- div codice di sicurezza, di default nascosto -->
-		<div id="codiceSicurezzaDiv" style="display:none;">
-			<label>Codice Sicurezza: <input type="number" name="codiceSicurezza" id="codiceSicurezza"></label><br>
-		</div>
-		<button type="submit"> Submit </button>
-</form>
+	<a href="index.php"><button class="ButtonBack">Torna al Login</button></a>
+	<h1> Bostarter-Registrazione </h1>
+	<!-- form di registrazione -->
+		<form method="post" action = "registrazione.php">
+			<p> Email : </p><input type="email" name="email" required><br>
+			<p> Nome : </p><input type="text" name="nome" required><br>
+			<p> Cognome :</p> <input type="text" name="cognome" required><br>
+			<p> Anno di nascita :</p> <input type="number" name="anno"  min="1900" max="2025" required><br>
+			<p> Luogo di nascita : </p><input type="text" name="luogo" required><br>
+			<p> Nickname : </p><input type="text" name="nickname" required><br>
+			<p> Password : </p><input type="password" name="password" required><br>
+			<!-- tendina per selezionare ruolo -->
+			<p> Ruolo : </p>
+				<select name= "ruolo" id = "ruolo" onchange="AbilitazioneCodiceSicurezza()" required>
+					<option value="standard">Standard</option>
+					<option value="creatore">Creatore</option>
+					<option value="amministratore">Amministratore</option>
+				</select>
+			<br>
+			<!-- div codice di sicurezza, di default nascosto -->
+			<div id="codiceSicurezzaDiv" style="display:none;">
+				<p>Codice Sicurezza:</p> <input type="number" name="codiceSicurezza" id="codiceSicurezza"><br>
+			</div>
+			<button type="submit"> Submit </button>
+		</form>
 </body>
 </html>

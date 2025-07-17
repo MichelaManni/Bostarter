@@ -1,6 +1,6 @@
 <?php
 include 'db.php'; //connessione al database
-session_start();
+
 //Chiamata alla stored procedure per l'inserimento di un nuovo progetto
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -35,14 +35,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             //esecuzione procedure 
             if($stmt->execute()){
                 echo "<p> Progetto inserito correttamente! </p>";
-                echo "<a href='../Homepage.php'>Torna alla homepage</a>";
-            }else{
-                echo "<p> Errore: " . htmlspecialchars($stmt->error) . "</p>";
+                echo "<div class='container'>";
+                echo "<a href='../Homepage.php'><button class='Pulsantegrande' type='button'>Torna alla homepage</a></button>";
+                echo "<a href='../InserimentoFoto.php'><button class='Pulsantegrande' type='button'> Aggiungi delle foto al progetto </a></button>";
+                echo " </div>";
+            } else{
+                $errorMsg = $stmt->error; //messaggio errore generato dalla storedd procedure
+                if (strpos($errorMsg, 'Id creatore non valido') !== false) {
+                    echo "<p>Errore: Id creatore non valido </p>";
+                }
+                elseif(strpos($errorMsg, 'Nome progetto già esistente') !== false){
+                    echo "<p>Errore: Progetto già esistente, cambiare nome </p>";
+                } else { //altri errori generici
+                echo "<p>Errore durante la registrazione: " . htmlspecialchars($errorMsg) . "</p>";
+                }
             }
         }catch(mysqli_sql_exception $e){
-            echo "<p> Errore nel database". htmlspecialchars($e->getMessage()) . "</p>";
+             echo "<p> Errore: ". htmlspecialchars($e->getMessage()) . "</p>";
         }
         $stmt->close(); //chiuso statement procedure
         
     }
 }
+?>
