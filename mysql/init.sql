@@ -438,12 +438,14 @@ BEGIN
     DECLARE Controllo BOOLEAN;
 	#controllo associazione tra creatore e progetto
     SELECT EXISTS (SELECT 1
-					FROM PROGETTO AS P
-					WHERE P.NomeProgetto = NomeProgetto_inserito 
+					FROM Progetto AS P
+					WHERE P.Nome = NomeProgetto_inserito 
                     AND  P.IdCreatore = IdCreatore_inserito)INTO Controllo;
     IF (Controllo = TRUE) THEN
 		INSERT INTO FotoProgetto(IdCreatore,NomeProgetto,PercorsoFoto)
         VALUES (IdCreatore_inserito,NomeProgetto_inserito, Percorsofoto_inserito);
+    ELSE
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Non sei il creatore';
 	END IF;
 END //
 
@@ -454,7 +456,7 @@ BEGIN
 	DECLARE Controllo BOOLEAN;
 	#controllo esistenza progetto e corrispondenza con il creatore
     SELECT EXISTS (SELECT 1
-					FROM PROGETTO AS P
+					FROM Progetto AS P
                     WHERE P.Nome = Nome_progetto
 					AND P.IdCreatore = Id_creatore
                     AND P.Stato = 'aperto')
