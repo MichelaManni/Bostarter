@@ -1,7 +1,6 @@
 <?php
 include 'db.php';
 
-$nome_progetto = $_POST['nome_progetto'];
 
 $email = $_SESSION['Email']; //ricavo email dalla sessione per recuperare ID creatore
     
@@ -38,6 +37,7 @@ if ($idCreatore === null) {
                 if ($stmt->execute()) {
                     echo "<p>Foto caricata correttamente!</p>";
                 } else {
+                    $errorMsg = $stmt->error; //messaggio errore generato dalla storedd procedure
                     if (strpos($errorMsg, 'Non sei il creatore') !== false) { //errore dalla stored procedure
                         echo "<p>Errore: Non sei il creatore del progetto selezionato </p>";
                     } else { //altri errori generici

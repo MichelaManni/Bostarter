@@ -34,10 +34,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         try{
             //esecuzione procedure 
             if($stmt->execute()){
+                $_SESSION['nome_progetto']=$nome;
                 echo "<p> Progetto inserito correttamente! </p>";
                 echo "<div class='container'>";
-                echo "<a href='../Homepage.php'><button class='Pulsantegrande' type='button'>Torna alla homepage</a></button>";
-                echo "<a href='../InserimentoFoto.php'><button class='Pulsantegrande' type='button'> Aggiungi delle foto al progetto </a></button>";
+                echo "<a href='../InserimentoFoto.php'><button type='button'> Aggiungi delle foto al progetto </button></a>";
                 echo " </div>";
             } else{
                 $errorMsg = $stmt->error; //messaggio errore generato dalla storedd procedure
