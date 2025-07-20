@@ -35,10 +35,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             //esecuzione procedure 
             if($stmt->execute()){
                 $_SESSION['nome_progetto']=$nome;
-                echo "<p> Progetto inserito correttamente! </p>";
-                echo "<div class='container'>";
-                echo "<a href='../InserimentoFoto.php'><button type='button'> Aggiungi delle foto al progetto </button></a>";
-                echo " </div>";
+                $_SESSION['tipologia']=$tipologia;
+                //quando il progetto viene creato si reindirizza a nuova schermata x aggiunta foto, profili/componenti
+                header("Location: ../AggiuntaContenutiNuovoProgetto.php");
+                exit();
             } else{
                 $errorMsg = $stmt->error; //messaggio errore generato dalla storedd procedure
                 if (strpos($errorMsg, 'Id creatore non valido') !== false) {

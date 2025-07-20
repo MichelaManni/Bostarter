@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
 
 	<!-- Pulsante back -->   
-    <a href="HomePage.php"><button class="ButtonBack">Torna alla homepage</button></a>
+    <a href="AggiuntaContenutiNuovoProgetto.php"><button class="ButtonBack">Torna indietro</button></a>
     <h1>Inserisci una foto per un progetto</h1>
     <form method="POST" action="InserimentoFoto.php" enctype="multipart/form-data">
         <p>Nome del Progetto:</p>

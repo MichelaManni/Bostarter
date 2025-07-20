@@ -1,7 +1,7 @@
 <?php
 include 'db.php';
 
-
+//STORED PROCEDURE PER INSERIMENTO FOTO
 $email = $_SESSION['Email']; //ricavo email dalla sessione per recuperare ID creatore
     
 $query = "CALL GetIdCreatore(?, @idCreatore)";   //chiama la stored procedure per ritornare l'id dal creatore avendo la mail

@@ -510,6 +510,26 @@ BEGIN
             
             INSERT INTO Profili (Nome,Nome_progetto) VALUES (Nome_Profilo,Nome_Progetto);
 	 END //
+     
+-- Inserimento Componente per progetto hardware
+CREATE PROCEDURE AggiungiComponente(IN NomeComponente VARCHAR(30), IN DescrizioneComponente VARCHAR(255),
+    IN Quantita INT,IN Prezzo DECIMAL(10,2),IN NomeProgetto VARCHAR(30))
+BEGIN
+    DECLARE Controllo BOOLEAN;
+    -- verifica esistenza progetto
+    SELECT EXISTS (
+        SELECT 1 FROM Progetto 
+        WHERE Nome = NomeProgetto AND Tipologia = 'hardware' AND Stato = 'aperto'
+    ) INTO Controllo;
+
+    IF Controllo = FALSE THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Progetto non valido o non aperto';
+    END IF;
+
+    INSERT INTO Componenti(Nome, Descrizione, Quantita, Prezzo, NomeProgetto)
+    VALUES (NomeComponente, DescrizioneComponente, Quantita, Prezzo, NomeProgetto);
+END //
+
 
 -- Accettazione o meno di una candidatura
 CREATE PROCEDURE AccettazioneCandidatura (IN Id_Candidatura INT, 
