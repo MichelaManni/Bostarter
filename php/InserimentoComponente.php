@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <h1>Inserisci componente per il nuovo progetto</h1>
     <form method="POST" action="InserimentoComponente.php">
         <p>Nome del Progetto:</p>
-            <input type="text" name="nome_progetto" value="<?php echo htmlspecialchars($nome_progetto); ?>" required>
+            <input type="text" name="nome_progetto" value="<?php echo htmlspecialchars($nome_progetto); ?>" readonly required>
         <p>Nome componente:</p>
             <input type="text" name="nome" required>
         <p>Descrizione:</p>

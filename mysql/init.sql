@@ -501,15 +501,46 @@ END //
 -- Inserimento nuovo profilo per un progetto software
 Create Procedure AggiungiProfiloSoftware(in Id_Creatore int,in Nome_Progetto varchar(30),in Nome_Profilo varchar(30)) 
 BEGIN
-			IF NOT EXISTS (SELECT 1 FROM Creatore WHERE idCreatore = Id_Creatore) THEN
-				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Id non valido';
-			END IF;
-			IF NOT EXISTS (SELECT 1 FROM Progetto WHERE Nome = Nome_Progetto and Tipologia = "Software" and Stato = "Aperto") THEN
-				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Progetto non trovato';
-			END IF;
-            
-            INSERT INTO Profili (Nome,Nome_progetto) VALUES (Nome_Profilo,Nome_Progetto);
-	 END //
+	IF NOT EXISTS (
+        SELECT 1 FROM Creatore WHERE id = Id_Creatore
+    ) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Id non valido';
+    END IF;
+
+    IF NOT EXISTS (
+        SELECT 1 FROM Progetto 
+        WHERE Nome = Nome_Progetto AND Tipologia = 'Software' AND Stato = 'Aperto'
+    ) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Progetto non trovato';
+    END IF;
+
+    INSERT INTO Profili (Nome, NomeProgetto)
+    VALUES (Nome_Profilo, Nome_Progetto);
+
+    SELECT LAST_INSERT_ID() AS IdNuovoProfilo;
+END //
+
+-- Inserimento skill richieste nei profili per un progetto software
+CREATE PROCEDURE AggiungiSkillProfilo (IN Id_profilo INT,IN Skill VARCHAR(30),IN Livello INT)
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM Profili WHERE Id = Id_profilo) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Profilo non esistente';
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM Skills WHERE Competenza = Skill) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Skill non valida';
+    END IF;
+
+    IF EXISTS (
+        SELECT 1 FROM SkillRichieste
+        WHERE IdProfilo = Id_profilo AND CompetenzaRichiesta = Skill
+    ) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Skill già inserita per questo profilo';
+    END IF;
+
+    INSERT INTO SkillRichieste (IdProfilo, CompetenzaRichiesta, Livello)
+    VALUES (Id_profilo, Skill, Livello);
+END //
      
 -- Inserimento Componente per progetto hardware
 CREATE PROCEDURE AggiungiComponente(IN NomeComponente VARCHAR(30), IN DescrizioneComponente VARCHAR(255),

@@ -17,7 +17,7 @@ $tipologia = $_SESSION['tipologia'];
     <div class="container">
 		<a href="InserimentoFoto.php"><button class="Pulsantegrande" type="button">Inserisci foto</button></a>
 		<?php if ($_SESSION['tipologia'] == "software"): ?>
-            <a href="InserimentoProfilo.php"><button class="Pulsantegrande" type="button">Inserisci profili</button></a>
+            <a href="InserimentoProfiloSoftware.php"><button class="Pulsantegrande" type="button">Inserisci profili</button></a>
         <?php else: ?>
             <a href="InserimentoComponente.php"><button class="Pulsantegrande" type="button">Inserisci componenti</button></a>
         <?php endif; ?>

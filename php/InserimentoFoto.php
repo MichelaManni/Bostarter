@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <h1>Inserisci una foto per un progetto</h1>
     <form method="POST" action="InserimentoFoto.php" enctype="multipart/form-data">
         <p>Nome del Progetto:</p>
-            <input type="text" name="nome_progetto" value="<?php echo htmlspecialchars($nome_progetto); ?>" required>
+            <input type="text" name="nome_progetto" value="<?php echo htmlspecialchars($nome_progetto); ?>" readonly required>
         <p>Seleziona una foto (JPG, PNG):</p>
             <input type="file" name="foto" accept=".jpg,.jpeg,.png" required>
         <button type="submit">Carica foto</button>
