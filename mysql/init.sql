@@ -87,6 +87,7 @@ CREATE TABLE SkillRichieste (
 CREATE TABLE Rewards (
     Codice INT AUTO_INCREMENT PRIMARY KEY,
     Descrizione VARCHAR(300),
+    PrezzoMinimo DECIMAL(10,2),
     NomeProgetto VARCHAR(30),
     PercorsoFoto VARCHAR(255), #aggiunta percorso foto
     FOREIGN KEY (NomeProgetto) REFERENCES Progetto(Nome)
@@ -450,7 +451,7 @@ BEGIN
 END //
 
 -- inserimento Reward 
-CREATE PROCEDURE InserimentoReward( IN Descrizione_reward VARCHAR(300),IN Nome_progetto VARCHAR(30),
+CREATE PROCEDURE InserimentoReward( IN Descrizione_reward VARCHAR(300),IN Prezzo_minimo DECIMAL(10,2), IN Nome_progetto VARCHAR(30),
 									IN Id_creatore INT, IN  Percorso_Foto VARCHAR(255))
 BEGIN
 	DECLARE Controllo BOOLEAN;
@@ -462,8 +463,8 @@ BEGIN
                     AND P.Stato = 'aperto')
                     INTO Controllo;
 	IF Controllo= TRUE THEN
-		INSERT INTO Rewards(Descrizione, NomeProgetto, PercorsoFoto )
-		VALUES (Descrizione_reward, Nome_progetto,Percorso_foto);
+		INSERT INTO Rewards(Descrizione, PrezzoMinimo, NomeProgetto, PercorsoFoto )
+		VALUES (Descrizione_reward, Prezzo_minimo, Nome_progetto,Percorso_foto);
 	ELSE
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Progetto non trovato o chiuso';
 	END IF;
@@ -509,7 +510,7 @@ BEGIN
 
     IF NOT EXISTS (
         SELECT 1 FROM Progetto 
-        WHERE Nome = Nome_Progetto AND Tipologia = 'Software' AND Stato = 'Aperto'
+        WHERE Nome = Nome_Progetto AND Tipologia = 'software' AND Stato = 'aperto'
     ) THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Progetto non trovato';
     END IF;

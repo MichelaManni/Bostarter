@@ -16,6 +16,7 @@ $tipologia = $_SESSION['tipologia'];
     <p> Il progetto è stato creato correttamente! Ora è possibile aggiungere altre informazioni</p>
     <div class="container">
 		<a href="InserimentoFoto.php"><button class="Pulsantegrande" type="button">Inserisci foto</button></a>
+        <a href="InserimentoReward.php"><button class="Pulsantegrande" type="button">Inserisci reward</button></a>
 		<?php if ($_SESSION['tipologia'] == "software"): ?>
             <a href="InserimentoProfiloSoftware.php"><button class="Pulsantegrande" type="button">Inserisci profili</button></a>
         <?php else: ?>
