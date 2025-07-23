@@ -1,17 +1,16 @@
 <?php
 include 'Connessione/db.php';
-// Verifica che il dato sia stato inviato
+//*Script per visualizzare tutti i commenti relativi a un progetto
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if(isset($_POST['nome_progetto'])){
-          $_SESSION['Progetto'] = $_POST['nome_progetto'];
+    if (isset($_POST['nome_progetto'])) {
+        $_SESSION['Progetto'] = $_POST['nome_progetto'];
     }
 
     $nomeProgetto = $_SESSION['Progetto'];
     $EmailRegistrata = $_SESSION['Email'];
 
     //Controllo se si è il creatore del progetto per rispondere ai commenti
-    //se esito è true allora quando si visualizzano i commenti del proprio progetto è possibile
-    //rispondere, appare il tasto apposito
+    //se esito è true allora quando si visualizzano i commenti del proprio progetto è possibile rispondere
     $stmt = $mysqli->prepare("CALL ControlloProgetto(?, ?, @Esito)");
     $stmt->bind_param("ss", $EmailRegistrata, $nomeProgetto);
     $stmt->execute();
@@ -20,8 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $row = $result->fetch_assoc();
     $esito = $row['esito'];
 
-    //Chiamata alla stored procedure
-    //Costruisce una tabella con i commenti relativi al progetto
+    //Chiamata alla stored procedure e costruisce una tabella con i commenti relativi al progetto
     $stmt = $mysqli->prepare("CALL VisualizzaCommenti(?)");
     $stmt->bind_param("s", $nomeProgetto);
     $stmt->execute();
@@ -35,26 +33,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <th>Contenuto</th>
                     <th>Data</th>
                     <th>Risposta del cratore</th>";
-                    if($esito){
-                        echo "<th>---------------</th>";
-                    }
-                    "</tr>";
+        if ($esito) {
+            echo "<th>---------------</th>";
+        }
+        "</tr>";
         while ($row = $result->fetch_assoc()) {
             echo "<tr>
                     <td>" . htmlspecialchars($row['Poster']) . "</td>
                     <td>" . htmlspecialchars($row['Contenuto']) . "</td>
                     <td>" . htmlspecialchars($row['Data']) . "</td>
                     <td>" . htmlspecialchars($row['Risposta']) . "</td>";
-                    if($esito && $row['Risposta']== ''){
-                       echo "<td><a><button>Rispondi</button></a></td>";
-                    }
-                    else{
-                        echo "<td> </td>";
-                    }
-                    "</tr>";
+            if ($esito && $row['Risposta'] == '') {
+                echo "<td><a href='Risposta.php'><button>Rispondi</button></a></td>";
+            } else {
+                echo "<td> </td>";
+            }
+            "</tr>";
         }
         echo "</table>";
-    } else {echo "Nessun commento trovato per questo progetto.";}
-    $stmt->close();} 
-else {echo "Nessun progetto specificato.";}
-?>
+    } else {
+        echo "Nessun commento trovato per questo progetto.";
+    }
+    $stmt->close();
+} else {
+    echo "Nessun progetto specificato.";
+}

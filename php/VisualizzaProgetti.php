@@ -36,7 +36,7 @@ unset($_SESSION['Progetto']);
                     <th>Tipologia</th>
                     <th>Commenti</th>
                     <th>Foto</th>
-                    <th>Reward Finanziamenti</th> 
+                    <th>Reward Finanziamenti</th>
                     <th>Finanzia</th>
                     <th>Azione</th>
                 </tr>
@@ -71,12 +71,12 @@ unset($_SESSION['Progetto']);
                         <td>
                             <form action="VisualizzaReward.php" method="post">
                                 <input type="hidden" name="nome_progetto" value="<?= htmlspecialchars($row['Nome Progetto']) ?>">
-                                <button type="submit">Visualizza Reward Dei Finanziamenti</button>
+                                <button type="submit">Visualizza le Reward</button>
                             </form>
                         </td>
-                        <!-- Come per i commenti manda ad una specifica pagina -->
+                        <!-- Per andare alla pagina dei finanziamenti -->
                         <td>
-                            <form action="finanzia_progetto.php" method="post">
+                            <form action="Finanziamento.php" method="post">
                                 <input type="hidden" name="nome_progetto" value="<?= htmlspecialchars($row['Nome Progetto']) ?>">
                                 <button type="submit">Finanzia</button>
                             </form>
