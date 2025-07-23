@@ -1,52 +1,42 @@
 <?php
 session_start();
+//*Pagina visibile solo agli amministratori per inserire nuove skill selezionabili dagli utenti
 include 'Connessione/InviaSkill.php';
-if($_SESSION['Ruolo'] != 'Amministratore'){}
+include 'Connessione/db.php';
+if ($_SESSION['Ruolo'] != 'Amministratore') {
+}
+$result = $mysqli->query("SELECT Competenza FROM Skills");
 ?>
-<!-- Pagina per l'inserimento delle skills -->
+
 <!DOCTYPE HTML>
 <html>
+
 <head>
-	<title>Bostarter</title>
-	<style>
-		body {
-			background-color: powderblue;
-			font-family: Arial, sans-serif;
-			margin: 0;
-			padding: 20px;
-		}
-		h1 {
-			text-align: left;
-		}
-		.container {
-			display: flex;
-			flex-wrap: wrap;
-			gap: 20px;
-			justify-content: center;
-			margin-top: 40px;
-		}
-		.container a {
-			text-decoration: none;
-			flex: 1 1 200px; 
-			max-width: 300px;
-		}
-		button {
-			width: 100%;
-			padding: 20px;
-			font-size: 1.2;
-			background-color: white;
-			color: black;
-			border-radius: 10px;
-			cursor: pointer;
-		}
-	</style>
+	<title>Bostarter/Inserimento Skill</title>
+	<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-	<h1>Inserimento Skills</h1>
-	<p>
-		<?php
-		echo "Benvenuto " . $_SESSION['Email'];
-		?>
-	</p>
+	<div style="display: flex; width: 100%;">
+		<!-- Parte a destra contiene il form per aggiungere una skill-->
+		<div style="width: 50%;">
+			<form method="post">
+				<label name="Skill_Inserita">Inserisci una nuova skill:</label>
+				<input type="text" name="Skill_Inserita" id="parola" class="input-parola" maxlength="20" required>
+				<button type="submit">Invia</button>
+			</form>
+		</div>
+		<!-- Parte a sinistra contiene la lista di tutte le competenze(scrollabile se ce ne sono molte)-->
+		<div style="width: 50%;">
+			<h3>Lista competenze:</h3>
+			<ul class="lista skill" style="max-height: 200px; overflow-y: scroll; padding-right: 10px; background-color: white; margin: 0; padding: 0; list-style: none;">
+				<?php while ($row = $result->fetch_assoc()): ?>
+					<li style="border-bottom: 1px solid #ddd; padding: 8px 10px;"><?php echo htmlspecialchars($row['Competenza']); ?></li>
+				<?php endwhile; ?>
+			</ul>
+		</div>
+	</div>
+        <a href=HomePage.php style="align-content: center;"><button>HomePage</button></a><br>
 </body>
+
 </html>

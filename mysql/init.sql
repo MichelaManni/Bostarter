@@ -369,7 +369,7 @@ BEGIN
     DECLARE ControlloAmministratore BOOLEAN;
     
     SELECT EXISTS (SELECT 1
-					FROM AMMINISTRATORE AS A
+					FROM Amministratore AS A
                     WHERE A.CodiceSicurezza = Codice_sicurezza)INTO ControlloAmministratore;
 	SELECT EXISTS (SELECT 1
 					FROM Skills AS S
@@ -377,7 +377,7 @@ BEGIN
 	
     IF ControlloEsistenzaCompetenza=FALSE AND ControlloAmministratore=TRUE THEN
 		INSERT INTO Skills(Competenza)
-        VALUES (NuovaStringa);
+        VALUES (Nome_competenza);
 	ELSE SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Competenza già inserita o atenticazione come amministratore non andata a buon fine';
 	END IF;
 END //
