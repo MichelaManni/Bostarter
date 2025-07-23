@@ -268,6 +268,12 @@ BEGIN
     ORDER BY R.Codice;
 END //
 
+-- Restituisce le foto di un progetto dato il suo nome
+CREATE PROCEDURE VisualizzaFotoProgetto(IN Nome_Progetto VARCHAR(30))
+BEGIN
+    SELECT PercorsoFoto FROM FotoProgetto WHERE NomeProgetto = Nome_Progetto;
+END //
+
 -- Finanziamento progetto e assegnazione reward
 CREATE PROCEDURE FinanziaProgetto(
     IN Email_utente VARCHAR(30),
@@ -746,7 +752,24 @@ BEGIN
     SET Stato = 'chiuso'
     WHERE Stato = 'aperto' 
     AND DataLimite < CURDATE();
-END // DELIMITER;
+END // 
 
+DELIMITER ;
 
+CALL AggiungiFotoProgetto('Progetto Aperto 1', 'caricamenti/progetto1_img1.jpg', 1);
+CALL AggiungiFotoProgetto('Progetto Aperto 1', 'caricamenti/progetto1_img2.jpg', 1);
 
+INSERT INTO Componenti (Nome, Descrizione, Quantita, Prezzo, NomeProgetto)
+VALUES 
+('Sensore Termico', 'Sensore per rilevare temperatura ambientale', 3, 25.00, 'Progetto Aperto 1'),
+('Microcontrollore', 'Unità di controllo per sensori', 1, 80.00, 'Progetto Aperto 1');
+
+CALL AggiungiFotoProgetto('Progetto Aperto 2', 'caricamenti/progetto2_img1.jpg', 1);
+
+CALL AggiungiProfiloSoftware(1, 'Progetto Aperto 2', 'Backend Developer');
+CALL AggiungiSkillProfilo(1, 'Programmazione PHP', 4);
+CALL AggiungiSkillProfilo(1, 'Programmazione Python', 3);
+
+CALL InserimentoReward('Ringraziamento via email', 5.00, 'Progetto Aperto 1', 1, NULL);
+CALL InserimentoReward('T-shirt del progetto', 20.00, 'Progetto Aperto 1', 1, 'caricamenti/reward_maglietta.jpg');
+CALL InserimentoReward('Accesso anticipato al software', 50.00, 'Progetto Aperto 2', 1, 'caricamenti/accesso_beta.jpg');
