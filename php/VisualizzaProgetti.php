@@ -90,7 +90,7 @@ unset($_SESSION['Progetto']);
                                     <button type="submit">Manda candidatura</button>
                                 </form>
                             <?php else: ?>
-                                <form action="controlla_componenti.php" method="post">
+                                <form action="VisualizzazioneComponenti.php" method="post">
                                     <input type="hidden" name="nome_progetto" value="<?= htmlspecialchars($row['Nome Progetto']) ?>">
                                     <button type="submit">Controlla componenti</button>
                                 </form>

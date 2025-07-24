@@ -274,6 +274,12 @@ BEGIN
     SELECT PercorsoFoto FROM FotoProgetto WHERE NomeProgetto = Nome_Progetto;
 END //
 
+--Visualizza le componenti di progetto software
+CREATE PROCEDURE VisualizzaComponenti(IN nomeProgetto VARCHAR(30))
+BEGIN
+    SELECT Nome, Descrizione, Quantita, Prezzo FROM Componenti WHERE NomeProgetto = nomeProgetto;
+END //
+
 -- Finanziamento progetto e assegnazione reward
 CREATE PROCEDURE FinanziaProgetto(
     IN Email_utente VARCHAR(30),
