@@ -22,6 +22,7 @@ session_start();
 	<p>
 		<?php
 		echo "Benvenuto " . $_SESSION['Email'];
+		unset($_SESSION['Progetto']);
 		?>
 	</p>
 	<!-- Viene controllato il ruolo per mostrare più o meno i pulsanti -->

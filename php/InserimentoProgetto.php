@@ -1,5 +1,6 @@
 <?php
 session_start();
+unset($_SESSION['Progetto']);
 if($_SERVER["REQUEST_METHOD"]=="POST"){
     include 'connessione/InserisciProgetto.php';
 }

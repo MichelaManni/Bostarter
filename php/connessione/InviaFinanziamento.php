@@ -15,14 +15,9 @@ try {
         $stmt = $mysqli->prepare($query);
         $stmt->bind_param('ssdi', $EmailRegistrata, $nomeProgetto, $importo, $codiceReward); // i = intero per codice reward
         $stmt->execute();
-        $stmt->close();
 
-        if ($stmt->execute()) {
-            echo 'Skill inserita con successo!';
-        }
-
-        $stmt->close();
-    } else {
+        header("Location:VisualizzaProgetti.php");
+        exit;
     }
 } catch (mysqli_sql_exception $e) {
     echo "Errore: " . $e->getMessage();

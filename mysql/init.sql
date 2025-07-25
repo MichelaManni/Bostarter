@@ -100,7 +100,6 @@ CREATE TABLE Finanziamento (
     DataFinanziamento DATE,
     NomeProgetto VARCHAR(30),
     CodiceReward INT,
-    UNIQUE(EmailUtente, NomeProgetto, DataFinanziamento),
     FOREIGN KEY (EmailUtente) REFERENCES Utente(Email),
     FOREIGN KEY (NomeProgetto) REFERENCES Progetto(Nome),
     FOREIGN KEY (CodiceReward) REFERENCES Rewards(Codice)
@@ -140,6 +139,7 @@ INSERT INTO Utente (Email, Nome, Cognome, AnnoNascita, LuogoNascita, Nickname, P
 INSERT INTO Utente (Email, Nome, Cognome, AnnoNascita, LuogoNascita, Nickname, Password, Ruolo) VALUES ('B','Anna','Verdi',1990,'Roma','CreatorC','2','creatore');
 INSERT INTO Utente (Email, Nome, Cognome, AnnoNascita, LuogoNascita, Nickname, Password, Ruolo) VALUES ('C','Andrea','Blu',1990,'Roma','AdminM','3','amministratore');
 insert into Creatore(EmailUtente,Affidabilita,nr_progetti) VALUES('B',9,1);
+insert into Amministratore(CodiceSicurezza,EmailUtente) VALUES(1234,'C');
 INSERT INTO Progetto (IdCreatore, Nome, Descrizione, DataInserimento, DataLimite, Budget, Stato, Tipologia) VALUES (1, 'Progetto Aperto 1', 'Prototipo hardware per rilevamento temperatura in ambienti industriali.', '2025-06-19', '2025-07-30', 1500.00, 'aperto', 'hardware');
 INSERT INTO Progetto (IdCreatore, Nome, Descrizione, DataInserimento, DataLimite, Budget, Stato, Tipologia) VALUES ( 1, 'Progetto Aperto 2', 'Prototipo', '2025-06-19', '2025-07-30', 15020.00, 'aperto', 'software');
 INSERT INTO Progetto (IdCreatore, Nome, Descrizione, DataInserimento, DataLimite, Budget, Stato, Tipologia) VALUES (1, 'Progetto chiuso', 'Prototipo hardware per rilevamento temperatura in ambienti industriali.', '2025-06-19', '2025-07-30', 15000.00, 'chiuso', 'hardware');

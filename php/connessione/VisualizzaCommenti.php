@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <th>Data</th>
                     <th>Risposta del cratore</th>";
         if ($esito) {
-            echo "<th>---------------</th>";
+            echo "<th> </th>";
         }
         "</tr>";
         while ($row = $result->fetch_assoc()) {
@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <td>" . htmlspecialchars($row['Data']) . "</td>
                     <td>" . htmlspecialchars($row['Risposta']) . "</td>";
             if ($esito && $row['Risposta'] == '') {
-                echo "<td><a href='Risposta.php'><button>Rispondi</button></a></td>";
+                echo "<td><button onclick='Rispondi()'>Rispondi</button></td>";
             } else {
                 echo "<td> </td>";
             }
