@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['nome_progetto'])) {
             ];
         }
 
-        $result->close();
+        
     } else {
         echo "<p>Errore durante la visualizzazione dei profili software richiesti: " . htmlspecialchars($stmt->error) . "</p>";
     }

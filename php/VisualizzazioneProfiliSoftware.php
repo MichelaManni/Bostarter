@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 <h2>Profili software richiesti per il progetto: <?= htmlspecialchars($_SESSION['nome_progetto_profili']) ?></h2>
-
+<p> Di seguito i profili software con le skill richieste. Le candidature vengono prese in considerazione solo se si rispettano i requisiti minimi. </p>
 <?php if (!empty($elenco_profili)): ?>
     <table class="t1">
         <thead>
@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </ul>
                     </td>
                     <td>
-                        <form action="InserimentoCandidatura.php" method="post">
+                        <form action="connessione/InserisciCandidatura.php" method="post">
                             <input type="hidden" name="nome_profilo" value="<?= htmlspecialchars($nome_profilo) ?>">
                             <input type="hidden" name="nome_progetto" value="<?= htmlspecialchars($_SESSION['nome_progetto_profili']) ?>">
                             <button type="submit">Candidati</button>

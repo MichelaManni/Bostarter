@@ -345,35 +345,54 @@ END //
 CREATE PROCEDURE InserimentoCandidatura(IN Email_Utente VARCHAR(30), IN Id_Profilo INT) 
 BEGIN 
 	DECLARE Nome_Progetto VARCHAR(30);
-	DECLARE ControlloProgetto BOOLEAN;
-	
-    (SELECT Pr.Nome
-    FROM Progetto AS Pr
-    WHERE Pr.Id = Id_Profilo)INTO Nome_Progetto;
-    # controllo progetto
-    SELECT EXISTS(SELECT 1
-				FROM Progetto AS Prog
-                WHERE Prog.Nome = Nome_Progetto AND Prog.stato='aperto')INTO ControlloProgetto;
-	IF ControlloProgetto = 'false' THEN
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'progetto non valido';
-	END IF;
-    -- controllo che le skill dell'utente siano sufficienti
-	IF EXISTS(SELECT 1 
-					FROM SkillRichieste AS Sr
-                    WHERE Sr.IdProfilo=Id_Profilo AND
-                    NOT EXISTS(SELECT 1
-								FROM SkillUtente AS Su
-                                WHERE Su.EmailUtente = Email_Utente AND 
-                                Sr.CompetenzaRichiesta = Su.CompetenzaUtente AND
-                                Su.Livello >= Sr.Livello)
-	)
-	THEN SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Mancono delle skill per la candidatura';
+    DECLARE ProgettoAperto BOOLEAN;
+    DECLARE CandidaturaEsiste BOOLEAN;
+
+    -- Recupera nome progetto associato al profilo
+    SELECT NomeProgetto INTO Nome_Progetto
+    FROM Profili
+    WHERE Id = Id_Profilo;
+
+    -- Controlla progetto
+    SELECT EXISTS(
+        SELECT 1 FROM Progetto
+        WHERE Nome = Nome_Progetto AND Stato = 'aperto'
+    ) INTO ProgettoAperto;
+
+    IF ProgettoAperto = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Progetto non valido o non aperto';
     END IF;
-					
-	#se tutta va a buon fine si inserisce candidatura            
-	INSERT INTO Candidatura(EmailUtente, IdProfilo, stato)
-    VALUES (Email_Utente, Id_Profilo, 'in_attesa'); #stato inizializzato come 'in_attesa'
-END // 
+
+    -- Controlla se utente si era già candidato precedentemente
+    SELECT EXISTS(
+        SELECT 1 FROM Candidatura
+        WHERE EmailUtente = Email_Utente AND IdProfilo = Id_Profilo AND stato IN ('in_attesa', 'accettata')
+    ) INTO CandidaturaEsiste;
+
+    IF CandidaturaEsiste = 1 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Candidatura già presente per questo profilo';
+    END IF;
+
+    -- Controllo skill utente
+    IF EXISTS(
+        SELECT 1 
+        FROM SkillRichieste AS Sr
+        WHERE Sr.IdProfilo = Id_Profilo
+          AND NOT EXISTS(
+            SELECT 1 
+            FROM SkillUtente AS Su
+            WHERE Su.EmailUtente = Email_Utente
+              AND Su.CompetenzaUtente = Sr.CompetenzaRichiesta
+              AND Su.Livello >= Sr.Livello
+          )
+    ) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Skill insufficienti per la candidatura';
+    END IF;
+
+    -- Inserisce la candidatura con stato 'in_attesa'
+    INSERT INTO Candidatura (EmailUtente, IdProfilo, stato)
+    VALUES (Email_Utente, Id_Profilo, 'in_attesa');
+END //
 
 -- Operazioni degli Amministratori----------------------------------------------------------
 
@@ -797,3 +816,7 @@ CALL AggiungiSkillProfilo(1, 'Programmazione Python', 3);
 CALL InserimentoReward('Ringraziamento con chiamata', 5.00, 'Progetto Aperto 1', 1, NULL);
 CALL InserimentoReward('T-shirt del progetto', 20.00, 'Progetto Aperto 1', 1, 'caricamenti/reward_maglietta.jpg');
 CALL InserimentoReward('Accesso anticipato al software', 50.00, 'Progetto Aperto 2', 1, 'caricamenti/accesso_beta.jpg');
+
+CALL AggiungiProfiloSoftware(1, 'Progetto Aperto 2' , 'Frontend Java Developer');
+CALL AggiungiSkillProfilo(2, 'Programmazione Java', 2);
+INSERT INTO SkillUtente(EmailUtente,CompetenzaUtente,Livello)VALUES('B','Programmazione Java',5);
