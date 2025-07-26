@@ -85,7 +85,7 @@ unset($_SESSION['Progetto']);
                          candidature o una per vedere i componenti hardware -->
                         <td>
                             <?php if (strtolower($row["Tipologia"]) === 'software'): ?>
-                                <form action="manda_candidatura.php" method="post">
+                                <form action="VisualizzazioneProfiliSoftware.php" method="post">
                                     <input type="hidden" name="nome_progetto" value="<?= htmlspecialchars($row['Nome Progetto']) ?>">
                                     <button type="submit">Manda candidatura</button>
                                 </form>

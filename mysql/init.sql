@@ -280,6 +280,24 @@ BEGIN
     SELECT Nome, Descrizione, Quantita, Prezzo FROM Componenti WHERE NomeProgetto = nomeProgetto;
 END //
 
+--Visualizza profili software richiesti
+CREATE PROCEDURE VisualizzaProfili(IN Nome_Progetto VARCHAR(30))
+BEGIN 
+    IF NOT EXISTS(SELECT 1 FROM Progetto WHERE Nome=Nome_Progetto AND Stato = 'aperto')
+    THEN 
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Progetto non trovato o non aperto';
+    END IF;
+
+    IF EXISTS(SELECT 1 FROM Progetto WHERE Nome=Nome_Progetto AND Tipologia = 'hardware')
+    THEN 
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT='Progetto selezionato è progetto hardware, non software';
+    END IF;
+
+    SELECT P.Nome , S.CompetenzaRichiesta, S.Livello
+    FROM Profili as P 
+    JOIN SkillRichieste as S ON P.Id = S.IdProfilo
+    WHERE P.NomeProgetto = Nome_Progetto;
+END //
 -- Finanziamento progetto e assegnazione reward
 CREATE PROCEDURE FinanziaProgetto(
     IN Email_utente VARCHAR(30),

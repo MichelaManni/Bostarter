@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <td><?= htmlspecialchars($reward["Codice"]) ?></td>
                     <td><?= htmlspecialchars($reward["Descrizione"]) ?></td>
                     <td><?= htmlspecialchars($reward["PrezzoMinimo"]) ?></td>
-                     <td>
+                    <td>
                         <?php if (!empty($reward["PercorsoFoto"])): ?> <!--aggiunge foto se presente-->
                             <img src="<?= htmlspecialchars($reward["PercorsoFoto"]) ?>" alt="Foto reward" width="100">
                         <?php else: ?>
