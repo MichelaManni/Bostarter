@@ -69,9 +69,9 @@ unset($_SESSION['Progetto']);
                         </td>
                         <!-- Si indirizza a pagina per visualizzare i reward-->
                         <td>
-                            <form action="VisualizzaReward.php" method="post">
+                            <form action="VisualizzazioneReward.php" method="post">
                                 <input type="hidden" name="nome_progetto" value="<?= htmlspecialchars($row['Nome Progetto']) ?>">
-                                <button type="submit">Visualizza le Reward</button>
+                                <button type="submit">Visualizza Reward</button>
                             </form>
                         </td>
                         <!-- Per andare alla pagina dei finanziamenti -->

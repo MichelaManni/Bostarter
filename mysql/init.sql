@@ -258,11 +258,11 @@ END //
 CREATE PROCEDURE VisualizzazioneReward( IN Nome_Progetto VARCHAR(30))
 BEGIN
 	IF NOT EXISTS ( SELECT 1 FROM Progetto 
-	WHERE Nomeprogetto = Nome_progetto AND Stato = 'aperto') THEN
+	WHERE Nome = Nome_Progetto AND Stato = 'aperto') THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Progetto non trovato o non aperto';
     END IF;
     
-    SELECT R.Codice AS 'Codice del reward', R.Descrizione, R.PercorsoFoto
+    SELECT R.Codice, R.Descrizione, R.PrezzoMinimo, R.PercorsoFoto
     FROM Rewards as R
     WHERE R.NomeProgetto = Nome_Progetto
     ORDER BY R.Codice;
@@ -776,6 +776,6 @@ CALL AggiungiProfiloSoftware(1, 'Progetto Aperto 2', 'Backend Developer');
 CALL AggiungiSkillProfilo(1, 'Programmazione PHP', 4);
 CALL AggiungiSkillProfilo(1, 'Programmazione Python', 3);
 
-CALL InserimentoReward('Ringraziamento via email', 5.00, 'Progetto Aperto 1', 1, NULL);
+CALL InserimentoReward('Ringraziamento con chiamata', 5.00, 'Progetto Aperto 1', 1, NULL);
 CALL InserimentoReward('T-shirt del progetto', 20.00, 'Progetto Aperto 1', 1, 'caricamenti/reward_maglietta.jpg');
 CALL InserimentoReward('Accesso anticipato al software', 50.00, 'Progetto Aperto 2', 1, 'caricamenti/accesso_beta.jpg');
