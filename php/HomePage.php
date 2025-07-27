@@ -32,7 +32,7 @@ session_start();
 		<a href="Profilo.php"><button class="Pulsantegrande" type="button">Visualizza profilo personale</button></a>
 		<?php if ($_SESSION['Ruolo'] == "creatore") {
 			echo "<a href='InserimentoProgetto.php'><button class='Pulsantegrande' type='button'>Inserisci nuovo progetto</button></a>";
-			echo "<a href='GestioneProgetti.php'><button class='Pulsantegrande' type='button'>Gestisci i tuoi progetti</button></a>";
+			echo "<a href='VisualizzaProgettiPersonali.php'><button class='Pulsantegrande' type='button'>Gestisci i tuoi progetti</button></a>";
 		}
 		if ($_SESSION['Ruolo'] == "amministratore") {
 			echo "<a href='InserimentoSkills.php'><button class='Pulsantegrande' type='button'>Inserisci Skills</button></a>";;

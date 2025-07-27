@@ -298,6 +298,19 @@ BEGIN
     JOIN SkillRichieste as S ON P.Id = S.IdProfilo
     WHERE P.NomeProgetto = Nome_Progetto;
 END //
+--Visualizzazione progetti del creatore di riferimento
+CREATE PROCEDURE VisualizzaProgettiPersonali(IN email_creatore VARCHAR(30))
+BEGIN
+     DECLARE IdCreatore INT;
+    -- recupera id creatore
+    SELECT C.Id INTO IdCreatore
+    FROM Creatore AS C
+    WHERE C.EmailUtente = email_creatore;
+
+    SELECT P.Nome, P.Descrizione, P.DataInserimento, P.DataLimite, P.Budget, P.Tipologia, P.Stato
+    FROM Progetto as P 
+    WHERE P.IdCreatore = IdCreatore; 
+END //
 -- Finanziamento progetto e assegnazione reward
 CREATE PROCEDURE FinanziaProgetto(
     IN Email_utente VARCHAR(30),

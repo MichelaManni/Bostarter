@@ -25,8 +25,8 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
             <textarea name="descrizione" required> </textarea>
         <p> Importo minimo per ottenere il reward (in euro) :  </p>
             <input type="number" step="0.01" name="prezzo_minimo" required>
-        <p > Carica una foto del reward (facoltativo) : </p>
-           <input type="file" name="foto" accept=".jpg,.jpeg,.png" >
+        <p > Carica una foto del reward : </p>
+           <input type="file" name="foto" accept=".jpg,.jpeg,.png" required>
         <br>
 
         <button>Aggiungi Reward</button>
