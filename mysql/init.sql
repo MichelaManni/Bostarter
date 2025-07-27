@@ -206,13 +206,16 @@ END //
 -- Inserire una skill di curriculum
 Create Procedure AggiungiSkillUtente(in Email_utente varchar(30),in Competenza_utente varchar(30),in Livello_competenza int)
 BEGIN
-			IF NOT EXISTS (SELECT 1 FROM Utente WHERE Email = Email_utente) THEN
+			IF NOT EXISTS (SELECT Email FROM Utente WHERE Email = Email_utente) THEN
 				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Email non trovata';
 			END IF;
-            IF NOT EXISTS (SELECT 1 FROM Skills WHERE Competenza = Competenza_utente) THEN
+            IF NOT EXISTS (SELECT Competenza FROM Skills WHERE Competenza = Competenza_utente) THEN
 				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Questa skill non esiste';
 			END IF;
-			INSERT INTO SkillUtente (EmailUtente, Competenza, Livello)
+            IF EXISTS (SELECT 1 FROM SkillUtenteWHERE EmailUtente = Email_utente AND CompetenzaUtente = Competenza_utente) THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Skill è già inserita';
+            END IF;
+			INSERT INTO SkillUtente (EmailUtente, CompetenzaUtente, Livello)
 			VALUES (Email_utente,Competenza_utente,Livello_competenza);
 END //
 
@@ -250,8 +253,8 @@ END //
 CREATE PROCEDURE VisualizzaSkillsUtente(IN Email_Utente VARCHAR(30))
 BEGIN
     SELECT CompetenzaUtente,Livello 
-    FROM CompetenzaUtente C JOIN Utente U ON U.Email = C.EmailUtente
-    WHERE C.EmailUtente = Email_Utente;
+    FROM SkillUtente S JOIN Utente U ON U.Email = S.EmailUtente
+    WHERE S.EmailUtente = Email_Utente;
 END //
 
 -- Finanziare un progetto aperto e scelta del reward:
@@ -299,6 +302,7 @@ BEGIN
     JOIN SkillRichieste as S ON P.Id = S.IdProfilo
     WHERE P.NomeProgetto = Nome_Progetto;
 END //
+
 --Visualizzazione progetti del creatore di riferimento
 CREATE PROCEDURE VisualizzaProgettiPersonali(IN email_creatore VARCHAR(30))
 BEGIN
