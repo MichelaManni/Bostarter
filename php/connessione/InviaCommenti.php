@@ -2,12 +2,13 @@
 //*Script per inviare un commento al db
 include 'Connessione/db.php';
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+if (!isset($_SESSION['Email'])) {
+    header("Location: index.php");
+}
 
 try {
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['testo'])) {
-        if (!isset($_SESSION['Email']) || !isset($_SESSION['Progetto'])) {
-            die('Sessione non valida. Effettua il login o seleziona un progetto.');
-        }
+        
         $Email_utente   = $_SESSION['Email'];
         $Nome_progetto  = $_SESSION['Progetto'];
         $Testo_inserito = isset($_POST['testo']) ? trim($_POST['testo']) : '';
@@ -15,7 +16,6 @@ try {
         //Usa la stored procedure per inserire i commenti
         $query = "CALL InserimentoCommento(?, ?, ?)";
         if ($stmt = $mysqli->prepare($query)) {
-            // Bind dei parametri: tutti stringhe
             $stmt->bind_param('sss', $Email_utente, $Testo_inserito, $Nome_progetto);
             if ($stmt->execute()) {
                 echo 'Commento inserito con successo!';

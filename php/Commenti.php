@@ -3,15 +3,16 @@ session_start();
 //*Pagina per vedere e inviare commenti e risposte
 include 'Connessione/db.php';
 include 'Connessione/InviaCommenti.php';
-include 'Connessione/VisualizzaCommenti.php'
+include 'Connessione/VisualizzaCommenti.php';
+include 'Connessione/InviaRisposta.php'
 ?>
 
 <!DOCTYPE HTML>
 <html>
 
 <head>
-    <title><?php echo $nomeProgetto . "/Commenti" ?></title>
     <link rel="stylesheet" href="style.css">
+    <title><?php echo $nomeProgetto . "/Commenti" ?></title>
     <style>
         .BoxRisposta {
             display: none;

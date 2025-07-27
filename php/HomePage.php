@@ -1,5 +1,8 @@
 <?php
 session_start();
+if (!isset($_SESSION['Email'])) {
+    header("Location: index.php");
+}
 //*Pagina che viene vista dopo il login da cui si può accedere al resto a seconda del ruolo vengono mostrate più o meno opzioni
 
 //Lista di eventuali parametri salvati in $_SESSION[](tutti stringhe)

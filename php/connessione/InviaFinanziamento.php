@@ -3,6 +3,10 @@
 include "Connessione/db.php";
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
+if (!isset($_SESSION['Email'])) {
+    header("Location: index.php");
+}
+
 try {
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['importo'], $_POST['reward'])) {
 

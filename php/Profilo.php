@@ -10,8 +10,8 @@ $EmailDB = $_SESSION['Email'];
 <html>
 
 <head>
-    <title><?php echo "$Nickname/Profilo" ?> </title>
     <link rel="stylesheet" href="style.css">
+    <title>Profilo Personale</title>
 </head>
 
 <body>

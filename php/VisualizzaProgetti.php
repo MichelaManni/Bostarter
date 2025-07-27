@@ -9,18 +9,10 @@ unset($_SESSION['Progetto']);
 
 <!DOCTYPE HTML>
 <html>
-
 <head>
     <title>Bostarter - Progetti Aperti</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        button {
-            padding: 6px 12px;
-            cursor: pointer;
-        }
-    </style>
 </head>
-
 <body>
 
     <h2>Progetti Disponibili</h2>

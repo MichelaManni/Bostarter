@@ -212,7 +212,7 @@ BEGIN
             IF NOT EXISTS (SELECT Competenza FROM Skills WHERE Competenza = Competenza_utente) THEN
 				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Questa skill non esiste';
 			END IF;
-            IF EXISTS (SELECT 1 FROM SkillUtenteWHERE EmailUtente = Email_utente AND CompetenzaUtente = Competenza_utente) THEN
+            IF EXISTS (SELECT 1 FROM SkillUtente WHERE EmailUtente = Email_utente AND CompetenzaUtente = Competenza_utente) THEN
             SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Skill è già inserita';
             END IF;
 			INSERT INTO SkillUtente (EmailUtente, CompetenzaUtente, Livello)
@@ -242,7 +242,8 @@ BEGIN
         U.Nickname AS 'Poster',
         C.Testo AS 'Contenuto',
         C.DataCommento AS 'Data', 
-        IFNULL(R.Testo, '') AS 'Risposta'
+        IFNULL(R.Testo, '') AS 'Risposta',
+        C.CodiceCommento AS 'CodiceCommento'
     FROM Commento C 
     JOIN Utente U ON C.EmailUtente = U.Email 
     LEFT JOIN Risposta R ON R.CodCommento = C.CodiceCommento
