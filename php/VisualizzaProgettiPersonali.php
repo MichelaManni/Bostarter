@@ -10,7 +10,7 @@ $stmt->bind_param("s", $email);
 $stmt->execute();
 $result = $stmt->get_result();
 ?>
-<!--visualizza i progetti personali-->
+<!--permette di visualizzare i progetti personali-->
 <!DOCTYPE html>
 <html>
 <head>
@@ -47,12 +47,12 @@ $result = $stmt->get_result();
                     <td><?= htmlspecialchars($row['Stato']) ?></td>
                     <td>
                         <?php if (strtolower($row["Tipologia"]) === 'software'): ?>
-                            <form action="GestioneCandidature.php" method="post">
+                            <form action="GestioneCandidatura.php" method="post">
                                 <input type="hidden" name="nome_progetto" value="<?= htmlspecialchars($row['Nome']) ?>">
                                 <button type="submit">Gestisci Candidature</button>
                             </form>
                         <?php else: ?>
-                            <form action="GestioneComponenti.php" method="post">
+                            <form action="VisualizzazioneComponenti.php" method="post">
                                 <input type="hidden" name="nome_progetto" value="<?= htmlspecialchars($row['Nome']) ?>">
                                 <button type="submit">Controlla Componenti</button>
                             </form>

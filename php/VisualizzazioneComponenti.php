@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <p>Nessuna componente disponibile per questo progetto.</p><br>
 <?php endif; ?>
 <br>
-<a href="VisualizzaProgetti.php"><button >Torna indietro</button></a><br>
+<a href="HomePage.php"><button >Torna indietro</button></a><br>
 </body>
 </html>
           

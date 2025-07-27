@@ -151,6 +151,7 @@ INSERT INTO Skills(Competenza)VALUES('Programmazione Java');
 INSERT INTO Skills(Competenza)VALUES('Programmazione Python');
 INSERT INTO SkillUtente(EmailUtente,CompetenzaUtente,Livello)VALUES('A','Programmazione PHP',3);
 INSERT INTO SkillUtente(EmailUtente,CompetenzaUtente,Livello)VALUES('A','Programmazione Java',5);
+INSERT INTO SkillUtente(EmailUtente,CompetenzaUtente,Livello)VALUES('A','Programmazione Python',4);
 
 -- OPERAZIONI SUI DATI--
 
@@ -310,6 +311,21 @@ BEGIN
     SELECT P.Nome, P.Descrizione, P.DataInserimento, P.DataLimite, P.Budget, P.Tipologia, P.Stato
     FROM Progetto as P 
     WHERE P.IdCreatore = IdCreatore; 
+END //
+--Visualizza Candidature nei propri progetti
+CREATE PROCEDURE VisualizzaCandidatureProgettiPersonali(IN email_creatore VARCHAR(30))
+BEGIN
+    DECLARE id_creatore INT;
+
+    -- Recupera ID del creatore
+    CALL GetIdCreatore(email_creatore, id_creatore);
+
+    -- Restituisce tutte le candidature legate ai progetti del creatore
+    SELECT C.Id AS IdCandidatura, P.NomeProgetto, P.Nome AS NomeProfilo, C.EmailUtente, C.Stato
+    FROM Candidatura C
+    JOIN Profili P ON C.IdProfilo = P.Id
+    JOIN Progetto PR ON P.NomeProgetto = PR.Nome
+    WHERE PR.IdCreatore = id_creatore;
 END //
 -- Finanziamento progetto e assegnazione reward
 CREATE PROCEDURE FinanziaProgetto(
@@ -833,3 +849,15 @@ CALL InserimentoReward('Accesso anticipato al software', 50.00, 'Progetto Aperto
 CALL AggiungiProfiloSoftware(1, 'Progetto Aperto 2' , 'Frontend Java Developer');
 CALL AggiungiSkillProfilo(2, 'Programmazione Java', 2);
 INSERT INTO SkillUtente(EmailUtente,CompetenzaUtente,Livello)VALUES('B','Programmazione Java',5);
+
+CALL InserimentoCandidatura('A', 2);
+INSERT INTO Progetto (IdCreatore, Nome, Descrizione, DataInserimento, DataLimite, Budget, Stato, Tipologia)
+VALUES (1, 'Progetto Software Extra', 'Gestione API REST con sicurezza OAuth2', '2025-07-01', '2025-08-30', 8000.00, 'aperto', 'software');
+CALL AggiungiProfiloSoftware(1, 'Progetto Software Extra', 'API Developer');
+CALL AggiungiSkillProfilo(3, 'Programmazione PHP', 3);
+CALL InserimentoCandidatura('A', 3);
+INSERT INTO Candidatura (Email_Utente, Id_Profilo, Stato)
+VALUES ('A', 1, 'accettata');
+INSERT INTO Candidatura (Email_Utente, Id_Profilo, Stato)
+VALUES ('B', 2, 'rifiutata');
+CALL InserimentoCandidatura('B', 3);
