@@ -44,7 +44,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <td>" . htmlspecialchars($row['Data']) . "</td>
                     <td>" . htmlspecialchars($row['Risposta']) . "</td>";
             if ($esito && $row['Risposta'] == '') {
-                echo "<td><button onclick='Rispondi()'>Rispondi</button></td>";
+            echo "<td> <form method='post'>
+                <input type='hidden' name='CodiceCommento' value='" . htmlspecialchars($row['CodiceCommento']) . "'>
+                <button type='submit'>Rispondi</button>
+            </form></td>";
             } else {
                 echo "<td> </td>";
             }

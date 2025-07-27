@@ -8,17 +8,20 @@ if (!isset($_SESSION['Email'])) {
 }
 
 try {
-    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['Skill_Inserita'])) {
-
-        $Skill_inserita = trim($_POST['Skill_Inserita']);
-        $Codice_sicurezza = (int) $_SESSION['Codice'];
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['CodiceCommento']) && isset($_POST['Risposta'])) {
+ 
+        $CodCommento = (int)$_POST['CodiceCommento'];
+        $Risposta = trim($_POST['Risposta']);
+        $IdCreatore = 1;
 
         $query = "CALL InserimentoRisposta(?, ?,?)";
         $stmt = $mysqli->prepare($query);
-        $stmt->bind_param('si', $Skill_inserita, $Codice_sicurezza);
+        $stmt->bind_param('iis',$IdCreatore, $CodCommento, $Risposta);
 
         if ($stmt->execute()) {
             echo 'Risposta inserita con successo!';
+            header("Commenti.php");
+            exit;
         }
 
         $stmt->close();

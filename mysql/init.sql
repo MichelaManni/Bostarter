@@ -239,11 +239,11 @@ END //
 CREATE PROCEDURE VisualizzaCommenti(IN Nome_Progetto VARCHAR(30))
 BEGIN
     SELECT 
+        C.CodiceCommento AS 'CodiceCommento',
         U.Nickname AS 'Poster',
         C.Testo AS 'Contenuto',
         C.DataCommento AS 'Data', 
-        IFNULL(R.Testo, '') AS 'Risposta',
-        C.CodiceCommento AS 'CodiceCommento'
+        IFNULL(R.Testo, '') AS 'Risposta'
     FROM Commento C 
     JOIN Utente U ON C.EmailUtente = U.Email 
     LEFT JOIN Risposta R ON R.CodCommento = C.CodiceCommento
@@ -561,22 +561,20 @@ BEGIN
     DECLARE ControlloRisposta BOOLEAN ; 
     -- controllo esistenza del codice commento
     SELECT EXISTS (SELECT 1
-					FROM COMMENTO AS C
+					FROM Commento AS C
                     WHERE C.CodiceCommento = Cod_commento)
                     INTO ControlloCodiceCommento;
 	-- controllo associazione tra creatore e progetto
     SELECT EXISTS (SELECT 1
 				FROM Commento AS C
-                JOIN Progetto AS P ON C.NomeProgetto = P.NomeProgetto
-                WHERE C.Codice = Cod_commento 
+                JOIN Progetto AS P ON C.NomeProgetto = P.Nome
+                WHERE C.CodiceCommento = Cod_commento 
                 AND P.IdCreatore = Id_creatore) INTO ControlloCreatore;
-    -- controllo che non sia già stata inserita risposta    
-     SELECT EXISTS (SELECT 1 
-					FROM Risposta 
-					WHERE CodCommento = Cod_commento)  INTO ControlloRisposta;
+    -- controllo che non sia già stata inserita la risposta    
+     SELECT EXISTS (SELECT 1 FROM Risposta WHERE CodCommento = Cod_commento)  INTO ControlloRisposta;
                     
     IF ControlloCodiceCommento = TRUE AND ControlloCreatore=TRUE AND ControlloRisposta=FALSE THEN
-		INSERT INTO Risposta(idCreatore,Codice_commento,Data_risposta,Testo)
+		INSERT INTO Risposta(IdCreatore,CodCommento,DataRisposta,Testo)
         VALUES (Id_creatore,Cod_commento,CURDATE(), Testo_comm);
 	ELSE SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Commento non trovato o risposta già inserita';
 	END IF;
