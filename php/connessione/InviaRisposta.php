@@ -12,7 +12,7 @@ try {
  
         $CodCommento = (int)$_POST['CodiceCommento'];
         $Risposta = trim($_POST['Risposta']);
-        $IdCreatore = 1;
+        $IdCreatore = $_SESSION['Creatore'];
 
         $query = "CALL InserimentoRisposta(?, ?,?)";
         $stmt = $mysqli->prepare($query);

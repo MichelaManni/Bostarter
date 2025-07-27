@@ -1,5 +1,6 @@
 <?php
 session_start();
+session_reset();
 //*Pagina di login
 include 'Connessione/Login.php'
 ?>
