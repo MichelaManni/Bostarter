@@ -45,16 +45,16 @@ $Prezzo_Inserito = 0;
                 <?php
                 $Prezzo_Inserito = (float)$_POST['importo'];
 
-                $stmt = $mysqli->prepare("SELECT Codice, Descrizione FROM Rewards WHERE PrezzoMinimo <= ? AND NomeProgetto = ?");;
+                $stmt = $mysqli->prepare("SELECT Codice, Descrizione FROM Rewards WHERE NomeProgetto = ?");;
                 if ($stmt) {
-                    $stmt->bind_param("ds", $Prezzo_Inserito, $nomeProgetto);
+                    $stmt->bind_param("s",  $nomeProgetto);
                     $stmt->execute();
                     $result = $stmt->get_result();
 
                     if ($result && $result->num_rows > 0): ?>
                         <form method="POST">
                             <label for="reward">
-                                Reward disponibile per €<?php echo number_format($Prezzo_Inserito, 2); ?>:
+                                Seleziona una reward per il tuo finanziamento di <?php echo number_format($Prezzo_Inserito, 2); ?>:
                             </label>
                             <select name="reward" id="reward" required>
                                 <option value="">-- Seleziona --</option>
@@ -70,7 +70,7 @@ $Prezzo_Inserito = 0;
                             <button type="submit">Invia</button>
                         </form>
                     <?php else: ?>
-                        <p class="finanzia-message">Nessuna reward disponibile per questo importo.</p>
+                        <p class="finanzia-message">Nessuna reward disponibile</p>
                 <?php endif;
                 }
                 ?>
