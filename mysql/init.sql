@@ -331,6 +331,16 @@ BEGIN
     JOIN Progetto PR ON P.NomeProgetto = PR.Nome
     WHERE PR.IdCreatore = id_creatore;
 END //
+
+--Visualizza Finanziamenti Avvenuti
+CREATE PROCEDURE VisualizzaFinanziamenti(IN Nome_Progetto VARCHAR(30))
+BEGIN
+    SELECT F.Codice, F.EmailUtente, F.Importo, F.DataFinanziamento,F.CodiceReward,R.Descrizione
+    FROM Finanziamento AS F 
+    JOIN Rewards AS R ON R.Codice=F.CodiceReward
+    WHERE F.NomeProgetto = Nome_Progetto; 
+END //
+
 -- Finanziamento progetto e assegnazione reward
 CREATE PROCEDURE FinanziaProgetto(
     IN Email_utente VARCHAR(30),
@@ -829,7 +839,7 @@ BEGIN
 END // 
 
 DELIMITER ;
-
+--Ulteriori test
 CALL AggiungiFotoProgetto('Progetto Aperto 1', 'caricamenti/progetto1_img1.jpg', 1);
 CALL AggiungiFotoProgetto('Progetto Aperto 1', 'caricamenti/progetto1_img2.jpg', 1);
 

@@ -19,7 +19,7 @@ $result = $stmt->get_result();
 </head>
 <body>
 
-<h2>Bostarter- I tuoi progetti</h2>
+<h2>Bostarter- Tutti i tuoi progetti</h2>
 
 <?php if ($result && $result->num_rows > 0): ?>
     <table class="t1">
@@ -33,6 +33,7 @@ $result = $stmt->get_result();
                 <th>Tipologia</th>
                 <th>Stato</th>
                 <th>Gestione</th>
+                <th>Finanziamenti</th>
             </tr>
         </thead>
         <tbody>
@@ -57,6 +58,12 @@ $result = $stmt->get_result();
                                 <button type="submit">Controlla Componenti</button>
                             </form>
                         <?php endif; ?>
+                    </td>
+                    <td>
+                        <form action="VisualizzazioneFinanziamenti.php" method="post">
+                            <input type="hidden" name="nome_progetto" value="<?= htmlspecialchars($row['Nome']) ?>">
+                            <button type="submit">Visualizza Finanziamenti</button>
+                        </form>
                     </td>
                 </tr>
             <?php endwhile; ?>
