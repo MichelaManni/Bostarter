@@ -861,7 +861,26 @@ CALL InserimentoReward('Accesso anticipato al software', 'Progetto Aperto 2', 1,
 CALL AggiungiProfiloSoftware(1, 'Progetto Aperto 2' , 'Frontend Java Developer');
 CALL AggiungiSkillProfilo(2, 'Programmazione Java', 2);
 INSERT INTO SkillUtente(EmailUtente,CompetenzaUtente,Livello)VALUES('B','Programmazione Java',5);
-
+CALL FinanziaProgetto('A', 'Progetto Aperto 2', 25.00, 3);
+INSERT INTO Utente (Email, Nome, Cognome, AnnoNascita, LuogoNascita, Nickname, Password, Ruolo)
+VALUES 
+('D','Chiara','Bianchi',1992,'Napoli','ChiaraDev','4','creatore'),
+('E','Luca','Gialli',1995,'Torino','LucaFan','5','standard'),
+('F','Giulia','Rossi',1991,'Bologna','GiuliaCode','6','standard');
+INSERT INTO Creatore(EmailUtente,Affidabilita,nr_progetti)
+VALUES ('D',8,2);
+INSERT INTO Progetto (IdCreatore, Nome, Descrizione, DataInserimento, DataLimite, Budget, Stato, Tipologia)
+VALUES (2, 'Smart Garden', 'Sistema di irrigazione intelligente controllabile da app mobile.', '2025-07-01', '2025-08-31', 2000.00, 'aperto', 'hardware');
+INSERT INTO Progetto (IdCreatore, Nome, Descrizione, DataInserimento, DataLimite, Budget, Stato, Tipologia)
+VALUES (2, 'Ricette Intelligenti', 'App che consiglia ricette in base agli ingredienti disponibili e preferenze.', '2025-07-10', '2025-08-25', 5000.00, 'aperto', 'software');
+CALL InserimentoReward('Sticker personalizzati', 'Smart Garden', 2, 'caricamenti/sticker.jpg');
+CALL InserimentoReward('Controllo remoto per il giardino', 'Smart Garden', 2, 'caricamenti/controllo_remoto.jpg');
+CALL InserimentoReward('Accesso Premium per 1 anno', 'Ricette Intelligenti', 2, 'caricamenti/accesso_premium.jpg');
+CALL InserimentoReward('Video corso di cucina', 'Ricette Intelligenti', 2, 'caricamenti/videocorso.jpg');
+CALL FinanziaProgetto('E', 'Smart Garden', 10.00, 4);  
+CALL FinanziaProgetto('F', 'Smart Garden', 50.00, 5);  
+CALL FinanziaProgetto('E', 'Ricette Intelligenti', 30.00, 6);  
+CALL FinanziaProgetto('F', 'Ricette Intelligenti', 20.00, 7);  
 CALL InserimentoCandidatura('A', 2);
 INSERT INTO Progetto (IdCreatore, Nome, Descrizione, DataInserimento, DataLimite, Budget, Stato, Tipologia)
 VALUES (1, 'Progetto Software Extra', 'Gestione API REST con sicurezza OAuth2', '2025-07-01', '2025-08-30', 8000.00, 'aperto', 'software');
@@ -873,3 +892,6 @@ VALUES ('A', 1, 'accettata');
 INSERT INTO Candidatura (Email_Utente, Id_Profilo, Stato)
 VALUES ('B', 2, 'rifiutata');
 CALL InserimentoCandidatura('B', 3);
+
+
+
