@@ -332,13 +332,21 @@ BEGIN
     WHERE PR.IdCreatore = id_creatore;
 END //
 
---Visualizza Finanziamenti Avvenuti
+--Visualizza Finanziamenti Avvenuti su un progetto
 CREATE PROCEDURE VisualizzaFinanziamenti(IN Nome_Progetto VARCHAR(30))
 BEGIN
     SELECT F.Codice, F.EmailUtente, F.Importo, F.DataFinanziamento,F.CodiceReward,R.Descrizione
     FROM Finanziamento AS F 
     JOIN Rewards AS R ON R.Codice=F.CodiceReward
     WHERE F.NomeProgetto = Nome_Progetto; 
+END //
+--Visualizza Finanziamenti Fatti da un utente
+CREATE PROCEDURE VisualizzaFinanziamentiPropri(IN Email_Utente VARCHAR(30))
+BEGIN 
+    SELECT F.NomeProgetto, F.Codice, F.Importo, F.DataFinanziamento, F.CodiceReward, R.Descrizione
+    FROM Finanziamento AS F 
+    LEFT JOIN Rewards AS R ON R.Codice = F.CodiceReward
+    WHERE F.EmailUtente = Email_Utente;
 END //
 
 -- Finanziamento progetto e assegnazione reward

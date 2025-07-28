@@ -1,27 +1,26 @@
 <?php
 session_start();
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    include 'connessione/VisualizzaFinanziamenti.php';
-    $_SESSION['nome_progetto_finanziamenti'] = $_POST['nome_progetto'];
-}
+include 'connessione/VisualizzaFinanziamentiPropri.php';
+$EmailUtente = $_SESSION['Email'];
+
 ?>
-<!-- html per visualizzare l'elenco dei finanziamenti fatti fino ad ora-->
+<!-- html per visualizzare l'elenco dei finanziamenti fatti dall'utente-->
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Finanziamenti Progetto</title>
+    <title>Finanziamenti Propri</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 
-<h2>Finanziamenti del progetto: <?= htmlspecialchars($_SESSION['nome_progetto_finanziamenti']) ?></h2>
+<h2>Finanziamenti effettuati</h2>
 
 <?php if (!empty($elenco_finanziamenti)): ?>
     <table class="t1">
         <thead>
             <tr>
-                <th>Email Utente Finanziatore</th>
+                <th>Nome Progetto</th>
                 <th>Importo</th>
                 <th>Data Finanziamento</th>
                 <th>Descrizione Reward</th>
@@ -31,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <?php for ($i = 0; $i < count($elenco_finanziamenti); $i++):
                 $finanziamento = $elenco_finanziamenti[$i]; ?> 
                 <tr>
-                    <td><?= htmlspecialchars($finanziamento["EmailUtente"]) ?></td>
+                    <td><?= htmlspecialchars($finanziamento["NomeProgetto"]) ?></td>
                     <td><?= htmlspecialchars($finanziamento["Importo"]) ?></td>
                     <td><?= htmlspecialchars($finanziamento["DataFinanziamento"]) ?></td>
                     <td>
@@ -48,10 +47,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </tbody>
     </table>
 <?php else: ?>
-    <p>Nessun finanziamento effettuato per questo progetto</p><br>
+    <p>Non hai ancora effettuato nessun finanziamento</p><br>
 <?php endif; ?>
 <br>
-<a href="VisualizzaProgettiPersonali.php"><button >Torna indietro</button></a><br>
+<a href="Profilo.php"><button >Torna indietro</button></a><br>
 </body>
 </html>
           

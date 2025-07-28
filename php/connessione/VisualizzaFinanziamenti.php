@@ -1,6 +1,6 @@
 <?php
 include 'db.php';
-//stored procedure per visualizzare i finanziamenti effettuati
+//stored procedure per visualizzare i finanziamenti effettuati su un progetto
 $elenco_finanziamenti = []; //array vuoto per memorizzarli
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['nome_progetto'])) {

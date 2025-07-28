@@ -27,8 +27,8 @@ Visualizzazione Profili Progetti Aperti                                   ok
 Visualizzazione Reward Progetti Aperti                                    ok
 Visualizzazione Propri Progetti                                           ok
 Visualizzazione elenco Finanziamenti Propri Progetti                      ok
-Visualizzazione finanziamenti fatti da sè stesso                         DA FARE
-Finanziamento Progetti Aperti                                            quasi             --se non c'è un reward da scegliere non funziona  
+Visualizzazione finanziamenti fatti da sè stesso                          ok
+Finanziamento Progetti Aperti                                            quasi        --solo se non c'è un reward da scegliere non funziona, prezzo min già tolto  
 Scelta Reward Dopo Finanziamento                                          ok           
 Candidatura in Profili Nuovo Progetto                                     ok               --anche il creatore stesso può candidarsi, da modificare?
 Accettazione/Rifiuto Candidati                                            ok
@@ -41,10 +41,14 @@ Trigger affidabilità finanziamento                                       da ver
 Trigger chiusura progetto a raggiungimento finanziamento                 dovrebbe funzionare 
 Trigger incrementa numero progetti                                       dovrebbe funzionare
 Evento scadenza progetto                                                 da verificare
+Visualizzazione classifica utenti creatori                               da verificare
+Visualizzazione progettii aperti più vicini al proprio completamento     da verificare
+Visualizzazione classifica utenti                                        da verificare
 Chiudere profilo quando viene accettata una candidatura                  DA FARE
 LOG SU MONGODB                                                           DA FARE
 DOCUMENTAZIONE                                                           DA FARE
 DIAGRAMMA E-R FATTO AL PC                                                DA FARE
 SLIDES                                                                   DA FARE
 CAMPO NUMERO PROGETTI DA TOGLIERE O NO ?                                 DA FARE
-POPOLAMENTO PER DEMO                                                     da controllare         --non so se è da fare
+POPOLAMENTO PER DEMO                                                     da sistemare         --non so se è da fare
+modifiche estetiche                                                      se c'è tempo 
