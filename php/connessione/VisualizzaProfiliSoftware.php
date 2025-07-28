@@ -16,6 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['nome_progetto'])) {
             $nome_profilo = $row["Nome"];
             $competenza = $row["CompetenzaRichiesta"];
             $livello = $row["Livello"];
+            $assegnato = $row["Assegnato"];
             //Se il profilo non è ancora stato inserito si inizializza
             if (!isset($elenco_profili[$nome_profilo])) {
                 $elenco_profili[$nome_profilo] = [];
@@ -23,7 +24,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['nome_progetto'])) {
             //si aggiunge la skill al profilo corrispondente
             $elenco_profili[$nome_profilo][] = [
                 "Competenza" => $competenza,                    //operatore => definisce coppia chiave-vallore in array associativo, chiave=> valore
-                "Livello" => $livello
+                "Livello" => $livello,
+                "Assegnato" => $assegnato
             ];
         }
 

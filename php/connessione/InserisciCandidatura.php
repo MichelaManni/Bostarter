@@ -46,6 +46,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['nome_profilo'], $_POST
             echo "<p class='errore'>Non puoi candidarti a questo progetto perché non è attualmente aperto</p>";
         }elseif (strpos($errorMsg, 'Candidatura già effettuata') !== false) {
             echo "<p class='errore'>Hai già inviato una candidatura per questo profilo</p>";
+        }elseif (strpos($errorMsg, 'già stato assegnato') !== false) {
+            echo "<p class='errore'>Questo profilo è già stato assegnato. Non è possibile candidarsi</p>";
         } else {
             echo "<p class='errore'>Errore durante la candidatura: " . htmlspecialchars($errorMsg) . "</p>";
         }

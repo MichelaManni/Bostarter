@@ -59,6 +59,7 @@ CREATE TABLE Profili (
 	Id INT AUTO_INCREMENT PRIMARY KEY,
     Nome VARCHAR(30) NOT NULL,
     NomeProgetto VARCHAR(30) NOT NULL,
+    Assegnato BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (NomeProgetto) REFERENCES Progetto(Nome)
 ) ENGINE=INNODB;
 
@@ -297,7 +298,7 @@ BEGIN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT='Progetto selezionato è progetto hardware, non software';
     END IF;
 
-    SELECT P.Nome , S.CompetenzaRichiesta, S.Livello
+    SELECT P.Nome , S.CompetenzaRichiesta, S.Livello, P.Assegnato
     FROM Profili as P 
     JOIN SkillRichieste as S ON P.Id = S.IdProfilo
     WHERE P.NomeProgetto = Nome_Progetto;
@@ -398,7 +399,7 @@ BEGIN
 	DECLARE Nome_Progetto VARCHAR(30);
     DECLARE ProgettoAperto BOOLEAN;
     DECLARE CandidaturaEsiste BOOLEAN;
-
+    DECLARE ProfiloAssegnato BOOLEAN;
     -- Recupera nome progetto associato al profilo
     SELECT NomeProgetto INTO Nome_Progetto
     FROM Profili
@@ -412,6 +413,15 @@ BEGIN
 
     IF ProgettoAperto = 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Progetto non valido o non aperto';
+    END IF;
+
+    -- Controlla se profilo è già stato assegnato
+    SELECT Assegnato INTO ProfiloAssegnato
+    FROM Profili
+    WHERE Id = Id_Profilo;
+
+    IF ProfiloAssegnato = TRUE THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Profilo è già stato assegnato';
     END IF;
 
     -- Controlla se utente si era già candidato precedentemente
@@ -668,7 +678,7 @@ CREATE PROCEDURE AccettazioneCandidatura (IN Id_Candidatura INT,
 BEGIN
 	DECLARE controlloCandidatura BOOLEAN DEFAULT FALSE;
     DECLARE id_profilo INT;
-    DECLARE nome_progetto VARCHAR(30);
+
     
     -- controllo esistenza candidatura e appartenenza progetto a creatore
     SELECT EXISTS (
@@ -697,6 +707,21 @@ BEGIN
     UPDATE Candidatura
     SET Stato = Esito_candidatura
     WHERE Id = Id_candidatura;
+
+    -- se esito=accettata recupera id_profilo e aggiorna Assegnato = TRUE
+    IF Esito_Candidatura = 'accettata' THEN
+        SELECT C.IdProfilo
+        INTO id_profilo
+        FROM Candidatura C
+        JOIN Profili PR ON C.IdProfilo = PR.Id
+        JOIN Progetto P ON PR.NomeProgetto = P.Nome
+        WHERE C.Id = Id_Candidatura
+        AND P.IdCreatore = Id_creatore;
+
+        UPDATE Profili
+        SET Assegnato = TRUE
+        WHERE Id = id_profilo;
+    END IF;
 END //
 
 -- Statistiche(Viste)------------------------------------------------------------------------------------------------

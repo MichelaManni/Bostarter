@@ -38,11 +38,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </ul>
                     </td>
                     <td>
-                        <form action="connessione/InserisciCandidatura.php" method="post">
-                            <input type="hidden" name="nome_profilo" value="<?= htmlspecialchars($nome_profilo) ?>">
-                            <input type="hidden" name="nome_progetto" value="<?= htmlspecialchars($_SESSION['nome_progetto_profili']) ?>">
-                            <button type="submit">Candidati</button>
-                        </form>
+                        <!--campo assegnato è uguale per tutte skill dello stesso profilo, percio se lista_skill[0]['Assegnato'] è 0 allora il profilo non è già stato assegnato
+                        quindi è possibile candidarsi. Altrimenti è già stata accettata una candidatura per quel profilo -->
+                        <?php if (isset($lista_skill[0]['Assegnato']) && !$lista_skill[0]['Assegnato']): ?> 
+                            <form action="connessione/InserisciCandidatura.php" method="post">
+                                <input type="hidden" name="nome_profilo" value="<?= htmlspecialchars($nome_profilo) ?>">
+                                <input type="hidden" name="nome_progetto" value="<?= htmlspecialchars($_SESSION['nome_progetto_profili']) ?>">
+                                <button type="submit">Candidati</button>
+                            </form>
+                        <?php else: ?>
+                            <p>Profilo già assegnato</p>
+                        <?php endif; ?>
                     </td>
                 </tr>
             <?php endforeach; ?>
