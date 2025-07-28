@@ -87,7 +87,6 @@ CREATE TABLE SkillRichieste (
 CREATE TABLE Rewards (
     Codice INT AUTO_INCREMENT PRIMARY KEY,
     Descrizione VARCHAR(300),
-    PrezzoMinimo DECIMAL(10,2),
     NomeProgetto VARCHAR(30),
     PercorsoFoto VARCHAR(255), #aggiunta percorso foto
     FOREIGN KEY (NomeProgetto) REFERENCES Progetto(Nome)
@@ -267,7 +266,7 @@ BEGIN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Progetto non trovato o non aperto';
     END IF;
     
-    SELECT R.Codice, R.Descrizione, R.PrezzoMinimo, R.PercorsoFoto
+    SELECT R.Codice, R.Descrizione, R.PercorsoFoto
     FROM Rewards as R
     WHERE R.NomeProgetto = Nome_Progetto
     ORDER BY R.Codice;
@@ -534,7 +533,7 @@ BEGIN
 END //
 
 -- inserimento Reward 
-CREATE PROCEDURE InserimentoReward( IN Descrizione_reward VARCHAR(300),IN Prezzo_minimo DECIMAL(10,2), IN Nome_progetto VARCHAR(30),
+CREATE PROCEDURE InserimentoReward( IN Descrizione_reward VARCHAR(300), IN Nome_progetto VARCHAR(30),
 									IN Id_creatore INT, IN  Percorso_Foto VARCHAR(255))
 BEGIN
 	DECLARE Controllo BOOLEAN;
@@ -546,8 +545,8 @@ BEGIN
                     AND P.Stato = 'aperto')
                     INTO Controllo;
 	IF Controllo= TRUE THEN
-		INSERT INTO Rewards(Descrizione, PrezzoMinimo, NomeProgetto, PercorsoFoto )
-		VALUES (Descrizione_reward, Prezzo_minimo, Nome_progetto,Percorso_foto);
+		INSERT INTO Rewards(Descrizione,  NomeProgetto, PercorsoFoto )
+		VALUES (Descrizione_reward, Nome_progetto,Percorso_foto);
 	ELSE
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Progetto non trovato o chiuso';
 	END IF;
@@ -845,9 +844,9 @@ CALL AggiungiProfiloSoftware(1, 'Progetto Aperto 2', 'Backend Developer');
 CALL AggiungiSkillProfilo(1, 'Programmazione PHP', 4);
 CALL AggiungiSkillProfilo(1, 'Programmazione Python', 3);
 
-CALL InserimentoReward('Ringraziamento con chiamata', 5.00, 'Progetto Aperto 1', 1, NULL);
-CALL InserimentoReward('T-shirt del progetto', 20.00, 'Progetto Aperto 1', 1, 'caricamenti/reward_maglietta.jpg');
-CALL InserimentoReward('Accesso anticipato al software', 50.00, 'Progetto Aperto 2', 1, 'caricamenti/accesso_beta.jpg');
+CALL InserimentoReward('Ringraziamento con chiamata',  'Progetto Aperto 1', 1, NULL);
+CALL InserimentoReward('T-shirt del progetto', 'Progetto Aperto 1', 1, 'caricamenti/reward_maglietta.jpg');
+CALL InserimentoReward('Accesso anticipato al software', 'Progetto Aperto 2', 1, 'caricamenti/accesso_beta.jpg');
 
 CALL AggiungiProfiloSoftware(1, 'Progetto Aperto 2' , 'Frontend Java Developer');
 CALL AggiungiSkillProfilo(2, 'Programmazione Java', 2);

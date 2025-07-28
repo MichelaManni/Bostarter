@@ -23,7 +23,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <tr>
                 <th>Codice</th>
                 <th>Descrizione</th>
-                <th>Prezzo minimo (in euro)</th>
                 <th>Foto</th>
             </tr>
         </thead>
@@ -33,7 +32,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <tr>
                     <td><?= htmlspecialchars($reward["Codice"]) ?></td>
                     <td><?= htmlspecialchars($reward["Descrizione"]) ?></td>
-                    <td><?= htmlspecialchars($reward["PrezzoMinimo"]) ?></td>
                     <td>
                         <?php if (!empty($reward["PercorsoFoto"])): ?> <!--aggiunge foto se presente-->
                             <img src="<?= htmlspecialchars($reward["PercorsoFoto"]) ?>" alt="Foto reward" width="100">

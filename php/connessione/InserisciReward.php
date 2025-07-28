@@ -6,7 +6,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     //recupero i dati inviati dal form html
     $descrizione = $_POST['descrizione'];
-    $prezzo_minimo = $_POST['prezzo_minimo'];
     $foto = $_FILES['foto']['name'];
     
     $nome_progetto = $_SESSION['nome_progetto'];
@@ -46,8 +45,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     //Chiamata alla stored procedure 
-    $stmt = $mysqli->prepare("CALL InserimentoReward(?, ?, ?, ?, ?)");
-    $stmt->bind_param("sdsis", $descrizione, $prezzo_minimo, $nome_progetto, $idCreatore, $targetPath);
+    $stmt = $mysqli->prepare("CALL InserimentoReward(?, ?, ?, ?)");
+    $stmt->bind_param("sdsis", $descrizione,  $nome_progetto, $idCreatore, $targetPath);
 
     try {
         if ($stmt->execute()) {
