@@ -12,11 +12,11 @@ try {
  
         $CodCommento = (int)$_POST['CodiceCommento'];
         $Risposta = trim($_POST['Risposta']);
-        $IdCreatore = $_SESSION['Creatore'];
+        $email = $_SESSION['Email'];
 
         $query = "CALL InserimentoRisposta(?, ?,?)";
         $stmt = $mysqli->prepare($query);
-        $stmt->bind_param('iis',$IdCreatore, $CodCommento, $Risposta);
+        $stmt->bind_param('sis',$email, $CodCommento, $Risposta);
 
         if ($stmt->execute()) {
             echo 'Risposta inserita con successo!';

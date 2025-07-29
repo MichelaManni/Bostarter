@@ -10,22 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     $nome_progetto = $_SESSION['nome_progetto'];
     $email = $_SESSION['Email'];
-
-    $query = "CALL GetIdCreatore(?, @idCreatore)";   //chiama la stored procedure per ritornare l'id dal creatore avendo la mail
-    $stmt = $mysqli->prepare($query);
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $stmt->close();
-
-    $result = $mysqli->query("SELECT @idCreatore AS id");  //recupero valore output id
-    $row = $result->fetch_assoc();
-    $idCreatore = $row['id'];
-
-    if ($idCreatore === null) {
-        echo "<p>creatore non trovato</p>";
-        exit;
-    }
-    //Gestione caricamento foto che è facolattivo
+    //Gestione caricamento foto
     $targetPath = null; // Default in caso non venga caricata nessuna foto
 
     if (isset($_FILES['foto']) && $_FILES['foto']['error'] === 0) { //stesso procedimento di connessione/InserisciFoto
@@ -46,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     //Chiamata alla stored procedure 
     $stmt = $mysqli->prepare("CALL InserimentoReward(?, ?, ?, ?)");
-    $stmt->bind_param("sdsis", $descrizione,  $nome_progetto, $idCreatore, $targetPath);
+    $stmt->bind_param("sdsss", $descrizione,  $nome_progetto, $email, $targetPath);
 
     try {
         if ($stmt->execute()) {

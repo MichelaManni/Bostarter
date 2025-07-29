@@ -8,7 +8,6 @@ if (!isset($_SESSION['Email'])) {
 //Lista di eventuali parametri salvati in $_SESSION[](tutti stringhe)
 //-> Email = Email dell'utente 
 //-> Ruolo = Ruolo dell'utente 
-//-> Creatore = IDcreatore dell'utente creatore
 //-> Codice = Codice dell'admin se è loggato
 //-> Progetto = Nome del progetto che si sta controllando
 ?>

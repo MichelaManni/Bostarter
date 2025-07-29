@@ -7,23 +7,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nome_progetto = $_SESSION['nome_progetto']; //nome progetto e email presi dalla session
     $email = $_SESSION['Email'];
 
-    $query = "CALL GetIdCreatore(?, @idCreatore)";   //chiama la stored procedure per ritornare l'id dal creatore avendo la mail
-    $stmt = $mysqli->prepare($query);
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $stmt->close();
-
-    $result = $mysqli->query("SELECT @idCreatore AS id");  //recupero valore output id
-    $row = $result->fetch_assoc();
-    $idCreatore = $row['id'];
-
-     if ($idCreatore === null) {
-        echo "<p>creatore non trovato</p>";
-        exit;
-    }
-    
     $stmt = $mysqli->prepare("CALL AggiungiProfiloSoftware(?, ?, ?)");
-    $stmt->bind_param("iss", $idCreatore, $nome_progetto, $nome_profilo);
+    $stmt->bind_param("sss", $email, $nome_progetto, $nome_profilo);
 
 
     try {

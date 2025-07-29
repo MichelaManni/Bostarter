@@ -12,21 +12,20 @@ CREATE TABLE Utente (
 ) ENGINE=INNODB;
 
 CREATE TABLE Creatore (
-    Id INT AUTO_INCREMENT PRIMARY KEY,
-    EmailUtente VARCHAR(30),
+    EmailUtente VARCHAR(30) PRIMARY KEY,
     Affidabilita INT ,
     nr_progetti INT, -- ridondanza???????????
     FOREIGN KEY (EmailUtente) REFERENCES Utente(Email)
 ) ENGINE=INNODB;
 
 CREATE TABLE Amministratore (
-    CodiceSicurezza INT PRIMARY KEY,
-    EmailUtente VARCHAR(30),
+    CodiceSicurezza INT ,
+    EmailUtente VARCHAR(30) PRIMARY KEY,
     FOREIGN KEY (EmailUtente) REFERENCES Utente(Email)
 ) ENGINE=INNODB;
 
 CREATE TABLE Progetto (
-    IdCreatore INT,
+    EmailCreatore VARCHAR(30),
     Nome VARCHAR(30) PRIMARY KEY,
     Descrizione VARCHAR(255), 
     DataInserimento DATE,
@@ -34,16 +33,14 @@ CREATE TABLE Progetto (
     Budget DECIMAL(10,2),
     Stato ENUM('aperto','chiuso'),
     Tipologia ENUM('hardware','software'),
-    FOREIGN KEY (IdCreatore) REFERENCES Creatore(Id)
+    FOREIGN KEY (EmailCreatore) REFERENCES Creatore(EmailUtente)
 ) ENGINE=INNODB;
 
 CREATE TABLE FotoProgetto(  
 	IdFoto INT AUTO_INCREMENT PRIMARY KEY,
-    IdCreatore INT,
     NomeProgetto VARCHAR(30),
     PercorsoFoto VARCHAR(255),    
-    FOREIGN KEY (NomeProgetto) REFERENCES Progetto(Nome),
-    FOREIGN KEY(IdCreatore) REFERENCES Creatore(Id)
+    FOREIGN KEY (NomeProgetto) REFERENCES Progetto(Nome)
 ) ENGINE=INNODB;
 
 CREATE TABLE Componenti (
@@ -116,12 +113,12 @@ CREATE TABLE Commento (
 ) ENGINE=INNODB;
 
 CREATE TABLE Risposta (
-    IdCreatore INT,
+    EmailCreatore VARCHAR(30),
     CodCommento INT PRIMARY KEY,
     DataRisposta DATE,
     Testo VARCHAR(500),
     FOREIGN KEY (CodCommento) REFERENCES Commento(CodiceCommento),
-    FOREIGN KEY (IdCreatore) REFERENCES Creatore(Id)
+    FOREIGN KEY (EmailCreatore) REFERENCES Creatore(EmailUtente)
 ) ENGINE=INNODB;
 
 CREATE TABLE Candidatura (
@@ -133,25 +130,6 @@ CREATE TABLE Candidatura (
     FOREIGN KEY (EmailUtente) REFERENCES Utente(Email),
     FOREIGN KEY (IdProfilo) REFERENCES Profili(Id)
 ) ENGINE=INNODB;
-
---Test
-INSERT INTO Utente (Email, Nome, Cognome, AnnoNascita, LuogoNascita, Nickname, Password, Ruolo) VALUES ('A','Mario','Rossi',1985,'Milano','StandardD','1','standard');
-INSERT INTO Utente (Email, Nome, Cognome, AnnoNascita, LuogoNascita, Nickname, Password, Ruolo) VALUES ('B','Anna','Verdi',1990,'Roma','CreatorC','2','creatore');
-INSERT INTO Utente (Email, Nome, Cognome, AnnoNascita, LuogoNascita, Nickname, Password, Ruolo) VALUES ('C','Andrea','Blu',1990,'Roma','AdminM','3','amministratore');
-insert into Creatore(EmailUtente,Affidabilita,nr_progetti) VALUES('B',9,1);
-insert into Amministratore(CodiceSicurezza,EmailUtente) VALUES(1234,'C');
-INSERT INTO Progetto (IdCreatore, Nome, Descrizione, DataInserimento, DataLimite, Budget, Stato, Tipologia) VALUES (1, 'Progetto Aperto 1', 'Prototipo hardware per rilevamento temperatura in ambienti industriali.', '2025-06-19', '2025-07-30', 1500.00, 'aperto', 'hardware');
-INSERT INTO Progetto (IdCreatore, Nome, Descrizione, DataInserimento, DataLimite, Budget, Stato, Tipologia) VALUES ( 1, 'Progetto Aperto 2', 'Prototipo', '2025-06-19', '2025-07-30', 15020.00, 'aperto', 'software');
-INSERT INTO Progetto (IdCreatore, Nome, Descrizione, DataInserimento, DataLimite, Budget, Stato, Tipologia) VALUES (1, 'Progetto chiuso', 'Prototipo hardware per rilevamento temperatura in ambienti industriali.', '2025-06-19', '2025-07-30', 15000.00, 'chiuso', 'hardware');
-INSERT INTO Commento (EmailUtente,DataCommento, Testo, NomeProgetto)VALUES ('A','2025-06-15', 'Ottimo lavoro su questo progetto!', 'Progetto Aperto 1');
-INSERT INTO Commento (EmailUtente,DataCommento, Testo, NomeProgetto)VALUES ('B','2025-06-15', 'Ci sono ancora alcuni miglioramenti da fare.', 'Progetto Aperto 2');
-INSERT INTO Risposta (IdCreatore,CodCommento,DataRisposta,Testo)VALUES(1,1,'2025-06-15','Gas');
-INSERT INTO Skills(Competenza)VALUES('Programmazione PHP');
-INSERT INTO Skills(Competenza)VALUES('Programmazione Java');
-INSERT INTO Skills(Competenza)VALUES('Programmazione Python');
-INSERT INTO SkillUtente(EmailUtente,CompetenzaUtente,Livello)VALUES('A','Programmazione PHP',3);
-INSERT INTO SkillUtente(EmailUtente,CompetenzaUtente,Livello)VALUES('A','Programmazione Java',5);
-INSERT INTO SkillUtente(EmailUtente,CompetenzaUtente,Livello)VALUES('A','Programmazione Python',4);
 
 -- OPERAZIONI SUI DATI--
 
@@ -307,30 +285,19 @@ END //
 --Visualizzazione progetti del creatore di riferimento
 CREATE PROCEDURE VisualizzaProgettiPersonali(IN email_creatore VARCHAR(30))
 BEGIN
-     DECLARE IdCreatore INT;
-    -- recupera id creatore
-    SELECT C.Id INTO IdCreatore
-    FROM Creatore AS C
-    WHERE C.EmailUtente = email_creatore;
-
     SELECT P.Nome, P.Descrizione, P.DataInserimento, P.DataLimite, P.Budget, P.Tipologia, P.Stato
     FROM Progetto as P 
-    WHERE P.IdCreatore = IdCreatore; 
+    WHERE P.EmailCreatore = email_creatore; 
 END //
 --Visualizza Candidature nei propri progetti
 CREATE PROCEDURE VisualizzaCandidatureProgettiPersonali(IN email_creatore VARCHAR(30))
 BEGIN
-    DECLARE id_creatore INT;
-
-    -- Recupera ID del creatore
-    CALL GetIdCreatore(email_creatore, id_creatore);
-
     -- Restituisce tutte le candidature legate ai progetti del creatore
     SELECT C.Id AS IdCandidatura, P.NomeProgetto, P.Nome AS NomeProfilo, C.EmailUtente, C.Stato
     FROM Candidatura C
     JOIN Profili P ON C.IdProfilo = P.Id
     JOIN Progetto PR ON P.NomeProgetto = PR.Nome
-    WHERE PR.IdCreatore = id_creatore;
+    WHERE PR.EmailCreatore = email_creatore;
 END //
 
 --Visualizza Finanziamenti Avvenuti su un progetto
@@ -494,35 +461,25 @@ END //
 
 -- Operazioni dei Creatori------------------------------------------------------------------
 
---Ricava l'id del creatore tramite la mail
-CREATE PROCEDURE GetIdCreatore(IN Email VARCHAR(30), OUT IdCreatore INT)
-BEGIN 
-    SELECT Id INTO IdCreatore
-    FROM Creatore AS C
-    WHERE Email = C.EmailUtente
-    LIMIT 1;
-END //
-
 -- Controllare se si possiede effettivamente il progetto
 CREATE PROCEDURE ControlloProgetto(IN Email_inserita VARCHAR(30),IN Progetto_inserito VARCHAR(30),OUT Esito BOOLEAN)
 BEGIN
-    DECLARE EmailRegistrata VARCHAR(30);
-    DECLARE ProgettoRegistrato VARCHAR(30);
+    DECLARE Esiste BOOLEAN;
     SET Esito = FALSE;
-    SELECT C.EmailUtente, P.Nome
-    INTO EmailRegistrata, ProgettoRegistrato
-    FROM Creatore C
-    JOIN Utente U ON C.EmailUtente = U.Email
-    JOIN Progetto P ON P.IdCreatore = C.Id
-    WHERE C.EmailUtente = Email_inserita AND P.Nome = Progetto_inserito;
-    IF (EmailRegistrata IS NOT NULL AND ProgettoRegistrato IS NOT NULL) THEN
+    SELECT EXISTS(
+        SELECT 1
+        FROM Progetto
+        WHERE EmailCreatore = Email_inserita AND Nome = Progetto_inserito
+    ) INTO Esiste;
+
+    IF Esiste THEN
         SET Esito = TRUE;
     END IF;
 END //
 
 -- Inserire un nuovo progetto
 CREATE PROCEDURE AggiungiProgetto(
-    IN Id_Creatore INT,
+    IN Email_Creatore VARCHAR(30),
     IN Nome_Progetto VARCHAR(30),
     IN Descrizione_Progetto VARCHAR(255),
     IN Budget DECIMAL(10,2),
@@ -530,58 +487,58 @@ CREATE PROCEDURE AggiungiProgetto(
     IN Tipologia ENUM('hardware','software')
 )
 BEGIN
-    IF NOT EXISTS (SELECT 1 FROM Creatore WHERE Id = Id_Creatore) THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Id creatore non valido';
+    IF NOT EXISTS (SELECT 1 FROM Creatore WHERE EmailUtente = Email_Creatore) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Creatore non valido';
     END IF;
             
     IF EXISTS (SELECT 1 FROM Progetto WHERE Nome = Nome_Progetto) THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Nome progetto già esistente';
     END IF;
             
-    INSERT INTO Progetto (IdCreatore,Nome,Descrizione,DataInserimento,Budget,DataLimite,Stato,Tipologia) 
-    VALUES (Id_Creatore,Nome_Progetto,Descrizione_Progetto,CURDATE(),Budget,Limite,'aperto',Tipologia);
+    INSERT INTO Progetto (EmailCreatore, Nome, Descrizione, DataInserimento, Budget, DataLimite, Stato, Tipologia) 
+    VALUES (Email_Creatore, Nome_Progetto, Descrizione_Progetto, CURDATE(), Budget, Limite, 'aperto', Tipologia);
 END //
 
 -- Inserimento foto nel Progetto
 CREATE PROCEDURE AggiungiFotoProgetto( IN NomeProgetto_inserito VARCHAR(30), IN Percorsofoto_inserito VARCHAR(255),
-									IN IdCreatore_inserito INT )
+									IN EmailCreatore_inserito VARCHAR(30))
 BEGIN
     DECLARE Controllo BOOLEAN;
-	#controllo associazione tra creatore e progetto
-    SELECT EXISTS (SELECT 1
-					FROM Progetto AS P
-					WHERE P.Nome = NomeProgetto_inserito 
-                    AND  P.IdCreatore = IdCreatore_inserito)INTO Controllo;
-    IF (Controllo = TRUE) THEN
-		INSERT INTO FotoProgetto(IdCreatore,NomeProgetto,PercorsoFoto)
-        VALUES (IdCreatore_inserito,NomeProgetto_inserito, Percorsofoto_inserito);
+    SELECT EXISTS (
+        SELECT 1
+        FROM Progetto
+        WHERE Nome = NomeProgetto_inserito AND EmailCreatore = EmailCreatore_inserito
+    ) INTO Controllo;
+
+    IF Controllo = TRUE THEN
+        INSERT INTO FotoProgetto( NomeProgetto, PercorsoFoto)
+        VALUES (NomeProgetto_inserito, Percorsofoto_inserito);
     ELSE
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Non sei il creatore';
-	END IF;
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Non sei il creatore';
+    END IF;
 END //
 
 -- inserimento Reward 
 CREATE PROCEDURE InserimentoReward( IN Descrizione_reward VARCHAR(300), IN Nome_progetto VARCHAR(30),
-									IN Id_creatore INT, IN  Percorso_Foto VARCHAR(255))
+									IN Email_creatore VARCHAR(30), IN  Percorso_Foto VARCHAR(255))
 BEGIN
 	DECLARE Controllo BOOLEAN;
-	#controllo esistenza progetto e corrispondenza con il creatore
-    SELECT EXISTS (SELECT 1
-					FROM Progetto AS P
-                    WHERE P.Nome = Nome_progetto
-					AND P.IdCreatore = Id_creatore
-                    AND P.Stato = 'aperto')
-                    INTO Controllo;
-	IF Controllo= TRUE THEN
-		INSERT INTO Rewards(Descrizione,  NomeProgetto, PercorsoFoto )
-		VALUES (Descrizione_reward, Nome_progetto,Percorso_foto);
-	ELSE
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Progetto non trovato o chiuso';
-	END IF;
+    SELECT EXISTS (
+        SELECT 1
+        FROM Progetto
+        WHERE Nome = Nome_progetto AND EmailCreatore = Email_creatore AND Stato = 'aperto'
+    ) INTO Controllo;
+
+    IF Controllo = TRUE THEN
+        INSERT INTO Rewards(Descrizione, NomeProgetto, PercorsoFoto)
+        VALUES (Descrizione_reward, Nome_progetto, Percorso_foto);
+    ELSE
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Progetto non trovato o chiuso';
+    END IF;
 END //
 
 -- inserimento di una risposta
-CREATE PROCEDURE InserimentoRisposta (IN Id_creatore INT,IN Cod_commento INT,IN Testo_comm VARCHAR(500))
+CREATE PROCEDURE InserimentoRisposta (IN Email_creatore VARCHAR(30),IN Cod_commento INT,IN Testo_comm VARCHAR(500))
 BEGIN
     DECLARE ControlloCodiceCommento BOOLEAN;
     DECLARE ControlloCreatore BOOLEAN;
@@ -592,26 +549,28 @@ BEGIN
                     WHERE C.CodiceCommento = Cod_commento)
                     INTO ControlloCodiceCommento;
 	-- controllo associazione tra creatore e progetto
-    SELECT EXISTS (SELECT 1
-				FROM Commento AS C
-                JOIN Progetto AS P ON C.NomeProgetto = P.Nome
-                WHERE C.CodiceCommento = Cod_commento 
-                AND P.IdCreatore = Id_creatore) INTO ControlloCreatore;
+    SELECT EXISTS (
+        SELECT 1
+        FROM Commento C
+        JOIN Progetto P ON C.NomeProgetto = P.Nome
+        WHERE C.CodiceCommento = Cod_commento AND P.EmailCreatore = Email_creatore
+    ) INTO ControlloCreatore;
+
     -- controllo che non sia già stata inserita la risposta    
      SELECT EXISTS (SELECT 1 FROM Risposta WHERE CodCommento = Cod_commento)  INTO ControlloRisposta;
                     
     IF ControlloCodiceCommento = TRUE AND ControlloCreatore=TRUE AND ControlloRisposta=FALSE THEN
-		INSERT INTO Risposta(IdCreatore,CodCommento,DataRisposta,Testo)
-        VALUES (Id_creatore,Cod_commento,CURDATE(), Testo_comm);
+		INSERT INTO Risposta(EmailCreatore, CodCommento, DataRisposta, Testo)
+        VALUES (Email_creatore, Cod_commento, CURDATE(), Testo_comm);
 	ELSE SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Commento non trovato o risposta già inserita';
 	END IF;
 END //
 
 -- Inserimento nuovo profilo per un progetto software
-Create Procedure AggiungiProfiloSoftware(in Id_Creatore int,in Nome_Progetto varchar(30),in Nome_Profilo varchar(30)) 
+Create Procedure AggiungiProfiloSoftware(IN Email_creatore VARCHAR(30),in Nome_Progetto varchar(30),in Nome_Profilo varchar(30)) 
 BEGIN
 	IF NOT EXISTS (
-        SELECT 1 FROM Creatore WHERE id = Id_Creatore
+        SELECT 1 FROM Creatore WHERE EmailUtente= Email_creatore
     ) THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Id non valido';
     END IF;
@@ -673,7 +632,7 @@ END //
 
 -- Accettazione o meno di una candidatura
 CREATE PROCEDURE AccettazioneCandidatura (IN Id_Candidatura INT, 
-										IN Id_creatore INT, 
+										IN Email_creatore VARCHAR(30),  
                                         IN Esito_Candidatura ENUM('accettata', 'rifiutata'))
 BEGIN
 	DECLARE controlloCandidatura BOOLEAN DEFAULT FALSE;
@@ -683,11 +642,10 @@ BEGIN
     -- controllo esistenza candidatura e appartenenza progetto a creatore
     SELECT EXISTS (
         SELECT 1
-        FROM Candidatura AS C
+        FROM Candidatura C
         JOIN Profili PR ON C.IdProfilo = PR.Id
         JOIN Progetto P ON PR.NomeProgetto = P.Nome
-        WHERE C.Id = Id_candidatura
-        AND P.IdCreatore = Id_creatore
+        WHERE C.Id = Id_candidatura AND P.EmailCreatore = Email_creatore
     ) INTO controlloCandidatura;
     
     IF controlloCandidatura=FALSE THEN
@@ -715,8 +673,7 @@ BEGIN
         FROM Candidatura C
         JOIN Profili PR ON C.IdProfilo = PR.Id
         JOIN Progetto P ON PR.NomeProgetto = P.Nome
-        WHERE C.Id = Id_Candidatura
-        AND P.IdCreatore = Id_creatore;
+        WHERE C.Id = Id_Candidatura AND P.EmailCreatore = Email_creatore;
 
         UPDATE Profili
         SET Assegnato = TRUE
@@ -765,12 +722,12 @@ BEGIN
 	-- Contrare il numero di progetti di un creatore -> contrare i progetti finanziati almeno una volta
     SELECT COUNT(*) INTO progetti_totali
     FROM Progetto
-    WHERE IdCreatore = NEW.IdCreatore;
+    WHERE EmailCreatore = NEW.EmailCreatore;
     
     SELECT COUNT(DISTINCT p.Nome) INTO progetti_finanziati
     FROM Progetto p
     JOIN Finanziamento f ON p.Nome = f.NomeProgetto
-    WHERE p.IdCreatore = NEW.IdCreatore;
+    WHERE p.EmailCreatore = NEW.EmailCreatore;
     
     IF progetti_totali > 0 THEN
         SET nuova_affidabilita = (progetti_finanziati * 100) / progetti_totali;
@@ -781,7 +738,7 @@ BEGIN
     UPDATE Creatore
     SET Affidabilita = nuova_affidabilita,
         nr_progetti = progetti_totali
-    WHERE Id = NEW.IdCreatore;
+    WHERE EmailUtente = NEW.EmailCreatore;
 END //
 
 -- Aggiornare l'affidabilità dopo un finanziamento (Da rivedere)
@@ -792,23 +749,23 @@ BEGIN
     DECLARE progetti_totali INT;
     DECLARE progetti_finanziati INT;
     DECLARE nuova_affidabilita INT;
-    DECLARE id_creatore_progetto INT;
+    DECLARE email_creatore_progetto VARCHAR(30);
     
-    -- Trova l'ID del creatore del progetto finanziato
-    SELECT IdCreatore INTO id_creatore_progetto
+    -- Trova l'email del creatore del progetto finanziato
+    SELECT EmailCreatore INTO email_creatore_progetto
     FROM Progetto
     WHERE Nome = NEW.NomeProgetto;
     
     -- Conta il numero totale di progetti del creatore
     SELECT COUNT(*) INTO progetti_totali
     FROM Progetto
-    WHERE IdCreatore = id_creatore_progetto;
+    WHERE EmailCreatore = email_creatore_progetto;
     
     -- Conta il numero di progetti finanziati del creatore (almeno un finanziamento)
     SELECT COUNT(DISTINCT p.Nome) INTO progetti_finanziati
     FROM Progetto p
     JOIN Finanziamento f ON p.Nome = f.NomeProgetto
-    WHERE p.IdCreatore = id_creatore_progetto;
+    WHERE p.EmailCreatore = email_creatore_progetto;
     
     -- Calcola la nuova affidabilità (percentuale progetti finanziati)
     IF progetti_totali > 0 THEN
@@ -821,7 +778,7 @@ BEGIN
     UPDATE Creatore
     SET Affidabilita = nuova_affidabilita,
         nr_progetti = progetti_totali
-    WHERE Id = id_creatore_progetto;
+    WHERE EmailUtente = email_creatore_progetto;
 END //
 
 -- Cambiare lo stato di un progetto da aperto a chiuso
@@ -856,7 +813,7 @@ FOR EACH ROW
 BEGIN
     UPDATE Creatore
     SET nr_progetti = nr_progetti + 1
-    WHERE Id = NEW.IdCreatore;
+    WHERE EmailUtente = NEW.EmailCreatore;
 END //
 
 -- Evento per cambiare lo stato di un progetto in data di scadenza
@@ -872,59 +829,151 @@ BEGIN
 END // 
 
 DELIMITER ;
---Ulteriori test
-CALL AggiungiFotoProgetto('Progetto Aperto 1', 'caricamenti/progetto1_img1.jpg', 1);
-CALL AggiungiFotoProgetto('Progetto Aperto 1', 'caricamenti/progetto1_img2.jpg', 1);
 
-INSERT INTO Componenti (Nome, Descrizione, Quantita, Prezzo, NomeProgetto)
-VALUES 
-('Sensore Termico', 'Sensore per rilevare temperatura ambientale', 3, 25.00, 'Progetto Aperto 1'),
-('Microcontrollore', 'Unità di controllo per sensori', 1, 80.00, 'Progetto Aperto 1');
+USE Bostarter;
 
-CALL AggiungiFotoProgetto('Progetto Aperto 2', 'caricamenti/progetto2_img1.jpg', 1);
+--Test 
+---
+-- 1. Tabella `Utente`
+---
+INSERT INTO Utente (Email, Nome, Cognome, AnnoNascita, LuogoNascita, Nickname, Password, Ruolo) VALUES
+('alice.rossi@example.com', 'Alice', 'Rossi', 1990, 'Roma', 'AliceR', 'passAlice', 'creatore'),
+('bruno.bianchi@example.com', 'Bruno', 'Bianchi', 1985, 'Milano', 'BrunoB', 'passBruno', 'standard'),
+('carla.verdi@example.com', 'Carla', 'Verdi', 1992, 'Napoli', 'CarlaV', 'passCarla', 'creatore'),
+('davide.gialli@example.com', 'Davide', 'Gialli', 1988, 'Torino', 'DaveG', 'passDave', 'amministratore'),
+('elena.neri@example.com', 'Elena', 'Neri', 1995, 'Firenze', 'ElenaN', 'passElena', 'standard'),
+('franco.blu@example.com', 'Franco', 'Blu', 1980, 'Bologna', 'FrancoB', 'passFranco', 'standard');
 
-CALL AggiungiProfiloSoftware(1, 'Progetto Aperto 2', 'Backend Developer');
-CALL AggiungiSkillProfilo(1, 'Programmazione PHP', 4);
-CALL AggiungiSkillProfilo(1, 'Programmazione Python', 3);
+---
+-- 2. Tabella `Creatore`
+---
+INSERT INTO Creatore (EmailUtente, Affidabilita) VALUES
+('alice.rossi@example.com', 0),
+('carla.verdi@example.com', 0);
 
-CALL InserimentoReward('Ringraziamento con chiamata',  'Progetto Aperto 1', 1, NULL);
-CALL InserimentoReward('T-shirt del progetto', 'Progetto Aperto 1', 1, 'caricamenti/reward_maglietta.jpg');
-CALL InserimentoReward('Accesso anticipato al software', 'Progetto Aperto 2', 1, 'caricamenti/accesso_beta.jpg');
+---
+-- 3. Tabella `Amministratore`
+---
+INSERT INTO Amministratore (CodiceSicurezza, EmailUtente) VALUES
+(1234, 'davide.gialli@example.com');
 
-CALL AggiungiProfiloSoftware(1, 'Progetto Aperto 2' , 'Frontend Java Developer');
-CALL AggiungiSkillProfilo(2, 'Programmazione Java', 2);
-INSERT INTO SkillUtente(EmailUtente,CompetenzaUtente,Livello)VALUES('B','Programmazione Java',5);
-CALL FinanziaProgetto('A', 'Progetto Aperto 2', 25.00, 3);
-INSERT INTO Utente (Email, Nome, Cognome, AnnoNascita, LuogoNascita, Nickname, Password, Ruolo)
-VALUES 
-('D','Chiara','Bianchi',1992,'Napoli','ChiaraDev','4','creatore'),
-('E','Luca','Gialli',1995,'Torino','LucaFan','5','standard'),
-('F','Giulia','Rossi',1991,'Bologna','GiuliaCode','6','standard');
-INSERT INTO Creatore(EmailUtente,Affidabilita,nr_progetti)
-VALUES ('D',8,2);
-INSERT INTO Progetto (IdCreatore, Nome, Descrizione, DataInserimento, DataLimite, Budget, Stato, Tipologia)
-VALUES (2, 'Smart Garden', 'Sistema di irrigazione intelligente controllabile da app mobile.', '2025-07-01', '2025-08-31', 2000.00, 'aperto', 'hardware');
-INSERT INTO Progetto (IdCreatore, Nome, Descrizione, DataInserimento, DataLimite, Budget, Stato, Tipologia)
-VALUES (2, 'Ricette Intelligenti', 'App che consiglia ricette in base agli ingredienti disponibili e preferenze.', '2025-07-10', '2025-08-25', 5000.00, 'aperto', 'software');
-CALL InserimentoReward('Sticker personalizzati', 'Smart Garden', 2, 'caricamenti/sticker.jpg');
-CALL InserimentoReward('Controllo remoto per il giardino', 'Smart Garden', 2, 'caricamenti/controllo_remoto.jpg');
-CALL InserimentoReward('Accesso Premium per 1 anno', 'Ricette Intelligenti', 2, 'caricamenti/accesso_premium.jpg');
-CALL InserimentoReward('Video corso di cucina', 'Ricette Intelligenti', 2, 'caricamenti/videocorso.jpg');
-CALL FinanziaProgetto('E', 'Smart Garden', 10.00, 4);  
-CALL FinanziaProgetto('F', 'Smart Garden', 50.00, 5);  
-CALL FinanziaProgetto('E', 'Ricette Intelligenti', 30.00, 6);  
-CALL FinanziaProgetto('F', 'Ricette Intelligenti', 20.00, 7);  
-CALL InserimentoCandidatura('A', 2);
-INSERT INTO Progetto (IdCreatore, Nome, Descrizione, DataInserimento, DataLimite, Budget, Stato, Tipologia)
-VALUES (1, 'Progetto Software Extra', 'Gestione API REST con sicurezza OAuth2', '2025-07-01', '2025-08-30', 8000.00, 'aperto', 'software');
-CALL AggiungiProfiloSoftware(1, 'Progetto Software Extra', 'API Developer');
-CALL AggiungiSkillProfilo(3, 'Programmazione PHP', 3);
-CALL InserimentoCandidatura('A', 3);
-INSERT INTO Candidatura (Email_Utente, Id_Profilo, Stato)
-VALUES ('A', 1, 'accettata');
-INSERT INTO Candidatura (Email_Utente, Id_Profilo, Stato)
-VALUES ('B', 2, 'rifiutata');
-CALL InserimentoCandidatura('B', 3);
+---
+-- 4. Tabella `Skills`
+---
+INSERT INTO Skills (Competenza) VALUES
+('Programmazione Java'),
+('Database SQL'),
+('HTML/CSS'),
+('Python'),
+('C++'),
+('Project Management'),
+('UX/UI Design'),
+('Elettronica Digitale'),
+('Modellazione 3D');
 
+---
+-- 5. Tabella `SkillUtente`
+---
+INSERT INTO SkillUtente (EmailUtente, CompetenzaUtente, Livello) VALUES
+('alice.rossi@example.com', 'Programmazione Java', 5),
+('alice.rossi@example.com', 'Database SQL', 4),
+('bruno.bianchi@example.com', 'HTML/CSS', 3),
+('bruno.bianchi@example.com', 'UX/UI Design', 4),
+('carla.verdi@example.com', 'Python', 5),
+('carla.verdi@example.com', 'Project Management', 4),
+('elena.neri@example.com', 'Programmazione Java', 3),
+('elena.neri@example.com', 'Database SQL', 2),
+('franco.blu@example.com', 'Elettronica Digitale', 5),
+('franco.blu@example.com', 'C++', 4);
 
+---
+-- 6. Tabella `Progetto`
+---
+-- Progetti 'aperti' per testing
+INSERT INTO Progetto (EmailCreatore, Nome, Descrizione, DataInserimento, DataLimite, Budget, Stato, Tipologia) VALUES
+('alice.rossi@example.com', 'App Gestionale', 'Sviluppo di un sistema gestionale aziendale completo.', '2025-01-10', '2025-12-31', 5000.00, 'aperto', 'software'),
+('carla.verdi@example.com', 'Drone Ricerca', 'Progettazione e costruzione di un drone autonomo per ricerca.', '2025-02-15', '2025-11-30', 7500.00, 'aperto', 'hardware'),
+('alice.rossi@example.com', 'Sito E-commerce', 'Realizzazione di una piattaforma di vendita online con catalogo prodotti.', '2025-03-01', '2025-09-30', 3000.00, 'aperto', 'software');
 
+-- Progetto 'chiuso' per testing
+INSERT INTO Progetto (EmailCreatore, Nome, Descrizione, DataInserimento, DataLimite, Budget, Stato, Tipologia) VALUES
+('carla.verdi@example.com', 'Robot Domestico', 'Sviluppo di un piccolo robot per la pulizia domestica.', '2024-05-01', '2024-10-30', 2000.00, 'chiuso', 'hardware');
+
+---
+-- 7. Tabella `FotoProgetto`
+---
+INSERT INTO FotoProgetto (NomeProgetto, PercorsoFoto) VALUES
+('App Gestionale', 'caricamenti/app_img1.png'),
+('App Gestionale', 'caricamenti/app_img2.png'),
+('Drone Ricerca', 'caricamenti/drone_img1.png'),
+('Drone Ricerca', 'caricamenti/drone_img2.png'),
+('Sito E-commerce', 'caricamenti/ecommerce_img.png'),
+('Robot Domestico', 'caricamenti/robot_img.png');
+
+---
+-- 8. Tabella `Componenti`
+---
+INSERT INTO Componenti (Nome, Descrizione, Quantita, Prezzo, NomeProgetto) VALUES
+('Motore brushless', 'Motore elettrico per droni', 4, 75.00, 'Drone Ricerca'),
+('Scheda Raspberry Pi', 'Mini computer per sistemi embedded', 1, 50.00, 'Drone Ricerca'),
+('Batteria LiPo 4S', 'Batteria al litio ad alta capacità', 1, 60.00, 'Drone Ricerca'),
+('Sensore di distanza', 'Sensore a ultrasuoni', 2, 15.00, 'Robot Domestico');
+
+---
+-- 9. Tabella `Profili`
+---
+INSERT INTO Profili (Nome, NomeProgetto, Assegnato) VALUES
+('Sviluppatore Backend', 'App Gestionale', FALSE),
+('UI Designer', 'App Gestionale', FALSE),
+('Sviluppatore Frontend', 'Sito E-commerce', FALSE);
+
+---
+-- 10. Tabella `SkillRichieste`
+---
+INSERT INTO SkillRichieste (IdProfilo, CompetenzaRichiesta, Livello) VALUES
+((SELECT Id FROM Profili WHERE Nome = 'Sviluppatore Backend' AND NomeProgetto = 'App Gestionale'), 'Programmazione Java', 4),
+((SELECT Id FROM Profili WHERE Nome = 'Sviluppatore Backend' AND NomeProgetto = 'App Gestionale'), 'Database SQL', 4),
+((SELECT Id FROM Profili WHERE Nome = 'UI Designer' AND NomeProgetto = 'App Gestionale'), 'UX/UI Design', 3),
+((SELECT Id FROM Profili WHERE Nome = 'UI Designer' AND NomeProgetto = 'App Gestionale'), 'HTML/CSS', 2),
+((SELECT Id FROM Profili WHERE Nome = 'Sviluppatore Frontend' AND NomeProgetto = 'Sito E-commerce'), 'HTML/CSS', 4),
+((SELECT Id FROM Profili WHERE Nome = 'Sviluppatore Frontend' AND NomeProgetto = 'Sito E-commerce'), 'Programmazione Java', 3);
+
+---
+-- 11. Tabella `Rewards`
+---
+INSERT INTO Rewards (Descrizione, NomeProgetto, PercorsoFoto) VALUES
+('Ringraziamento pubblico sul sito', 'App Gestionale', 'caricamenti/reward_grazie.png'),
+('Accesso anticipato alla beta', 'App Gestionale', 'caricamenti/reward_beta.png'),
+('T-shirt personalizzata del progetto', 'Drone Ricerca', 'caricamenti/reward_tshirt.png'),
+('Modello 3D stampabile del drone', 'Drone Ricerca', 'caricamenti/reward_3dmodel.png');
+
+---
+-- 12. Tabella `Finanziamento`
+---
+INSERT INTO Finanziamento (EmailUtente, Importo, DataFinanziamento, NomeProgetto, CodiceReward) VALUES
+('bruno.bianchi@example.com', 50.00, '2025-04-01', 'App Gestionale', (SELECT Codice FROM Rewards WHERE NomeProgetto = 'App Gestionale' AND Descrizione = 'Ringraziamento pubblico sul sito')),
+('elena.neri@example.com', 100.00, '2025-04-05', 'App Gestionale', (SELECT Codice FROM Rewards WHERE NomeProgetto = 'App Gestionale' AND Descrizione = 'Accesso anticipato alla beta')),
+('franco.blu@example.com', 200.00, '2025-04-10', 'Drone Ricerca', (SELECT Codice FROM Rewards WHERE NomeProgetto = 'Drone Ricerca' AND Descrizione = 'T-shirt personalizzata del progetto')),
+('bruno.bianchi@example.com', 30.00, '2025-04-12', 'Sito E-commerce', NULL); -- Finanziamento senza reward specifico
+
+---
+-- 13. Tabella `Commento`
+---
+INSERT INTO Commento (EmailUtente, DataCommento, Testo, NomeProgetto) VALUES
+('bruno.bianchi@example.com', '2025-04-03', 'Ottima idea! Avete pensato a integrare API di terze parti?', 'App Gestionale'),
+('elena.neri@example.com', '2025-04-07', 'Il design del drone è fantastico, ma sarà resistente al vento?', 'Drone Ricerca'),
+('franco.blu@example.com', '2025-04-15', 'Quando prevedete una demo per l e-commerce?', 'Sito E-commerce');
+
+---
+-- 14. Tabella `Risposta`
+---
+INSERT INTO Risposta (EmailCreatore, CodCommento, DataRisposta, Testo) VALUES
+('alice.rossi@example.com', (SELECT CodiceCommento FROM Commento WHERE Testo LIKE '%API di terze parti%' AND NomeProgetto = 'App Gestionale'), '2025-04-04', 'Sì, stiamo valutando diverse opzioni per le integrazioni.'),
+('carla.verdi@example.com', (SELECT CodiceCommento FROM Commento WHERE Testo LIKE '%resistente al vento%' AND NomeProgetto = 'Drone Ricerca'), '2025-04-08', 'Abbiamo testato diversi materiali compositi per garantire stabilità anche in condizioni ventose.');
+
+---
+-- 15. Tabella `Candidatura`
+---
+INSERT INTO Candidatura (EmailUtente, IdProfilo, Stato) VALUES
+('bruno.bianchi@example.com', (SELECT Id FROM Profili WHERE Nome = 'UI Designer' AND NomeProgetto = 'App Gestionale'), 'in_attesa'),
+('elena.neri@example.com', (SELECT Id FROM Profili WHERE Nome = 'Sviluppatore Backend' AND NomeProgetto = 'App Gestionale'), 'in_attesa');
