@@ -33,6 +33,7 @@ $EmailDB = $_SESSION['Email'];
                 echo "<p>Nickname: " . $Nickname . "</p>";
                 echo "<p>Ruolo: " . htmlspecialchars($row['Ruolo']) . "</p>";
                 echo "<a href='VisualizzazioneFinanziamentiPropri.php'><button> Visualizza Finanziamenti Fatti </button> </a>";
+                echo "<a href='VisualizzazioneCandidatureEffettuate.php'><button> Visualizza Esito Candidature Effettuate </button> </a>";
             }
             ?>
         </div>

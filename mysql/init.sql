@@ -331,6 +331,22 @@ BEGIN
     WHERE NomeProgetto = p_nomeProgetto;
 END //
 
+--visualizza le candidature con relativo esito effettuate da un utente
+CREATE PROCEDURE VisualizzaCandidatureUtente(IN p_emailUtente VARCHAR(30))
+BEGIN
+    -- Controlla se l'utente esiste
+    IF NOT EXISTS(SELECT 1 FROM Utente WHERE Email = p_emailUtente) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Utente con l''email specificata non trovato.';
+    END IF;
+
+    SELECT P.Nome AS NomeProgetto,PROF.Nome AS NomeProfilo,C.Stato AS StatoCandidatura
+    FROM Candidatura C
+    JOIN Profili PROF ON C.IdProfilo = PROF.Id
+    JOIN Progetto P ON PROF.NomeProgetto = P.Nome
+    WHERE C.EmailUtente = p_emailUtente
+    ORDER BY P.Nome, PROF.Nome;
+END //
+
 -- Finanziamento progetto e assegnazione reward
 CREATE PROCEDURE FinanziaProgetto(
     IN Email_utente VARCHAR(30),

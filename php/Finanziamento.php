@@ -71,9 +71,9 @@ $mancanteAlBudget = $budgetProgetto - $finanziatoAttuale;
     <h1><?php echo "Stai per finanziare -> " . htmlspecialchars($nomeProgetto); ?></h1>
     <div class="project-summary">
         <p>Budget Totale Progetto: <strong>€ <?php echo number_format($budgetProgetto, 2); ?></strong></p>
-        <p>Totale Finanziato ad oggi: <strong>€ <?php echo number_format($finanziatoAttuale, 2); ?></strong></p>
+        <p>Totale Finanziato ad oggi: <strong style="color: green;">€ <?php echo number_format($finanziatoAttuale, 2); ?></strong></p>
         <?php if ($mancanteAlBudget > 0): ?>
-            <p>Mancano: <strong style="color: green;">€ <?php echo number_format($mancanteAlBudget, 2); ?></strong> al raggiungimento del budget!</p>
+            <p>Mancano: <strong style="color: red;">€ <?php echo number_format($mancanteAlBudget, 2); ?></strong> al raggiungimento del budget!</p>
         <?php else: ?>
             <p><strong>Il budget è stato raggiunto!</strong> (o superato)</p>
         <?php endif; ?>

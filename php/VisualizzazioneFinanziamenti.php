@@ -3,7 +3,7 @@ session_start();
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     include 'connessione/VisualizzaFinanziamenti.php';
     $nome_progetto_finanziamenti = $_POST['nome_progetto'];
-
+    $_SESSION['nome_progetto_finanziamenti'] = $nome_progetto_finanziamenti;
     $budgetProgetto = 0;
     $finanziatoAttuale = 0;
     //Stored Procedure successive servono per far visualizzare all'utente quanto manca al raggiungimento del budget
