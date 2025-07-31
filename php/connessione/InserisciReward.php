@@ -1,19 +1,17 @@
 <?php
+
 include 'db.php'; //connessione al database
-
-//Chiamata alla stored procedure per l'inserimento di nuova reward
+//Stored procedure per inserimento reward
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-    //recupero i dati inviati dal form html
     $descrizione = $_POST['descrizione'];
-    $foto = $_FILES['foto']['name'];
-    
     $nome_progetto = $_SESSION['nome_progetto'];
     $email = $_SESSION['Email'];
-    //Gestione caricamento foto
-    $targetPath = null; // Default in caso non venga caricata nessuna foto
+    
+    $targetPath = null; 
+    $hasError = false; // per tracciare se si è verificato un errore
 
-    if (isset($_FILES['foto']) && $_FILES['foto']['error'] === 0) { //stesso procedimento di connessione/InserisciFoto
+    // Gestione dell'upload della foto
+    if (isset($_FILES['foto']) && $_FILES['foto']['error'] === 0) {
         $cartellaPerSalvareFoto = 'caricamenti/';
         if (!file_exists($cartellaPerSalvareFoto)) {
             mkdir($cartellaPerSalvareFoto, 0777, true);
@@ -24,27 +22,50 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $targetPath = $cartellaPerSalvareFoto . uniqid() . "_" . $fileName;
 
         if (!move_uploaded_file($fileTmp, $targetPath)) {
-            echo "<p>Errore nel salvataggio della foto</p>";
-            exit;
+            $_SESSION['error_message'] = "Errore nel salvataggio della foto. Riprova.";
+            $hasError = true;
         }
+    } else if (isset($_FILES['foto']) && $_FILES['foto']['error'] !== UPLOAD_ERR_NO_FILE) {
+        // Errore di upload del file
+        // UPLOAD_ERR_NO_FILE significa che nessun file è stato caricato, gestito dal 'required' HTML
+        $_SESSION['error_message'] = "Errore nel caricamento della foto: " . $_FILES['foto']['error'] . " Verifica dimensione e formato";
+        $hasError = true;
+    } else {
+        // Questo se 'required' nell'HTML non funziona
+        $_SESSION['error_message'] = "La foto del reward è obbligatoria";
+        $hasError = true;
     }
 
-    //Chiamata alla stored procedure 
+    // Se errore nell'upload della foto non si va avanti con l'inserimento
+    if ($hasError) {
+        header("Location: ../InserimentoReward.php"); // Reindirizza alla pagina 
+        exit();
+    }
+
+    // Preparazione ed esecuzione della stored procedure
     $stmt = $mysqli->prepare("CALL InserimentoReward(?, ?, ?, ?)");
-    $stmt->bind_param("sdsss", $descrizione,  $nome_progetto, $email, $targetPath);
+    $stmt->bind_param("ssss", $descrizione, $nome_progetto, $email, $targetPath); 
 
     try {
         if ($stmt->execute()) {
-            echo "<p>Reward inserito correttamente! Ora è possibile inserirne un'altra o tornare indietro </p>";
+            while ($mysqli->more_results() && $mysqli->next_result()) {
+                if ($res = $mysqli->store_result()) {
+                    $res->free();// Pulisce i risultati  dalla stored procedure se ce ne sono.
+                }
+            }
         } else {
-            echo "<p>Errore durante l'inserimento del reward: " . htmlspecialchars($stmt->error) . "</p>";
+            // Errore generato dalla stored procedure
+            $_SESSION['error_message'] = "Errore nell'inserimento del reward: " . htmlspecialchars($stmt->error);
         }
     } catch (mysqli_sql_exception $e) {
-        echo "<p>Errore: " . htmlspecialchars($e->getMessage()) . "</p>";
+        // Errore generale del database
+        $_SESSION['error_message'] = "Errore di sistema: " . htmlspecialchars($e->getMessage());
+    } finally {
+        $stmt->close(); 
     }
 
-    $stmt->close();
+    // Reindirizza alla pagina di gestione contenuti dopo elaborazione del POST
+    header("Location: ../AggiuntaContenutiNuovoProgetto.php"); 
+    exit();
 }
 ?>
-
-            

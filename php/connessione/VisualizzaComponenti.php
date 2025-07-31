@@ -7,6 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['nome_progetto'])) {
     $nome_progetto = $_POST['nome_progetto'];
 
     $stmt = $mysqli->prepare("CALL VisualizzaComponenti(?)");
+    error_log("Nome Progetto ricevuto per VisualizzaComponenti: " . $nome_progetto);
     $stmt->bind_param("s", $nome_progetto);
     if($stmt->execute()){
         $result = $stmt->get_result();

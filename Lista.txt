@@ -16,10 +16,10 @@ Manca tutta la documentazione e la presentazione se non ricordo male
 Registrazione                                                             ok  
 Login                                                                     ok
 InserimentoNuovoProgetto                                                  ok
-Inserimento Profilo per Nuovo Progetto                                    ok         --utente non è obbligato a farlo, non so se è da cambiare
-Inserimento Componenti per Nuovo Progetto                                 ok         --utente non è obbligato a farlo, non so se è da cambiare
+Inserimento Profilo per Nuovo Progetto                                    ok    --Ho fatto delle modifiche in modo che si obblighi a livello grafico l'utente a inserire almeno un profilo
+Inserimento Componenti per Nuovo Progetto                                 ok    --Ho fatto delle modifiche in modo che si obblighi a livello grafico l'utente a inserire almeno una componente
 Inserimento foto per Nuovo Progetto                                       ok
-Inserimento Reward per Nuovo Progetto                                     ok         --utente non è obbligato a farlo, non so se è da cambiare
+Inserimento Reward per Nuovo Progetto                                     ok    --Ho fatto delle modifiche in modo che si obblighi a livello grafico l'utente a inserire almeno una reward
 Visualizzazione informazioni Progetti Aperti                              ok
 Visualizzazione Foto Progetti Aperti                                      ok
 Visualizzazione Componenti Progetti Aperti                                ok
@@ -28,10 +28,10 @@ Visualizzazione Reward Progetti Aperti                                    ok
 Visualizzazione Propri Progetti                                           ok
 Visualizzazione elenco Finanziamenti Propri Progetti                      ok
 Visualizzazione finanziamenti fatti da sè stesso                          ok
-Finanziamento Progetti Aperti                                             ok        --funziona solo se c'è reward 
+Finanziamento Progetti Aperti                                             ok     --Tolto prezzo minimo  
 Scelta Reward Dopo Finanziamento                                          ok           
 Candidatura in Profili Nuovo Progetto                                     ok               --anche il creatore stesso può candidarsi, da modificare?
-Accettazione/Rifiuto Candidati                                            ok
+Accettazione/Rifiuto Candidati                                            ok              --Quando viene accettata una candidatura gli utenti non potranno più candidarsi a quel profilo
 Inserimento Commento                                                     da verificare
 Inserimento Stringa Lista Competenze x admin                             da verificare
 Inserimento Risposta ad Un Commento                                      da verificare
@@ -45,8 +45,8 @@ Visualizzazione classifica utenti creatori                               da veri
 Visualizzazione progettii aperti più vicini al proprio completamento     da verificare
 Visualizzazione classifica utenti                                        da verificare
 Chiudere profilo quando viene accettata una candidatura                  ok
-LOG SU MONGODB                                                           DA FARE    <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-DOCUMENTAZIONE                                                           da finire
+LOG SU MONGODB                                                           DA FARE TUTTA           <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+DOCUMENTAZIONE                                                           DA FINIRE (documento word nella cartella documentazione)
 DIAGRAMMA E-R FATTO AL PC                                                ok
 SLIDES                                                                   DA FARE MA NON DA CONSEGNARE
 POPOLAMENTO PER DEMO                                                     da sistemare      

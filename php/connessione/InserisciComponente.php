@@ -1,7 +1,6 @@
 <?php
-
 include 'db.php';
-//STORED PROCEDURE PER AGGIUNTA COMPONENTE
+//stored procedure per inserire nuova componente
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nome = $_POST['nome'];
     $descrizione = $_POST['descrizione'];
@@ -9,27 +8,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $prezzo = $_POST['prezzo'];
     $nome_progetto = $_SESSION['nome_progetto'];
 
-    $query = "CALL AggiungiComponente(?, ?, ?, ?, ?)";
-    $stmt = $mysqli->prepare($query);
+    $stmt = $mysqli->prepare("CALL AggiungiComponente(?, ?, ?, ?, ?)");
     $stmt->bind_param("ssids", $nome, $descrizione, $quantita, $prezzo, $nome_progetto);
 
     try {
         if ($stmt->execute()) {
-            echo "<p>Componente aggiunto correttamente!</p>";
+            while ($mysqli->more_results() && $mysqli->next_result()) {
+                if ($res = $mysqli->store_result()) {
+                    $res->free(); //pulisce risultati
+                }
+            }
         } else {
-            $errorMsg = $stmt->error; //messaggio errore generato dalla storedd procedure
-            if (strpos($errorMsg, 'Progetto non valido o non aperto') !== false) { //errore dalla stored procedure
-                echo "<p>Errore: Problemi con il progetto: non valido o chiuso </p>";
-            }
-            else{
-                echo "<p>Errore nell'inserimento: " . htmlspecialchars($stmt->error) . "</p>";
-            }
-            
+            // Errore generato dalla stored procedure
+            $_SESSION['error_message'] = "Errore nell'inserimento del componente: " . htmlspecialchars($stmt->error);
         }
     } catch (mysqli_sql_exception $e) {
-        echo "<p>Errore: " . htmlspecialchars($e->getMessage()) . "</p>";
+        // Errore generale del database
+        $_SESSION['error_message'] = "Errore di sistema: " . htmlspecialchars($e->getMessage());
+    } finally {
+        $stmt->close();
     }
-
-    $stmt->close();
+    // Reindirizza 
+    header("Location: ../AggiuntaContenutiNuovoProgetto.php"); 
+    exit();
 }
 ?>

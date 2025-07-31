@@ -31,6 +31,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['nome_progetto'])) {
         <p>Nessuna foto trovata per questo progetto.</p>
     <?php endif; ?>
     <br>
-    <a href="VisualizzaProgetti.php"><button>Torna alla lista progetti</button></a>
+    <a href="VisualizzaProgetti.php"><button>Torna indietro</button></a>
 </body>
 </html>

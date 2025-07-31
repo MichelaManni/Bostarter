@@ -1,34 +1,33 @@
 <?php
-
 include 'db.php';
-//STORED PROCEDURE PER AGGIUNTA SKILL A PROFILO
+//stored procedure per inserire skill a profilo software
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nome = $_POST['nome_profilo']; //nome skill e livello prese dal post
     $skill = $_POST['competenza'];
     $livello = $_POST['livello'];
-    $id_profilo = $_SESSION['id_profilo_corrente'];  //id profilo preso dalla session
-
+    $id_profilo = $_SESSION['id_profilo_corrente']; 
 
     $stmt = $mysqli->prepare("CALL AggiungiSkillProfilo(?, ?, ?)");
     $stmt->bind_param("isi", $id_profilo, $skill, $livello);
 
     try {
         if ($stmt->execute()) {
-            echo "<p>Skill aggiunta correttamente! E' possibile aggiungerne un'altra o tornare indietro </p>";
+            while ($mysqli->more_results() && $mysqli->next_result()) {
+                if ($res = $mysqli->store_result()) {
+                    $res->free();  //pulisce i risultati
+                }
+            }
         } else {
-            $errorMsg = $stmt->error; //messaggio errore generato dalla storedd procedure
-            if (strpos($errorMsg, 'Skill già inserita per questo profilo') !== false) {
-                echo "<p>Errore: Skill già inserita per questo profilo</p>";
-            }
-            else{
-                echo "<p>Errore nell'inserimento: " . htmlspecialchars($stmt->error) . "</p>";
-            }
-
+            // Errore generato dalla stored procedure 
+            $_SESSION['error_message'] = "Errore nell'inserimento della skill: " . htmlspecialchars($stmt->error);
         }
     } catch (mysqli_sql_exception $e) {
-        echo "<p>Errore: " . htmlspecialchars($e->getMessage()) . "</p>";
+        // Errore generale del database
+        $_SESSION['error_message'] = "Errore di sistema: " . htmlspecialchars($e->getMessage());
+    } finally {
+        $stmt->close();
     }
-
-    $stmt->close();
+    // reindirizza alla pagina di aggiunta skill (per mostrare eventuali errori o continuare ad aggiungere skill)
+    header("Location: ../InserimentoSkillProfilo.php"); 
+    exit();
 }
 ?>
