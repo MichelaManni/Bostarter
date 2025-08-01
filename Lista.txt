@@ -10,6 +10,24 @@ funziona lo stesso
 
 Manca tutta la documentazione e la presentazione se non ricordo male
 
+--------------------------------COSE MODIFICATE----------------------------------------------------
+Cose importanti che sono state modificate:
+- In generale modificato la parte dell'inserimento di un nuovo progetto per obbligare utente a inserire almeno
+  un reward e almeno un profilo con skill/un componente.
+- Tolto nella table creatore l'idCreatore perchè risultava un attributo inutile: il creatore è un sottotipo di utente
+    e l'utente deve già avere come identificativo univoco l'email di conseguenza ha senso che sia l'amministratore
+    sia il creatore mantegano la mail come chiave primaria. Ho modificato di conseguenza gli script
+- Tolto prezzo minimo dai reward e nei finanziamenti
+- Aggiunte alcune pagine di visualizzazione tra cui: visualizzazione delle proprie candidature inviate con relativo esito, 
+    visualizzazione per utente creatori dei finanziamenti ricevuti su un proprio progetto, viusalizzazione quando si effettua un finanziamento
+    della cifra necessaria per il raggiungimento del budget di un progetto (altrimenti un utente non può sapere quanto gli altri utenti hanno già donato) ecc..
+- Tolti test vecchi, aggiunta nuovi test (fatti con Gemini quindi da ricontrollare quando si farà la demo)
+- Creata la relazione (da rileggere tutta assolutamente e da modificare in alcune parti ma come base c'è tutta) 'Documentazione/RelazionebasiDiDati.docx'
+- Il Diagramma E-R fatto a computer si può modificare aprendo il file Documentazione/Diagramma.drawio su https://app.diagrams.net/
+- Le cose implementate da me dovrebbero andare bene e le ho ricontrollate, quello che non ho fatto io tipo commenti risposte non l'ho controllato
+
+MANCA: tutto mongoDB + vincolo Un	utente	potrebbe	inserire	più	finanziamenti	per	lo	stesso	progetto,	ma	in	date	diverse (non so se è stato fatto)
+
 ---------------------------------ELENCO REQUISI NECESSARI-------------------------------------------
                                                                       Funziona?       
 
@@ -28,7 +46,7 @@ Visualizzazione Reward Progetti Aperti                                    ok
 Visualizzazione Propri Progetti                                           ok
 Visualizzazione elenco Finanziamenti Propri Progetti                      ok
 Visualizzazione finanziamenti fatti da sè stesso                          ok
-Finanziamento Progetti Aperti                                             ok     --Tolto prezzo minimo  
+Finanziamento Progetti Aperti                                             ok     --Tolto prezzo minimo , aggiunta visualizzazione budget mancante
 Scelta Reward Dopo Finanziamento                                          ok           
 Candidatura in Profili Nuovo Progetto                                     ok               --anche il creatore stesso può candidarsi, da modificare?
 Accettazione/Rifiuto Candidati                                            ok              --Quando viene accettata una candidatura gli utenti non potranno più candidarsi a quel profilo
@@ -45,6 +63,8 @@ Visualizzazione classifica utenti creatori                               da veri
 Visualizzazione progettii aperti più vicini al proprio completamento     da verificare
 Visualizzazione classifica utenti                                        da verificare
 Chiudere profilo quando viene accettata una candidatura                  ok
+Vincolo: Un	utente potrebbe	inserire più	                             DA FARE????            <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+finanziamenti	per	lo	stesso	progetto,	ma	in	date	diverse.	                                 
 LOG SU MONGODB                                                           DA FARE TUTTA           <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 DOCUMENTAZIONE                                                           DA FINIRE (documento word nella cartella documentazione)
 DIAGRAMMA E-R FATTO AL PC                                                ok
