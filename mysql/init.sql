@@ -359,6 +359,9 @@ BEGIN
 	IF NOT EXISTS (SELECT 1 FROM Utente WHERE Email = Email_utente) THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Email non trovata';
 	END IF;
+    IF EXISTS (SELECT 1 FROM Finanziamento WHERE EmailUtente = Email_utente AND Nome_progetto = NomeProgetto AND DataFinanziamento = CURDATE()) THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Massimi finanziamenti su questo progetto per oggi';
+	END IF;
     IF NOT EXISTS ( SELECT 1 FROM Progetto 
 	WHERE Nome = Nome_progetto AND Stato = 'aperto') THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Progetto non trovato o non aperto';

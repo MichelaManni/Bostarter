@@ -50,10 +50,10 @@ Scelta Reward Dopo Finanziamento                                          ok
 Candidatura in Profili Nuovo Progetto                                     ok               --anche il creatore stesso può candidarsi, da modificare?
 Accettazione/Rifiuto Candidati                                            ok              --Quando viene accettata una candidatura gli utenti non potranno più candidarsi a quel profilo
 Inserimento Commento                                                      ok
-Inserimento Stringa Lista Competenze x admin                             da verificare 
+Inserimento Stringa Lista Competenze x admin                              ok
 Inserimento Risposta ad Un Commento                                       ok
 Inserire proprie skill di curriculum                                      ok 
-Trigger affidabilità progetto                                            da verificare
+Trigger affidabilità progetto                                            da verificare -> Si aggiorna e sembra vada ma da vedere meglio
 Trigger affidabilità finanziamento                                       da verificare
 Trigger chiusura progetto a raggiungimento finanziamento                 dovrebbe funzionare 
 Trigger incrementa numero progetti                                       dovrebbe funzionare
@@ -62,7 +62,7 @@ Visualizzazione classifica utenti creatori                               da veri
 Visualizzazione progettii aperti più vicini al proprio completamento     da verificare
 Visualizzazione classifica utenti                                        da verificare
 Chiudere profilo quando viene accettata una candidatura                  ok
-Vincolo: Un	utente potrebbe	inserire più	                             DA FARE????            <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+Vincolo: Un	utente potrebbe	inserire più	                               ok (nel dubbio fatto)
 finanziamenti	per	lo	stesso	progetto,	ma	in	date	diverse.	                                 
 LOG SU MONGODB                                                           DA FARE TUTTA           <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 DOCUMENTAZIONE                                                           DA FINIRE (documento word nella cartella documentazione)

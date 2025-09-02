@@ -77,6 +77,6 @@ if (!empty($nome_progetto_corrente)) {
     <p>Nessuna componente disponibile per questo progetto.</p><br>
 <?php endif; ?>
 <br>
-<a href="HomePage.php"><button >Torna indietro</button></a><br>
+<a href="PaginaVisualizzaProgetti.php"><button >Torna indietro</button></a><br>
 </body>
 </html>
