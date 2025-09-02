@@ -4,9 +4,9 @@ class VisualizzatoreCommenti
 {
     public $nomeProgetto;
     public $EmailRegistrata;
+    //Serve per metterci dentro $mysqli di db.php!
     public $conn;
 
-    // Costruttore
     public function __construct($mysqli) {
         $this->conn = $mysqli;
     }
@@ -21,7 +21,6 @@ class VisualizzatoreCommenti
         $nomeProgetto = $_SESSION['Progetto'];
         $EmailRegistrata = $_SESSION['Email'];
 
-        // Controllo se si è il creatore del progetto
         $stmt = $this->conn->prepare("CALL ControlloProgetto(?, ?, @Esito)");
         $stmt->bind_param("ss", $EmailRegistrata, $nomeProgetto);
         $stmt->execute();
@@ -31,7 +30,6 @@ class VisualizzatoreCommenti
         $row = $result->fetch_assoc();
         $esito = $row['esito'];
 
-        // Chiamata alla stored procedure per i commenti
         $stmt = $this->conn->prepare("CALL VisualizzaCommenti(?)");
         $stmt->bind_param("s", $nomeProgetto);
         $stmt->execute();

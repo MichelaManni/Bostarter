@@ -13,13 +13,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute();
         $stmt->close();
         $result = $mysqli->query("SELECT @Esito AS esito, @RuoloRegistrato AS Ruolo");
-        $row = $result->fetch_assoc();
+        $row = $result->fetch_assoc();  
 
         if ($row['esito']) {
 			$_SESSION['Email'] = $Email_inserita;
 			$_SESSION['Ruolo'] = $row['Ruolo'];
             if (strtolower($row['Ruolo']) === 'amministratore') {
-                header("Location: AdminLogin.php");
+                header("Location: PaginaAdminLogin.php");
             } 
             else {
                 header("Location: HomePage.php");

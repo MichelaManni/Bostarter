@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['nome_progetto'])) {
 
 if (!isset($_SESSION['Progetto']) || !isset($_SESSION['Email'])) {
     // Se manca qualcosa, rimanda alla visualizzazione progetti
-    header("Location: VisualizzaProgetti.php");
+    header("Location: PaginaVisualizzaProgetti.php");
     exit();
 }
 
@@ -48,7 +48,7 @@ if ($stmtFinanziato) {
         $finanziatoAttuale = (float)$rowFinanziato['TotaleFinanziato'];
     }
     $stmtFinanziato->close();
-    
+
     while ($mysqli->more_results() && $mysqli->next_result()) {
         if ($res = $mysqli->store_result()) {
             $res->free();
@@ -128,7 +128,7 @@ $mancanteAlBudget = $budgetProgetto - $finanziatoAttuale;
         </div>
     </div>
 
-    <a href="VisualizzaProgetti.php"><button>Torna ai progetti</button></a><br>
+    <a href="PaginaVisualizzaProgetti.php"><button>Torna ai progetti</button></a><br>
 </body>
 
 </html>

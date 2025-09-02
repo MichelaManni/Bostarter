@@ -43,7 +43,7 @@ $Visualizzatore->CreaTabellaCommenti();
             </form>';
         } ?>
     </div>
-    <a href=VisualizzaProgetti.php><button type="submit">Torna ai progetti</button></a><br>
+    <a href=PaginaVisualizzaProgetti.php><button type="submit">Torna ai progetti</button></a><br>
 </body>
 
 </html>

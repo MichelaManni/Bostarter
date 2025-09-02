@@ -1,7 +1,6 @@
 -----------------------------------------------------------------------------------
 Cose da correggere prima di consegnare(più che altro per me stesso)
 
-Risposte -> non si refresha la pagina se si mette una risposta
 Finanziamenti -> sono legati ancora al fatto che le reward hanno un prezzo minimo
 
 Una piccolezza di cui mi sono accorto nella registrazione mi piace che invece che nella stored procedure
@@ -51,7 +50,7 @@ Scelta Reward Dopo Finanziamento                                          ok
 Candidatura in Profili Nuovo Progetto                                     ok               --anche il creatore stesso può candidarsi, da modificare?
 Accettazione/Rifiuto Candidati                                            ok              --Quando viene accettata una candidatura gli utenti non potranno più candidarsi a quel profilo
 Inserimento Commento                                                      ok
-Inserimento Stringa Lista Competenze x admin                             da verificare
+Inserimento Stringa Lista Competenze x admin                             da verificare 
 Inserimento Risposta ad Un Commento                                       ok
 Inserire proprie skill di curriculum                                      ok 
 Trigger affidabilità progetto                                            da verificare

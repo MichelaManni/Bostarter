@@ -30,7 +30,7 @@ if (!isset($_SESSION['Email'])) {
 	</p>
 	<!-- Viene controllato il ruolo per mostrare più o meno i pulsanti -->
 	<div class="container">
-		<a href="VisualizzaProgetti.php"><button class="Pulsantegrande" type="button">Visualizza i progetti aperti</button></a>
+		<a href="PaginaVisualizzaProgetti.php"><button class="Pulsantegrande" type="button">Visualizza i progetti aperti</button></a>
 		<a href="Statistiche.php"><button class="Pulsantegrande" type="button">Visualizza statistiche</button></a>
 		<a href="Profilo.php"><button class="Pulsantegrande" type="button">Visualizza profilo personale</button></a>
 		<?php if ($_SESSION['Ruolo'] == "creatore") {

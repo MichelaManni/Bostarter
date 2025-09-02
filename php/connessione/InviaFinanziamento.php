@@ -20,7 +20,7 @@ try {
         $stmt->bind_param('ssdi', $EmailRegistrata, $nomeProgetto, $importo, $codiceReward); // i = intero per codice reward
         $stmt->execute();
 
-        header("Location:VisualizzaProgetti.php");
+        header("Location: PaginaVisualizzaProgetti.php");
         exit;
     }
 } catch (mysqli_sql_exception $e) {

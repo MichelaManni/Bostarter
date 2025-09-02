@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <p>Nessun reward disponibile per questo progetto.</p><br>
 <?php endif; ?>
 <br>
-<a href="VisualizzaProgetti.php"><button >Torna indietro</button></a><br>
+<a href="PaginaVisualizzaProgetti.php"><button >Torna indietro</button></a><br>
 </body>
 </html>
           

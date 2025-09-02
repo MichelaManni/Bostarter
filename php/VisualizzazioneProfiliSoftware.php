@@ -59,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <?php endif; ?>
 
 <br>
-<a href="VisualizzaProgetti.php"><button>Torna indietro</button></a><br>
+<a href="PaginaVisualizzaProgetti.php"><button>Torna indietro</button></a><br>
 </body>
 </html>
           
