@@ -1,63 +1,84 @@
 <?php
 include 'Connessione/db.php';
-//*Script per visualizzare tutti i commenti relativi a un progetto
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST['nome_progetto'])) {
-        $_SESSION['Progetto'] = $_POST['nome_progetto'];
+
+class VisualizzatoreCommenti
+{
+    public $nomeProgetto;
+    public $EmailRegistrata;
+    public $conn;
+
+    // Costruttore
+    public function __construct($mysqli) {
+        $this->conn = $mysqli;
     }
 
-    $nomeProgetto = $_SESSION['Progetto'];
-    $EmailRegistrata = $_SESSION['Email'];
+    public function CreaTabellaCommenti()
+    {
+        if (!isset($_SESSION['Progetto']) || !isset($_SESSION['Email'])) {
+            echo "Sessione non valida.";
+            return;
+        }
 
-    //Controllo se si è il creatore del progetto per rispondere ai commenti
-    //se esito è true allora quando si visualizzano i commenti del proprio progetto è possibile rispondere
-    $stmt = $mysqli->prepare("CALL ControlloProgetto(?, ?, @Esito)");
-    $stmt->bind_param("ss", $EmailRegistrata, $nomeProgetto);
-    $stmt->execute();
-    $stmt->close();
-    $result = $mysqli->query("SELECT @esito AS esito");
-    $row = $result->fetch_assoc();
-    $esito = $row['esito'];
+        $nomeProgetto = $_SESSION['Progetto'];
+        $EmailRegistrata = $_SESSION['Email'];
 
-    //Chiamata alla stored procedure e costruisce una tabella con i commenti relativi al progetto
-    $stmt = $mysqli->prepare("CALL VisualizzaCommenti(?)");
-    $stmt->bind_param("s", $nomeProgetto);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    echo "<h2>Commenti del progetto: " . htmlspecialchars($nomeProgetto) . "</h2>";
-    //Costruisce la tabella con il risultato della storede procedure, a seconda del ruolo vengono aggiunte/rimosse opzioni
-    if ($result->num_rows > 0) {
-        echo "<table class='T1' border='1' cellpadding='5'>
+        // Controllo se si è il creatore del progetto
+        $stmt = $this->conn->prepare("CALL ControlloProgetto(?, ?, @Esito)");
+        $stmt->bind_param("ss", $EmailRegistrata, $nomeProgetto);
+        $stmt->execute();
+        $stmt->close();
+
+        $result = $this->conn->query("SELECT @Esito AS esito");
+        $row = $result->fetch_assoc();
+        $esito = $row['esito'];
+
+        // Chiamata alla stored procedure per i commenti
+        $stmt = $this->conn->prepare("CALL VisualizzaCommenti(?)");
+        $stmt->bind_param("s", $nomeProgetto);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        echo "<h2>Commenti del progetto: " . htmlspecialchars($nomeProgetto) . "</h2>";
+
+        if ($result->num_rows > 0) {
+            echo "<table class='T1' border='1' cellpadding='5'>
                 <tr>
                     <th>Poster</th>
                     <th>Contenuto</th>
                     <th>Data</th>
-                    <th>Risposta del cratore</th>";
-        if ($esito) {
-            echo "<th> </th>";
-        }
-        "</tr>";
-        while ($row = $result->fetch_assoc()) {
-            echo "<tr>
+                    <th>Risposta del creatore</th>";
+
+            if ($esito) {
+                echo "<th>Azioni</th>";
+            }
+
+            echo "</tr>";
+
+            while ($row = $result->fetch_assoc()) {
+                echo "<tr>
                     <td>" . htmlspecialchars($row['Poster']) . "</td>
                     <td>" . htmlspecialchars($row['Contenuto']) . "</td>
                     <td>" . htmlspecialchars($row['Data']) . "</td>
                     <td>" . htmlspecialchars($row['Risposta']) . "</td>";
-            if ($esito && $row['Risposta'] == '') {
-            echo "<td> <form method='post'>
-                <input type='hidden' name='CodiceCommento' value='" . htmlspecialchars($row['CodiceCommento']) . "'>
-                <button type='submit'>Rispondi</button>
-            </form></td>";
-            } else {
-                echo "<td> </td>";
+
+                if ($esito && $row['Risposta'] == '') {
+                    echo "<td>
+                        <form method='post'>
+                            <input type='hidden' name='CodiceCommento' value='" . htmlspecialchars($row['CodiceCommento']) . "'>
+                            <button type='submit'>Rispondi</button>
+                        </form>
+                    </td>";
+                } else {
+                    echo "<td></td>";
+                }
+
+                echo "</tr>";
             }
-            "</tr>";
+            echo "</table>";
+        } else {
+            echo "Nessun commento trovato per questo progetto.";
         }
-        echo "</table>";
-    } else {
-        echo "Nessun commento trovato per questo progetto.";
+
+        $stmt->close();
     }
-    $stmt->close();
-} else {
-    echo "Nessun progetto specificato.";
 }

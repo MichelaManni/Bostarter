@@ -225,7 +225,8 @@ BEGIN
     FROM Commento C 
     JOIN Utente U ON C.EmailUtente = U.Email 
     LEFT JOIN Risposta R ON R.CodCommento = C.CodiceCommento
-    WHERE C.NomeProgetto = Nome_Progetto;
+    WHERE C.NomeProgetto = Nome_Progetto
+    ORDER BY CodiceCommento DESC;
 END //
 
 -- prende tutti i dati di un utente per restituire la lista delle sue skills inserite

@@ -20,8 +20,6 @@ try {
 
         if ($stmt->execute()) {
             echo 'Risposta inserita con successo!';
-            header("Commenti.php");
-            exit;
         }
 
         $stmt->close();

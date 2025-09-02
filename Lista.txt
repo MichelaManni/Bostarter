@@ -50,7 +50,7 @@ Finanziamento Progetti Aperti                                             ok    
 Scelta Reward Dopo Finanziamento                                          ok           
 Candidatura in Profili Nuovo Progetto                                     ok               --anche il creatore stesso può candidarsi, da modificare?
 Accettazione/Rifiuto Candidati                                            ok              --Quando viene accettata una candidatura gli utenti non potranno più candidarsi a quel profilo
-Inserimento Commento                                                     da verificare
+Inserimento Commento                                                      ok
 Inserimento Stringa Lista Competenze x admin                             da verificare
 Inserimento Risposta ad Un Commento                                      da verificare
 Inserire proprie skill di curriculum                                      ok 

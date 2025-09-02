@@ -7,6 +7,14 @@ include 'Connessione/VisualizzaCommenti.php';
 include 'Connessione/InviaRisposta.php'
 ?>
 
+<?php
+if (isset($_POST['nome_progetto'])) {
+    $_SESSION['Progetto'] = $_POST['nome_progetto'];
+}
+$Visualizzatore = new VisualizzatoreCommenti($mysqli);
+$Visualizzatore->CreaTabellaCommenti();
+?>
+
 <!DOCTYPE HTML>
 <html>
 
@@ -27,12 +35,13 @@ include 'Connessione/InviaRisposta.php'
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['CodiceCommento'])) {
             $CodiceCommento = $_POST['CodiceCommento'];
             echo '
-            <form method="post" action="Commenti.php" class="container" style="display: flex; gap: 10px; align-items: center;">
+            <form method="post" class="container" style="display: flex; gap: 10px; align-items: center;">
             <label>Inserisci risposta</label>
             <textarea id="Risposta" name="Risposta" rows="3" cols="50" maxlength="500" required></textarea>
             <input type="hidden" name="CodiceCommento" value="' . htmlspecialchars($CodiceCommento) . '">
             <button type="submit">Invia</button>
-            </form>';} ?>
+            </form>';
+        } ?>
     </div>
     <a href=VisualizzaProgetti.php><button type="submit">Torna ai progetti</button></a><br>
 </body>
