@@ -52,7 +52,7 @@ Candidatura in Profili Nuovo Progetto                                     ok    
 Accettazione/Rifiuto Candidati                                            ok              --Quando viene accettata una candidatura gli utenti non potranno più candidarsi a quel profilo
 Inserimento Commento                                                      ok
 Inserimento Stringa Lista Competenze x admin                             da verificare
-Inserimento Risposta ad Un Commento                                      da verificare
+Inserimento Risposta ad Un Commento                                       ok
 Inserire proprie skill di curriculum                                      ok 
 Trigger affidabilità progetto                                            da verificare
 Trigger affidabilità finanziamento                                       da verificare
@@ -71,3 +71,4 @@ DIAGRAMMA E-R FATTO AL PC                                                ok
 SLIDES                                                                   DA FARE MA NON DA CONSEGNARE
 POPOLAMENTO PER DEMO                                                     da sistemare      
 modifiche estetiche                                                      se c'è tempo 
+Ordinare i file(Ho fatto un esempio per i commenti)                      se c'è tempo

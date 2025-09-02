@@ -2,9 +2,9 @@
 session_start();
 //*Pagina per vedere e inviare commenti e risposte
 include 'Connessione/db.php';
-include 'Connessione/InviaCommenti.php';
-include 'Connessione/VisualizzaCommenti.php';
-include 'Connessione/InviaRisposta.php'
+include 'Commenti/InviaCommenti.php';
+include 'Commenti/VisualizzaCommenti.php';
+include 'Commenti/InviaRisposta.php'
 ?>
 
 <?php
@@ -20,11 +20,11 @@ $Visualizzatore->CreaTabellaCommenti();
 
 <head>
     <link rel="stylesheet" href="style.css">
-    <title><?php echo $nomeProgetto . "/Commenti" ?></title>
+    <title><?php echo  $_SESSION['Progetto'] . "/Commenti" ?></title>
 </head>
 
 <body>
-    <form method="post" action="Commenti.php" class="container" style="display: flex; gap: 10px; align-items: center;">
+    <form method="post" action="PaginaCommenti.php" class="container" style="display: flex; gap: 10px; align-items: center;">
         <label>Inserisci un commento:</label>
         <textarea id="testo" name="testo" rows="3" cols="50" maxlength="500" required></textarea>
         <button type="submit">Invia</button>

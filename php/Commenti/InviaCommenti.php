@@ -1,6 +1,5 @@
 <?php
 //*Script per inviare un commento al db
-include 'Connessione/db.php';
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 if (!isset($_SESSION['Email'])) {
     header("Location: index.php");

@@ -1,6 +1,5 @@
 <?php
-include 'Connessione/db.php';
-
+//*Classe che crea e aggiorna ogni volta la pagina dei commenti
 class VisualizzatoreCommenti
 {
     public $nomeProgetto;
