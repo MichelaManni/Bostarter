@@ -1,13 +1,5 @@
 -----------------------------------------------------------------------------------
-Cose da correggere prima di consegnare(più che altro per me stesso)
-
-Finanziamenti -> sono legati ancora al fatto che le reward hanno un prezzo minimo
-
-Una piccolezza di cui mi sono accorto nella registrazione mi piace che invece che nella stored procedure
-di inserire gli adim e i creatori tramite trigger all'inserimento ma è una cagata
-funziona lo stesso
-
-Manca tutta la documentazione e la presentazione se non ricordo male
+PER VEDERE IL LOG DI MONGO BISOGNA ANDARE SU MONGO EXPRESS E POI ANDARE SU BOSTAER LOGS.
 
 --------------------------------COSE MODIFICATE----------------------------------------------------
 Cose importanti che sono state modificate:
