@@ -1,5 +1,5 @@
 <?php
-// Wrapper per intercettare le CALL a stored procedure e loggare inserimenti
+// Il wrapper incapsula mysqli che è usato in tutta l'applicazione per l'accesso al databse.
 class MysqliLoggerWrapper {
     private mysqli $inner;
     private MongoLogger $logger;
@@ -9,6 +9,7 @@ class MysqliLoggerWrapper {
         $this->logger = $logger;
     }
 
+    //Per passare alla parte stmt
     public function prepare(string $query) {
         $stmt = $this->inner->prepare($query);
         if (!$stmt) return false;
@@ -51,14 +52,15 @@ class MysqliStmtLoggerWrapper {
     private function maybeLog(): void {
         if (preg_match('/^\s*CALL\s+([A-Za-z0-9_]+)/i', $this->query, $m)) {
             $proc = $m[1];
-            $payload = $this->buildPayload($proc);
+            $payload = $this->CreaLog($proc);
             if ($payload !== null) {
                 $this->logger->log($payload['event'], $payload['data']);
             }
         }
     }
 
-    private function buildPayload(string $proc): ?array {
+    //Per scrivere su Mongodb a seconda dell'operazione
+    private function CreaLog(string $proc): ?array {
         $p = array_map(function($v){
             if (is_object($v) || is_array($v)) return json_encode($v);
             return $v;
