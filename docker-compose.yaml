@@ -16,7 +16,7 @@ services:
       - databases
     volumes:
       - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - ./mysql/init.sql:/docker-entrypoint-initdb.d/testdati.sql
+      - ./mysql/testdati.sql:/docker-entrypoint-initdb.d/testdati.sql
 
   phpmyadmin:
     image: phpmyadmin:latest

@@ -717,6 +717,8 @@ BEGIN
     END IF;
 END //
 
+DELIMITER ;
+
 -- Statistiche(Viste)------------------------------------------------------------------------------------------------
 
 -- Top 3 creatori più affidabili
@@ -746,8 +748,10 @@ LIMIT 3;
 
 -- Triggers----------------------------------------------------------------------------------------------------------------------
 
+DELIMITER //
+
 -- Aggiornare l'affidabilità dopo l'inserimento di un progetto (Da rivedere)
-CREATE TRIGGER Affidabilità_progetto
+CREATE TRIGGER Affidabilita_progetto
 AFTER INSERT ON Progetto
 FOR EACH ROW
 BEGIN
@@ -772,7 +776,7 @@ BEGIN
     END IF;
         -- Aggiorna l'affidabilità del creatore
     UPDATE Creatore
-    SET Affidabilita = nuova_affidabilita,
+    SET Affidabilita = nuova_affidabilita
     WHERE EmailUtente = NEW.EmailCreatore;
 END //
 
@@ -809,7 +813,7 @@ BEGIN
         SET nuova_affidabilita = 0;
     END IF;
     UPDATE Creatore
-    SET Affidabilita = nuova_affidabilita,
+    SET Affidabilita = nuova_affidabilita
     WHERE EmailUtente = email_creatore_progetto;
 END //
 
@@ -850,6 +854,5 @@ BEGIN
     AND DataLimite < CURDATE();
 END // 
 
-DELIMITER ;
 
 
