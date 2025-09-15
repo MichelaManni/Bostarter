@@ -3,10 +3,11 @@ session_start();
 include 'connessione/db.php';
 
 $email_creatore = $_SESSION['Email'];
-
+$nome_progetto_corrente = $_POST['nome_progetto'];
+$_SESSION['nome_progetto_candidature'] = $nome_progetto_corrente; 
 // Chiama la stored procedure per visualizzare le candidature
-$stmt = $mysqli->prepare("CALL VisualizzaCandidatureProgettiPersonali(?)");
-$stmt->bind_param("s", $email_creatore);
+$stmt = $mysqli->prepare("CALL VisualizzaCandidatureProgettiPersonali(?,?)");
+$stmt->bind_param("ss", $email_creatore, $nome_progetto_corrente);
 $stmt->execute();
 $result = $stmt->get_result();
 ?>

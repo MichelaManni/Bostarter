@@ -302,14 +302,14 @@ BEGIN
     WHERE P.EmailCreatore = email_creatore; 
 END //
 --Visualizza Candidature nei propri progetti (solo x creatore)
-CREATE PROCEDURE VisualizzaCandidatureProgettiPersonali(IN email_creatore VARCHAR(30))
+CREATE PROCEDURE VisualizzaCandidatureProgettiPersonali(IN email_creatore VARCHAR(30), IN Nome_Progetto VARCHAR(30))
 BEGIN
-    -- Restituisce tutte le candidature legate ai progetti del creatore
+    -- Restituisce le candidature legate al progetto del creatore
     SELECT C.Id AS IdCandidatura, P.NomeProgetto, P.Nome AS NomeProfilo, C.EmailUtente, C.Stato
     FROM Candidatura C
     JOIN Profili P ON C.IdProfilo = P.Id
     JOIN Progetto PR ON P.NomeProgetto = PR.Nome
-    WHERE PR.EmailCreatore = email_creatore;
+    WHERE PR.EmailCreatore = email_creatore AND P.NomeProgetto=Nome_Progetto;
 END //
 
 --Visualizza Finanziamenti Avvenuti su un progetto
