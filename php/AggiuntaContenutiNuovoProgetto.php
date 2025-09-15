@@ -15,49 +15,37 @@ $almenoUnTipoSpecifico = false;
 $almenoUnaFoto = false;
 
 // Controllo per i Reward
-$stmt_rewards = $mysqli->prepare("SELECT COUNT(*) FROM Rewards WHERE NomeProgetto = ?");
-$stmt_rewards->bind_param("s", $nome_progetto);
-$stmt_rewards->execute();
-$stmt_rewards->bind_result($count_rewards);
-$stmt_rewards->fetch();
-$stmt_rewards->close();
-if ($count_rewards > 0) {
-    $almenoUnReward = true;
-}
+$stmt = $mysqli->prepare("CALL VisualizzazioneReward(?)");
+$stmt->bind_param("s", $nome_progetto);
+$stmt->execute();
+$res = $stmt->get_result();
+$almenoUnReward = $res && $res->num_rows > 0;
+$stmt->close();
+while ($mysqli->more_results() && $mysqli->next_result()) { if ($r = $mysqli->store_result()) { $r->free(); } }
 
 // Controllo per il tipo specifico (Profili per software, Componenti per hardware)
-if ($tipologia == "software") {
-    $stmt_profili = $mysqli->prepare("SELECT COUNT(*) FROM Profili WHERE NomeProgetto = ?");
-    $stmt_profili->bind_param("s", $nome_progetto);
-    $stmt_profili->execute();
-    $stmt_profili->bind_result($count_profili);
-    $stmt_profili->fetch();
-    $stmt_profili->close();
-    if ($count_profili > 0) {
-        $almenoUnTipoSpecifico = true;
-    }
-} else { // 'hardware'
-    $stmt_componenti = $mysqli->prepare("SELECT COUNT(*) FROM Componenti WHERE NomeProgetto = ?");
-    $stmt_componenti->bind_param("s", $nome_progetto);
-    $stmt_componenti->execute();
-    $stmt_componenti->bind_result($count_componenti);
-    $stmt_componenti->fetch();
-    $stmt_componenti->close();
-    if ($count_componenti > 0) {
-        $almenoUnTipoSpecifico = true;
-    }
+if ($tipologia === "software") {
+    $stmt = $mysqli->prepare("CALL VisualizzaProfili(?)");
+} else {
+    $stmt = $mysqli->prepare("CALL VisualizzaComponenti(?)");
 }
+$stmt->bind_param("s", $nome_progetto);
+$stmt->execute();
+$res = $stmt->get_result();
+$almenoUnTipoSpecifico = $res && $res->num_rows > 0;
+$stmt->close();
+while ($mysqli->more_results() && $mysqli->next_result()) { if ($r = $mysqli->store_result()) { $r->free(); } }
+
 //controllo per foto
-$stmt_foto = $mysqli->prepare("SELECT COUNT(*) FROM FotoProgetto WHERE NomeProgetto = ?");
-$stmt_foto->bind_param("s", $nome_progetto);
-$stmt_foto->execute();
-$stmt_foto->bind_result($count_foto);
-$stmt_foto->fetch();
-$stmt_foto->close();
-if ($count_foto > 0) {
-    $almenoUnaFoto = true;
-}
-$progettoCompleto = $almenoUnReward && $almenoUnTipoSpecifico &&$almenoUnaFoto; 
+$stmt = $mysqli->prepare("CALL VisualizzaFotoProgetto(?)");
+$stmt->bind_param("s", $nome_progetto);
+$stmt->execute();
+$res = $stmt->get_result();
+$almenoUnaFoto = $res && $res->num_rows > 0;
+$stmt->close();
+while ($mysqli->more_results() && $mysqli->next_result()) { if ($r = $mysqli->store_result()) { $r->free(); } }
+
+$progettoCompleto = $almenoUnReward && $almenoUnTipoSpecifico && $almenoUnaFoto;
 
 ?>
 <!DOCTYPE html>
