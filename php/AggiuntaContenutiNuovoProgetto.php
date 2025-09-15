@@ -12,6 +12,7 @@ $nome_progetto = $_SESSION['nome_progetto'];
 $tipologia = $_SESSION['tipologia'];
 $almenoUnReward = false;
 $almenoUnTipoSpecifico = false; 
+$almenoUnaFoto = false;
 
 // Controllo per i Reward
 $stmt_rewards = $mysqli->prepare("SELECT COUNT(*) FROM Rewards WHERE NomeProgetto = ?");
@@ -46,8 +47,17 @@ if ($tipologia == "software") {
         $almenoUnTipoSpecifico = true;
     }
 }
-
-$progettoCompleto = $almenoUnReward && $almenoUnTipoSpecifico; 
+//controllo per foto
+$stmt_foto = $mysqli->prepare("SELECT COUNT(*) FROM FotoProgetto WHERE NomeProgetto = ?");
+$stmt_foto->bind_param("s", $nome_progetto);
+$stmt_foto->execute();
+$stmt_foto->bind_result($count_foto);
+$stmt_foto->fetch();
+$stmt_foto->close();
+if ($count_foto > 0) {
+    $almenoUnaFoto = true;
+}
+$progettoCompleto = $almenoUnReward && $almenoUnTipoSpecifico &&$almenoUnaFoto; 
 
 ?>
 <!DOCTYPE html>
@@ -70,6 +80,9 @@ $progettoCompleto = $almenoUnReward && $almenoUnTipoSpecifico;
                     <p>-- Almeno un Profilo (per progetti Software) -- </p>
                 <?php elseif ($tipologia == "hardware" && !$almenoUnTipoSpecifico): ?>
                     <p>-- Almeno un Componente (per progetti Hardware) -- </p>
+                <?php endif; ?>
+                 <?php if (!$almenoUnaFoto): ?>
+                    <p>-- Almeno una Foto -- </p>
                 <?php endif; ?>
         </p>
     <?php endif; ?>
