@@ -8,17 +8,19 @@ if (!isset($_SESSION['Email'])) {
 
 try {
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['CodiceCommento']) && isset($_POST['Risposta'])) {
- 
+
         $CodCommento = (int)$_POST['CodiceCommento'];
         $Risposta = trim($_POST['Risposta']);
         $email = $_SESSION['Email'];
 
         $query = "CALL InserimentoRisposta(?, ?,?)";
         $stmt = $mysqli->prepare($query);
-        $stmt->bind_param('sis',$email, $CodCommento, $Risposta);
+        $stmt->bind_param('sis', $email, $CodCommento, $Risposta);
 
         if ($stmt->execute()) {
-            echo 'Risposta inserita con successo!';
+            $_SESSION['flash_ok'] = 'Risposta inserita con successo';
+            header('Location: PaginaCommenti.php');
+            exit;
         }
 
         $stmt->close();
@@ -26,4 +28,3 @@ try {
 } catch (mysqli_sql_exception $e) {
     echo "Errore: " . $e->getMessage();
 }
-?>
