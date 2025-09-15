@@ -1,5 +1,7 @@
 -----------------------------------------------------------------------------------
-Mancano commenti per wrapper.
+Mostrare le candidature di progetti chiusi(No)
+Accettare/Rifiutare candidature redirect
+Cosa delle Componenti
 Togliere dal progetto da consegnare immagini o anche questa Lista
 Ricontrollare documentazione
 Ricontrollare tutto

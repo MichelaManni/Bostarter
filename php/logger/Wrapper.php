@@ -21,6 +21,8 @@ class MysqliLoggerWrapper {
     public function __get($name) { return $this->inner->$name; }
 }
 
+// Wrapper ulteriore dello statement mysqli che: 
+// intercetta execute() per loggare eventi legati a CALL di stored procedure
 class MysqliStmtLoggerWrapper {
     private mysqli_stmt $inner;
     private string $query;
@@ -38,10 +40,9 @@ class MysqliStmtLoggerWrapper {
     return $this->inner->bind_result(...$vars);
     }
 
-    // Mantiene compatibilità: accetta variabili per riferimento e le inoltra all'originale
     public function bind_param($types, &...$vars) {
         $this->types = $types;
-        $this->boundValues = $vars; // snapshot per il log
+        $this->boundValues = $vars; 
         $args = [$types];
         foreach ($vars as &$v) { $args[] = &$v; }
         return $this->inner->bind_param(...$args);
@@ -49,11 +50,11 @@ class MysqliStmtLoggerWrapper {
 
     public function execute() {
         $ok = $this->inner->execute();
-        if ($ok) $this->maybeLog();
+        if ($ok) $this->Log();
         return $ok;
     }
 
-    private function maybeLog(): void {
+    private function Log(): void {
         if (preg_match('/^\s*CALL\s+([A-Za-z0-9_]+)/i', $this->query, $m)) {
             $proc = $m[1];
             $payload = $this->CreaLog($proc);
