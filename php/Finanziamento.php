@@ -1,7 +1,7 @@
 <?php
 session_start();
-include "Connessione/InviaFinanziamento.php";
-include "Connessione/db.php";
+include "connessione/InviaFinanziamento.php";
+include "connessione/db.php";
 
 // Verifica che ci sia il progetto nella POST e salvalo in sessione
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['nome_progetto'])) {

@@ -22,7 +22,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
 		echo "<p> Per gli amministratori il codice di sicurezza è obbligatotio </p>";
 		exit;
 	}
-	 include 'Connessione/registrazioneUtente.php';
+	 include 'connessione/registrazioneUtente.php';
 }
 ?>
 

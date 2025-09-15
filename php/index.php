@@ -2,7 +2,7 @@
 session_start();
 session_reset();
 //*Pagina di login
-include 'Login/Login.php'
+include 'Login/Login.php';
 ?>
 
 <!DOCTYPE HTML>

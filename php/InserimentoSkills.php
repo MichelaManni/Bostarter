@@ -1,8 +1,8 @@
 <?php
 session_start();
 //*Pagina visibile solo agli amministratori per inserire nuove skill selezionabili dagli utenti
-include 'Connessione/InviaSkill.php';
-include 'Connessione/db.php';
+include 'connessione/InviaSkill.php';
+include 'connessione/db.php';
 if ($_SESSION['Ruolo'] != 'Amministratore') {
 }
 $result = $mysqli->query("SELECT Competenza FROM Skills");

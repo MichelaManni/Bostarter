@@ -1,8 +1,8 @@
 <?php
 session_start();
 //Pagina per visualizzare il proprio profilo e dunque le proprie skill e inserirne di nuove
-include "Connessione/db.php";
-include "Connessione/InviaSkillCurriculum.php";
+include "connessione/db.php";
+include "connessione/InviaSkillCurriculum.php";
 $EmailDB = $_SESSION['Email'];
 ?>
 

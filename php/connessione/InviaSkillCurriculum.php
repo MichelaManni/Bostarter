@@ -1,6 +1,6 @@
 <?php
 //*Script per inviare le skill del proprio curriculum dal profilo personale al db
-include 'Connessione/db.php';
+include 'connessione/db.php';
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 if (!isset($_SESSION['Email'])) {

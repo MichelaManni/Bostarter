@@ -1,6 +1,6 @@
 <?php
 //*Script per usare la stored procedure per autenticarsi
-include 'Connessione/db.php';
+include 'connessione/db.php';
 $errore = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

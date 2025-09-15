@@ -1,7 +1,7 @@
 <?php
 session_start();
 //*Pagina per il login degli admin, se al login si risulta admin si viene reindirizzati qui
-include 'Connessione/db.php';
+include 'connessione/db.php';
 $errore = '';
 //Molto simile al login normale ma viene controllato solo il codice di sicurezza
 //Chiama la stored procedure dell'autenticazione admin che è quasi identica appunto all'autenticazione normale

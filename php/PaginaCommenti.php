@@ -1,10 +1,10 @@
 <?php
 session_start();
 //*Pagina per vedere e inviare commenti e risposte
-include 'Connessione/db.php';
+include 'connessione/db.php';
 include 'Commenti/InviaCommenti.php';
 include 'Commenti/VisualizzaCommenti.php';
-include 'Commenti/InviaRisposta.php'
+include 'Commenti/InviaRisposta.php';
 ?>
 
 <?php

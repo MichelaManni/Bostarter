@@ -1,6 +1,6 @@
 <?php
 //Mostra i progetti aperti chiamando la stored procedure apposita
-include 'Connessione/db.php';
+include 'connessione/db.php';
 $sql = "CALL VisualizzaProgettiDisponibili()";
 $result = $mysqli->query($sql);
 unset($_SESSION['Progetto']);
