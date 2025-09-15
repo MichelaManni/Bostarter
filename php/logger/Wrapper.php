@@ -34,6 +34,10 @@ class MysqliStmtLoggerWrapper {
         $this->logger  = $logger;
     }
 
+    public function bind_result(&...$vars) {
+    return $this->inner->bind_result(...$vars);
+    }
+
     // Mantiene compatibilità: accetta variabili per riferimento e le inoltra all'originale
     public function bind_param($types, &...$vars) {
         $this->types = $types;
