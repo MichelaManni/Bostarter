@@ -6,3 +6,4 @@ elena.neri@example.com -> passElena (Standard)
 
 Il log degli eventi è visibile in mongo express sotto "BostarterLogs"
 Sono stati precaricati dei dati test per dimostrare il funzionamento dell'applicazione in testdati.sql
+Non abbiamo inserito immagini nella consegna
