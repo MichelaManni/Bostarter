@@ -50,11 +50,11 @@ class MysqliStmtLoggerWrapper {
 
     public function execute() {
         $ok = $this->inner->execute();
-        if ($ok) $this->Log();
+        if ($ok) $this->Logging();
         return $ok;
     }
 
-    private function Log(): void {
+    private function Logging(): void {
         if (preg_match('/^\s*CALL\s+([A-Za-z0-9_]+)/i', $this->query, $m)) {
             $proc = $m[1];
             $payload = $this->CreaLog($proc);
