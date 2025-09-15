@@ -7,7 +7,7 @@ if (!isset($_SESSION['Email'])) {
 
 try {
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['testo'])) {
-        
+
         $Email_utente   = $_SESSION['Email'];
         $Nome_progetto  = $_SESSION['Progetto'];
         $Testo_inserito = isset($_POST['testo']) ? trim($_POST['testo']) : '';
@@ -17,7 +17,9 @@ try {
         if ($stmt = $mysqli->prepare($query)) {
             $stmt->bind_param('sss', $Email_utente, $Testo_inserito, $Nome_progetto);
             if ($stmt->execute()) {
-                echo 'Commento inserito con successo!';
+                $_SESSION['flash_ok'] = 'commento inserito con successo';
+                header('Location: PaginaCommenti.php');
+                exit;
             }
             $stmt->close();
         }
@@ -25,4 +27,3 @@ try {
 } catch (mysqli_sql_exception $e) {
     echo "Errore: " . $e->getMessage();
 }
-?>

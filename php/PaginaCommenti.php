@@ -16,6 +16,12 @@ $Visualizzatore->CreaTabellaCommenti();
 ?>
 
 <!DOCTYPE HTML>
+<!-- Messaggi -->
+<?php if (!empty($_SESSION['flash_ok'])) { ?>
+  <div class="container" style="margin:10px 0; padding:8px; border:1px solid">
+    <?php echo htmlspecialchars($_SESSION['flash_ok']); ?>
+  </div>
+<?php unset($_SESSION['flash_ok']); } ?>
 <html>
 
 <head>

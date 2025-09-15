@@ -1,7 +1,5 @@
 -----------------------------------------------------------------------------------
 Cosa delle Componenti
-Togliere dal progetto da consegnare immagini o anche questa Lista
-Ricontrollare documentazione
 Ricontrollare tutto
 
 --------------------------------COSE MODIFICATE----------------------------------------------------
