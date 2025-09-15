@@ -1,4 +1,5 @@
 <?php
+session_start();
 //Mostra i progetti aperti chiamando la stored procedure apposita
 include 'connessione/db.php';
 $sql = "CALL VisualizzaProgettiDisponibili()";
