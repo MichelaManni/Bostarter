@@ -16,7 +16,7 @@ CREATE TABLE Utente (
 
 CREATE TABLE Creatore (
     EmailUtente VARCHAR(30) PRIMARY KEY,
-    Affidabilita INT ,
+    Affidabilita INT DEFAULT 0,
     FOREIGN KEY (EmailUtente) REFERENCES Utente(Email)
 ) ENGINE=INNODB;
 

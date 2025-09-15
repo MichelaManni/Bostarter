@@ -1,9 +1,6 @@
 -----------------------------------------------------------------------------------
 Mancano commenti per wrapper.
-Ridondanza Concettuale
-Controllare init.sql
 Togliere dal progetto da consegnare immagini o anche questa Lista
-modificare il compose e mettere i dati da caricare in un altro file
 Ricontrollare documentazione
 Ricontrollare tutto
 

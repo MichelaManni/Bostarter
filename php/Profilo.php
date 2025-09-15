@@ -16,24 +16,37 @@ $EmailDB = $_SESSION['Email'];
 
 <body>
     <div class="container">
-        <!-- Mostrare le informazioni base del profilo -->
+        <!-- dezione che mostra le informazioni base del profilo -->
         <div style="width:30%;text-align:left">
             <h1>Informazioni personali</h1>
             <?php
-            $Query = " SELECT Nome,Cognome,AnnoNascita,LuogoNascita,Nickname,Ruolo FROM Utente WHERE Email = '$EmailDB'  limit 1;";
-            $result  = mysqli_query($mysqli, $Query);
+            $Query  = "SELECT Nome, Cognome, AnnoNascita, LuogoNascita, Nickname, Ruolo
+                 FROM Utente
+                 WHERE Email = '$EmailDB' LIMIT 1;";
+            $result = mysqli_query($mysqli_real, $Query);
+
             if ($result && mysqli_num_rows($result) > 0) {
-                $row = mysqli_fetch_assoc($result);
-                echo "<p>Email: " . $EmailDB . "</p>";
-                echo "<p>Nome: " . htmlspecialchars($row['Nome']) . "</p>";
-                echo "<p>Cognome: " . htmlspecialchars($row['Cognome']) . "</p>";
-                echo "<p>Anno di nascita: " . htmlspecialchars($row['AnnoNascita']) . "</p>";
-                echo "<p>Luogo di nascita: " . htmlspecialchars($row['LuogoNascita']) . "</p>";
-                $Nickname = htmlspecialchars($row['Nickname']);
-                echo "<p>Nickname: " . $Nickname . "</p>";
-                echo "<p>Ruolo: " . htmlspecialchars($row['Ruolo']) . "</p>";
-                echo "<a href='VisualizzazioneFinanziamentiPropri.php'><button> Visualizza Finanziamenti Fatti </button> </a>";
-                echo "<a href='VisualizzazioneCandidatureEffettuate.php'><button> Visualizza Esito Candidature Effettuate </button> </a>";
+                $row   = mysqli_fetch_assoc($result);
+                $email = htmlspecialchars($EmailDB, ENT_QUOTES, 'UTF-8');
+                $nome  = htmlspecialchars($row['Nome']         ?? '', ENT_QUOTES, 'UTF-8');
+                $cogn  = htmlspecialchars($row['Cognome']      ?? '', ENT_QUOTES, 'UTF-8');
+                $anno  = htmlspecialchars($row['AnnoNascita']  ?? '', ENT_QUOTES, 'UTF-8');
+                $luogo = htmlspecialchars($row['LuogoNascita'] ?? '', ENT_QUOTES, 'UTF-8');
+                $nick  = htmlspecialchars($row['Nickname']     ?? '', ENT_QUOTES, 'UTF-8');
+                $ruolo = htmlspecialchars($row['Ruolo']        ?? '', ENT_QUOTES, 'UTF-8');
+
+                echo "<p>Email: {$email}</p>";
+                echo "<p>Nome: {$nome}</p>";
+                echo "<p>Cognome: {$cogn}</p>";
+                echo "<p>Anno di nascita: {$anno}</p>";
+                echo "<p>Luogo di nascita: {$luogo}</p>";
+                echo "<p>Nickname: {$nick}</p>";
+                echo "<p>Ruolo: {$ruolo}</p>";
+
+                echo "<a href='VisualizzazioneFinanziamentiPropri.php'><button>Visualizza Finanziamenti Fatti</button></a> ";
+                echo "<a href='VisualizzazioneCandidatureEffettuate.php'><button>Visualizza Esito Candidature Effettuate</button></a>";
+            } else {
+                echo "<p>Profilo non trovato.</p>";
             }
             ?>
         </div>

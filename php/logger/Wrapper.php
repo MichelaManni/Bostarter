@@ -110,7 +110,7 @@ class MysqliStmtLoggerWrapper {
                     'importo'=>$p[2]??null,'codice_reward'=>$p[3]??null
                 ]];
             default:
-                return null; // niente log per procedure di sola lettura
+                return null;
         }
     }
 

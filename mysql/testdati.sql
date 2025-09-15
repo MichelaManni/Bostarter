@@ -1,87 +1,39 @@
 USE Bostarter;
 
---Dati per il testing
----
--- 1. Tabella `Utente`
----
 INSERT INTO Utente (Email, Nome, Cognome, AnnoNascita, LuogoNascita, Nickname, Password, Ruolo) VALUES
 ('alice.rossi@example.com', 'Alice', 'Rossi', 1990, 'Roma', 'AliceR', 'passAlice', 'creatore'),
-('bruno.bianchi@example.com', 'Bruno', 'Bianchi', 1985, 'Milano', 'BrunoB', 'passBruno', 'standard'),
-('carla.verdi@example.com', 'Carla', 'Verdi', 1992, 'Napoli', 'CarlaV', 'passCarla', 'creatore'),
 ('davide.gialli@example.com', 'Davide', 'Gialli', 1988, 'Torino', 'DaveG', 'passDave', 'amministratore'),
 ('elena.neri@example.com', 'Elena', 'Neri', 1995, 'Firenze', 'ElenaN', 'passElena', 'standard'),
-('franco.blu@example.com', 'Franco', 'Blu', 1980, 'Bologna', 'FrancoB', 'passFranco', 'standard');
 
----
--- 2. Tabella `Creatore`
----
+
 INSERT INTO Creatore (EmailUtente, Affidabilita) VALUES
-('alice.rossi@example.com', 0),
-('carla.verdi@example.com', 0);
+('alice.rossi@example.com'),
 
----
--- 3. Tabella `Amministratore`
----
 INSERT INTO Amministratore (CodiceSicurezza, EmailUtente) VALUES
 (1234, 'davide.gialli@example.com');
 
----
--- 4. Tabella `Skills`
----
 INSERT INTO Skills (Competenza) VALUES
 ('Programmazione Java'),
 ('Database SQL'),
-('HTML/CSS'),
 ('Python'),
-('C++'),
-('Project Management'),
-('UX/UI Design'),
-('Elettronica Digitale'),
-('Modellazione 3D'),
-('Testing Software'), 
-('Meccanica');        
 
----
--- 5. Tabella `SkillUtente`
----
 INSERT INTO SkillUtente (EmailUtente, CompetenzaUtente, Livello) VALUES
 ('alice.rossi@example.com', 'Programmazione Java', 5),
 ('alice.rossi@example.com', 'Database SQL', 4),
-('alice.rossi@example.com', 'Project Management', 4), 
-('bruno.bianchi@example.com', 'HTML/CSS', 3),
-('bruno.bianchi@example.com', 'UX/UI Design', 4),
-('bruno.bianchi@example.com', 'Testing Software', 3), 
-('carla.verdi@example.com', 'Python', 5),
-('carla.verdi@example.com', 'Project Management', 4),
-('carla.verdi@example.com', 'Elettronica Digitale', 5), 
 ('elena.neri@example.com', 'Programmazione Java', 3),
 ('elena.neri@example.com', 'Database SQL', 2),
-('franco.blu@example.com', 'Elettronica Digitale', 5),
-('franco.blu@example.com', 'C++', 4),
-('franco.blu@example.com', 'Modellazione 3D', 4); 
 
----
--- 6. Tabella `Progetto`
----
--- Progetti 'aperti' per testing
 INSERT INTO Progetto (EmailCreatore, Nome, Descrizione, DataInserimento, DataLimite, Budget, Stato, Tipologia) VALUES
 ('alice.rossi@example.com', 'App Gestionale', 'Sviluppo di un sistema gestionale aziendale completo.', '2025-01-10', '2025-12-31', 5000.00, 'aperto', 'software'),
-('carla.verdi@example.com', 'Drone Ricerca', 'Progettazione e costruzione di un drone autonomo per ricerca.', '2025-02-15', '2025-11-30', 7500.00, 'aperto', 'hardware'),
-('alice.rossi@example.com', 'Sito E-commerce', 'Realizzazione di una piattaforma di vendita online con catalogo prodotti.', '2025-03-01', '2025-09-30', 3000.00, 'aperto', 'software'),
-('alice.rossi@example.com', 'Game Indie', 'Sviluppo di un videogioco indie 2D platform.', '2025-04-05', '2026-03-31', 4000.00, 'aperto', 'software');
+('alice.rossi@example.com', 'Sito E-commerce', 'Realizzazione di una piattaforma di vendita online con catalogo prodotti.', '2025-03-01', '2025-12-31', 3000.00, 'aperto', 'software'),
 
--- Progetto 'chiuso' per testing
 INSERT INTO Progetto (EmailCreatore, Nome, Descrizione, DataInserimento, DataLimite, Budget, Stato, Tipologia) VALUES
-('carla.verdi@example.com', 'Robot Domestico', 'Sviluppo di un piccolo robot per la pulizia domestica.', '2024-05-01', '2024-10-30', 2000.00, 'chiuso', 'hardware');
+('alice.rossi@example.com', 'Robot Domestico', 'Sviluppo di un piccolo robot per la pulizia domestica.', '2024-05-01', '2024-10-30', 2000.00, 'chiuso', 'hardware');
 
----
--- 7. Tabella `FotoProgetto`
----
+
 INSERT INTO FotoProgetto (NomeProgetto, PercorsoFoto) VALUES
 ('App Gestionale', 'caricamenti/app_img1.png'),
 ('App Gestionale', 'caricamenti/app_img2.png'),
-('Drone Ricerca', 'caricamenti/drone_img1.png'),
-('Drone Ricerca', 'caricamenti/drone_img2.png'),
 ('Sito E-commerce', 'caricamenti/ecommerce_img.png'),
 ('Robot Domestico', 'caricamenti/robot_img.png'),
 ('Game Indie', 'caricamenti/game_indie.png');
