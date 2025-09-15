@@ -48,11 +48,17 @@ CREATE TABLE FotoProgetto(
 CREATE TABLE Componenti (
     Nome VARCHAR(30) PRIMARY KEY,
     Descrizione VARCHAR(255),
-    Quantita INT CHECK(Quantita>0),
-    Prezzo DECIMAL(10,2), 
-    NomeProgetto VARCHAR(30),
-    FOREIGN KEY (NomeProgetto) REFERENCES Progetto(Nome)
+    Prezzo DECIMAL(10,2)
 ) ENGINE=INNODB;
+
+CREATE TABLE Composizione(
+    NomeProgetto VARCHAR(30) NOT NULL,
+    NomeComponente VARCHAR(30) NOT NULL,
+    Quantita INT NOT NULL CHECK (Quantita >= 0),
+    FOREIGN KEY (NomeProgetto) REFERENCES Progetto(Nome),
+    FOREIGN KEY (NomeComponente) REFERENCES Componenti(Nome),
+    PRIMARY KEY(NomeProgetto,NomeComponente)
+)ENGINE=INNODB;
 
 CREATE TABLE Profili (
 	Id INT AUTO_INCREMENT PRIMARY KEY,
@@ -263,7 +269,10 @@ END //
 --Visualizza le componenti di progetto software
 CREATE PROCEDURE VisualizzaComponenti(IN nome_Progetto VARCHAR(30))
 BEGIN
-    SELECT Nome, Descrizione, Quantita, Prezzo FROM Componenti WHERE NomeProgetto = nome_Progetto;
+    SELECT C.Nome, C.Descrizione, C.Prezzo, CO.Quantita 
+    FROM Composizione AS CO
+    JOIN Componenti AS C ON CO.NomeComponente= C.Nome 
+    WHERE CO.NomeProgetto = nome_Progetto;
 END //
 
 --Visualizza profili software richiesti
@@ -650,19 +659,34 @@ END //
 CREATE PROCEDURE AggiungiComponente(IN NomeComponente VARCHAR(30), IN DescrizioneComponente VARCHAR(255),
     IN Quantita INT,IN Prezzo DECIMAL(10,2),IN NomeProgetto VARCHAR(30))
 BEGIN
-    DECLARE Controllo BOOLEAN;
-    -- verifica esistenza progetto
+     DECLARE ProgettoValido BOOLEAN;
+    DECLARE ComponenteEsistente BOOLEAN;
+
+    -- Verifica esistenza del progetto hardware e se è aperto
     SELECT EXISTS (
         SELECT 1 FROM Progetto 
         WHERE Nome = NomeProgetto AND Tipologia = 'hardware' AND Stato = 'aperto'
-    ) INTO Controllo;
+    ) INTO ProgettoValido;
 
-    IF Controllo = FALSE THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Progetto non valido o non aperto';
+    IF ProgettoValido = FALSE THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Il progetto non è valido, di tipo hardware, o non è nello stato "aperto"';
+    ELSE
+        -- Verifica se il componente esiste già nella tabella Componenti
+        SELECT EXISTS (
+            SELECT 1 FROM Componenti
+            WHERE Nome = NomeComponente
+        ) INTO ComponenteEsistente;
+
+        -- Se il componente non esiste, lo inserisce
+        IF ComponenteEsistente = FALSE THEN
+            INSERT INTO Componenti(Nome, Descrizione, Prezzo)
+            VALUES (NomeComponente, DescrizioneComponente, Prezzo);
+        END IF;
+
+        -- Inserisce l'associazione tra progetto e componente nella tabella Composizione
+        INSERT INTO Composizione(NomeProgetto, NomeComponente, Quantita)
+        VALUES (NomeProgetto, NomeComponente, Quantita);
     END IF;
-
-    INSERT INTO Componenti(Nome, Descrizione, Quantita, Prezzo, NomeProgetto)
-    VALUES (NomeComponente, DescrizioneComponente, Quantita, Prezzo, NomeProgetto);
 END //
 
 
