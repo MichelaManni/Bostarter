@@ -30,8 +30,11 @@ VALUES
 ('alice.rossi@example.com','App Social','Sviluppo di un social network','2025-09-01','2025-09-02',20000,'chiuso','software');
 
 
-INSERT INTO Componenti (Nome, Descrizione, Quantita, Prezzo, NomeProgetto) VALUES
-('Motore per le ruote', 'Motore', 4, 75.00, 'Robot');
+INSERT INTO Componenti (Nome, Descrizione,Prezzo) VALUES
+('Motore', 'Motore per le braccia', 4);
+
+INSERT INTO Composizione (`NomeProgetto`, `NomeComponente`, `Quantita`) VALUES 
+('Robot', 'Motore', '3');
 
 INSERT INTO Profili (Nome, NomeProgetto, Assegnato) VALUES
 ('Sviluppatore Backend', 'App Gestionale', FALSE);

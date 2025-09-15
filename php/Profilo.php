@@ -23,7 +23,9 @@ $EmailDB = $_SESSION['Email'];
             $Query  = "SELECT Nome, Cognome, AnnoNascita, LuogoNascita, Nickname, Ruolo
                  FROM Utente
                  WHERE Email = '$EmailDB' LIMIT 1;";
-            $result = mysqli_query($mysqli_real, $Query);
+            // meglio stile OO
+            $result = $mysqli_real->query($Query);
+
 
             if ($result && mysqli_num_rows($result) > 0) {
                 $row   = mysqli_fetch_assoc($result);
