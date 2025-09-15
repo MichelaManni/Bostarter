@@ -73,44 +73,44 @@ class MysqliStmtLoggerWrapper {
 
         switch ($proc) {
             case 'Registrazione':
-                return ['event'=>'user.registered','data'=>[
+                return ['event'=>'registrazione.utente','data'=>[
                     'email'=>$p[0]??null,'nickname'=>$p[5]??null,'ruolo'=>$p[7]??null
                 ]];
             case 'AggiungiProgetto':
-                return ['event'=>'project.created','data'=>[
+                return ['event'=>'creazione.progetto','data'=>[
                     'email_creatore'=>$p[0]??null,'nome'=>$p[1]??null,'tipologia'=>$p[5]??null,
                     'budget'=>$p[3]??null,'scadenza'=>$p[4]??null
                 ]];
             case 'AggiungiFotoProgetto':
-                return ['event'=>'project.photo.added','data'=>[
+                return ['event'=>'aggiunta.foto','data'=>[
                     'nome_progetto'=>$p[0]??null,'path'=>$p[1]??null
                 ]];
             case 'AggiungiComponente':
-                return ['event'=>'component.added','data'=>[
+                return ['event'=>'aggiunta.componente','data'=>[
                     'nome'=>$p[0]??null,'progetto'=>$p[4]??null,'quantita'=>$p[2]??null,'prezzo'=>$p[3]??null
                 ]];
             case 'AggiungiSkillProfilo':
-                return ['event'=>'profile.skill.added','data'=>[
+                return ['event'=>'aggiunta.skill','data'=>[
                     'id_profilo'=>$p[0]??null,'skill'=>$p[1]??null,'livello'=>$p[2]??null
                 ]];
             case 'InserimentoReward':
-                return ['event'=>'reward.added','data'=>[
+                return ['event'=>'aggiunta.reward','data'=>[
                     'progetto'=>$p[1]??null,'descrizione'=>$p[0]??null
                 ]];
             case 'InserimentoCandidatura':
-                return ['event'=>'application.submitted','data'=>[
+                return ['event'=>'aggiunta.candidatura','data'=>[
                     'email'=>$p[0]??null,'id_profilo'=>$p[1]??null
                 ]];
             case 'InserimentoCommento':
-                return ['event'=>'comment.added','data'=>[
+                return ['event'=>'add.commento','data'=>[
                     'email'=>$p[0]??null,'progetto'=>$p[2]??null
                 ]];
             case 'InserimentoRisposta':
-                return ['event'=>'comment.replied','data'=>[
+                return ['event'=>'add.risposta','data'=>[
                     'email_creatore'=>$p[0]??null,'commento_id'=>$p[1]??null
                 ]];
             case 'FinanziaProgetto':
-                return ['event'=>'project.funded','data'=>[
+                return ['event'=>'aggiunta.finanziamento','data'=>[
                     'email'=>$p[0]??null,'progetto'=>$p[1]??null,
                     'importo'=>$p[2]??null,'codice_reward'=>$p[3]??null
                 ]];
