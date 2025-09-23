@@ -439,7 +439,7 @@ BEGIN
     -- Controlla se utente si era già candidato precedentemente
     SELECT EXISTS(
         SELECT 1 FROM Candidatura
-        WHERE EmailUtente = Email_Utente AND IdProfilo = Id_Profilo AND stato IN ('in_attesa', 'accettata')
+        WHERE EmailUtente = Email_Utente AND IdProfilo = Id_Profilo AND stato IN ('in_attesa', 'accettata','rifiutata')
     ) INTO CandidaturaEsiste;
 
     IF CandidaturaEsiste = 1 THEN

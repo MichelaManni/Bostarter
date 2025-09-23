@@ -39,4 +39,4 @@ $mysqli->close();
 ?>
 
 <br>
-<a href='../GestioneCandidatura.php'><button>Torna indietro</button></a>
+<a href='../VisualizzaProgettiPersonali.php'><button>Torna indietro</button></a>

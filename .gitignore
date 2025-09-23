@@ -1,4 +1,3 @@
-# Ignora i file generati dai container MySQL
 mysql/*.ibd
 mysql/ib_logfile*
 mysql/auto.cnf
@@ -8,15 +7,9 @@ mysql/mysql
 mysql/performance_schema
 mysql/sys
 mysql/*.err
-
-# Mantieni solo lo script iniziale
 !mysql/init.sql
-
-# Ignora i dati generati da MongoDB
 mongo/*
 !mongo/.gitkeep
-
-# Ignora eventuali file temporanei/editor
 *.log
 *.DS_Store
 *.swp
@@ -24,8 +17,6 @@ mongo/*
 *.bak
 *.tmp
 .env
-
-# Cartelle generiche nascoste o build
 node_modules/
 vendor/
 build/

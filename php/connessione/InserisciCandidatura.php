@@ -1,6 +1,7 @@
 <?php
 session_start();
 include 'db.php';
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 ?>
 <!DOCTYPE html>
 <html>
@@ -38,19 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['nome_profilo'], $_POST
             $stmt->close();
         }
     } catch (mysqli_sql_exception $e) {
-        $errorMsg = $e->getMessage();
-
-        if (strpos($errorMsg, 'Skill insufficienti per la candidatura') !== false) {
-            echo "<p class='errore'>Non possiedi tutte le competenze richieste per candidarti a questo profilo</p>";
-        } elseif (strpos($errorMsg, 'Progetto non valido o non aperto') !== false) {
-            echo "<p class='errore'>Non puoi candidarti a questo progetto perché non è attualmente aperto</p>";
-        }elseif (strpos($errorMsg, 'Candidatura già effettuata') !== false) {
-            echo "<p class='errore'>Hai già inviato una candidatura per questo profilo</p>";
-        }elseif (strpos($errorMsg, 'già stato assegnato') !== false) {
-            echo "<p class='errore'>Questo profilo è già stato assegnato. Non è possibile candidarsi</p>";
-        } else {
-            echo "<p class='errore'>Errore durante la candidatura: " . htmlspecialchars($errorMsg) . "</p>";
-        }
+           echo "Errore: " . $e->getMessage();
     }
 } else {
     echo "<p class='errore'>Richiesta non valida</p>";
